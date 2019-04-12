@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "radix": false,
         "object-literal-sort-keys": false,
         "no-console": false
     },

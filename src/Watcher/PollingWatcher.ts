@@ -2,9 +2,9 @@ import { IWatcher } from ".";
 import { IFileSystem, IStats } from "../FileSystem";
 
 /**
- * I created this PollingWatcher which is not ideal
- * because the nodejs watch and watchFile functions are
- * a little bit buggy and inconsistent accross platforms.
+ * I created this PollingWatcher because nodejs's watch
+ * and watchFile functions are a little bit buggy and
+ * qinconsistent accross platforms.
  *
  * Source: https://stackoverflow.com/a/12979775/1829285
  */

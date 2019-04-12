@@ -1,8 +1,5 @@
 import * as fs from 'fs';
-
-export interface IFileSystem {
-    statSync(file: string): fs.Stats;
-}
+import { IFileSystem } from ".";
 
 export const node_fs: IFileSystem = {
     statSync: fs.statSync,

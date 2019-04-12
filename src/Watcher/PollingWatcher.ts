@@ -1,6 +1,13 @@
 import { IFileSystem, IStats } from '../FileSystem';
 import { IWatcher } from '.';
 
+/**
+ * I created this PollingWatcher which is not ideal
+ * because the nodejs watch and watchFile functions are
+ * a little bit buggy and inconsistent accross platforms.
+ * 
+ * Source: https://stackoverflow.com/a/12979775/1829285
+ */
 export class PollingWatcher implements IWatcher {
     private lastmtimeMs: number = 0;
 

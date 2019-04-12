@@ -1,2 +1,2 @@
-export * from './PollingWatcher';
-export * from './IWatcher';
+export * from "./PollingWatcher";
+export * from "./IWatcher";

@@ -1,8 +1,8 @@
-import { PollingWatcher } from '../Watcher/PollingWatcher';
-import { IFileSystem } from '../FileSystem/IFileSystem';
-import { IStats } from '../FileSystem/IStats';
+import "jest";
 import * as sinon from "sinon";
-import 'jest';
+import { IFileSystem } from "../FileSystem/IFileSystem";
+import { IStats } from "../FileSystem/IStats";
+import { PollingWatcher } from "../Watcher/PollingWatcher";
 
 const fakeStaticFs: IFileSystem = {
     statSync(_: string): IStats {
@@ -10,7 +10,7 @@ const fakeStaticFs: IFileSystem = {
             size: 51,
             mtimeMs: 120,
         };
-    }
+    },
 };
 
 const clock = sinon.useFakeTimers();
@@ -22,7 +22,7 @@ it("should not call onChange when timing is wrong", () => {
     const onChange = sinon.fake();
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
-    }
+    };
 
     const watcher = new PollingWatcher(fakeFs, "testfile");
 
@@ -31,13 +31,13 @@ it("should not call onChange when timing is wrong", () => {
 
     expect(fakedStatSync.callCount).toBe(2);
     expect(onChange.callCount).toBe(1);
-})
+});
 
 it("should call statsSync on filename", () => {
     const fakedStatSync = sinon.fake(fakeStaticFs.statSync);
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
-    }
+    };
 
     const watcher = new PollingWatcher(fakeFs, "testfile");
     watcher.watch(sinon.fake());
@@ -79,4 +79,4 @@ it("should tick every seconds by default", () => {
     watcher.watch(faked);
     clock.tick(2000);
     expect(faked.callCount).toBe(3);
-})
+});

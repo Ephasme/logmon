@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json --fix",
     "cover": "jest --coverage",
+    "test:watch": "jest --watch",
     "test": "jest",
     "start-dev": "ts-node src/index.ts",
     "build": "tsc",
@@ -18,32 +19,13 @@
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.4",
     "@types/sinon": "^7.0.11",
+    "immutable": "^4.0.0-rc.12",
     "jest": "^24.7.1",
     "moment": "^2.24.0",
-    "nyc": "^13.3.0",
     "sinon": "^7.3.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.3",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
-  },
-  "nyc": {
-    "include": [
-      "src/**/*.ts",
-      "src/**/*.tsx"
-    ],
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text-summary",
-      "html"
-    ],
-    "sourceMap": true,
-    "instrument": true
   }
 }

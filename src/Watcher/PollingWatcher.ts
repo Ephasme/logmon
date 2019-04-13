@@ -12,17 +12,17 @@ export class PollingWatcher implements IWatcher {
     private lastmtimeMs: number = 0;
 
     private filename: string;
-    private poolingDelay: number;
+    private pollingDelay: number;
     private fs: IFileSystem;
 
-    constructor(fs: IFileSystem, filename: string, poolingDelay: number = 1000) {
+    constructor(fs: IFileSystem, filename: string, pollingDelay: number = 1000) {
         if (fs == null) throw new Error(`Argument null: fs is required.`);
         if (filename == null) throw new Error(`Argument null: filename is required.`);
-        if (poolingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
+        if (pollingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
 
         this.fs = fs;
         this.filename = filename;
-        this.poolingDelay = poolingDelay;
+        this.pollingDelay = pollingDelay;
     }
 
     public watch(onChange: (stats: IStats) => void) {
@@ -35,6 +35,6 @@ export class PollingWatcher implements IWatcher {
             this.lastmtimeMs = stats.mtimeMs;
         }
 
-        setTimeout(this.watch.bind(this), this.poolingDelay, onChange);
+        setTimeout(this.watch.bind(this), this.pollingDelay, onChange);
     }
 }

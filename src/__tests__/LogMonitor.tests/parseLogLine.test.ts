@@ -1,7 +1,12 @@
-import { parseLogLine } from "../../LogMonitor/LogLineParser";
+import { parseLogLine } from "../../LogMonitor/parseLogLine";
 
 const str = `127.0.0.1 - mary [09/May/2018:16:00:42 +0000] "POST /api/user HTTP/1.0" 503 12`;
 const invalid = `127.16:00:42 +0000] "POST /api/user HTTP/1.0" 503 12`;
+
+it("should return null when null is given", () => {
+    const result = parseLogLine(null);
+    expect(result).toBeNull();
+});
 
 it("should return null when failing", () => {
     const result = parseLogLine(invalid);

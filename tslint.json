@@ -5,6 +5,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "curly": [true, "ignore-same-line"],
         "radix": false,
         "object-literal-sort-keys": false,
         "no-console": false

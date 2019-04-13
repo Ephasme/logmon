@@ -15,16 +15,19 @@ export class PollingWatcher implements IWatcher {
     private poolingDelay: number;
     private fs: IFileSystem;
 
-    constructor(
-        fs: IFileSystem,
-        filename: string,
-        poolingDelay: number = 1000) {
+    constructor(fs: IFileSystem, filename: string, poolingDelay: number = 1000) {
+        if (fs == null) throw new Error(`Argument null: fs is required.`);
+        if (filename == null) throw new Error(`Argument null: filename is required.`);
+        if (poolingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
+
         this.fs = fs;
         this.filename = filename;
         this.poolingDelay = poolingDelay;
     }
 
     public watch(onChange: (stats: IStats) => void) {
+        if (onChange == null) throw new Error("Argument null: onChange callback is required.");
+
         const stats = this.fs.statSync(this.filename);
 
         if (stats.mtimeMs > this.lastmtimeMs) {

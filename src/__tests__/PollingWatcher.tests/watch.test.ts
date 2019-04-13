@@ -1,25 +1,20 @@
 import "jest";
 import * as sinon from "sinon";
-import { IFileSystem } from "../FileSystem/IFileSystem";
-import { IStats } from "../FileSystem/IStats";
-import { PollingWatcher } from "../Watcher/PollingWatcher";
-
-const fakeStaticFs: IFileSystem = {
-    statSync(_: string): IStats {
-        return {
-            size: 51,
-            mtimeMs: 120,
-        };
-    },
-};
+import { factory } from "../../__fixtures__/fsFactory";
+import { IFileSystem } from "../../FileSystem/IFileSystem";
+import { PollingWatcher } from "../../Watcher/PollingWatcher";
 
 const clock = sinon.useFakeTimers();
 
-beforeEach(clock.reset);
+it("should throw when onChange is null", () => {
+    const watcher = new PollingWatcher(factory.makeStatic(), "testfile");
+    expect(() => watcher.watch(null)).toThrow(/Argument null/);
+});
 
 it("should not call onChange when timing is wrong", () => {
-    const fakedStatSync = sinon.fake(fakeStaticFs.statSync);
+    const fakedStatSync = sinon.fake(factory.makeStatic().statSync);
     const onChange = sinon.fake();
+
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
     };
@@ -34,7 +29,7 @@ it("should not call onChange when timing is wrong", () => {
 });
 
 it("should call statsSync on filename", () => {
-    const fakedStatSync = sinon.fake(fakeStaticFs.statSync);
+    const fakedStatSync = sinon.fake(factory.makeStatic().statSync);
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
     };
@@ -45,21 +40,21 @@ it("should call statsSync on filename", () => {
 });
 
 it("should return the correct size from stats", () => {
-    const watcher = new PollingWatcher(fakeStaticFs, "testfile");
+    const watcher = new PollingWatcher(factory.makeStatic(), "testfile");
     const faked = sinon.fake();
     watcher.watch(faked);
     expect(faked.calledWith({ size: 51 }));
 });
 
 it("should return the correct mtimeMs from stats", () => {
-    const watcher = new PollingWatcher(fakeStaticFs, "testfile");
+    const watcher = new PollingWatcher(factory.makeStatic(), "testfile");
     const faked = sinon.fake();
     watcher.watch(faked);
     expect(faked.calledWith({ mtimeMs: 120 }));
 });
 
 it("should tick every seconds by default", () => {
-    const stub = sinon.stub(fakeStaticFs);
+    const stub = sinon.stub(factory.makeStatic());
 
     stub.statSync.onCall(0).returns({
         size: 51,

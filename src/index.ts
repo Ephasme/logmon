@@ -1,7 +1,8 @@
 import { createReadStream } from "fs";
 import * as readline from "readline";
 import { nodeFs as fs } from "./FileSystem";
-import { ILogLineDto, parseLogLine } from "./LogMonitor/LogLineParser";
+import { ILogLineDto } from "./LogMonitor/ILogLineDto";
+import { parseLogLine } from "./LogMonitor/parseLogLine";
 import { IWatcher, PollingWatcher } from "./Watcher";
 
 const DEFAULT_FILE_NAME = "C:\\dev\\logmon-ts\\src\\test.log";

@@ -1,8 +1,8 @@
 import { createReadStream } from "fs";
 import * as readline from "readline";
 import { nodeFs as fs } from "./FileSystem";
-import { ILogLineDto } from "./LogMonitor/ILogLineDto";
-import { parseLogLine } from "./LogMonitor/parseLogLine";
+import { ILogLine } from "./Models/ILogLine";
+import { create } from "./Models/LogLineFactory";
 import { IWatcher, PollingWatcher } from "./Watcher";
 
 const DEFAULT_FILE_NAME = "C:\\dev\\logmon-ts\\src\\test.log";
@@ -16,13 +16,13 @@ interface IBlock {
     end: number;
 }
 
-function readLogs(filename: string, block: IBlock, cb: (log: ILogLineDto) => void) {
+function readLogs(filename: string, block: IBlock, cb: (log: ILogLine) => void) {
     const rs = createReadStream(filename, block);
     const rl = readline.createInterface(rs);
     rl.addListener("line", (line) => {
 
         if (line.trim() !== "") {
-            const result = parseLogLine(line);
+            const result = create(line);
             if (result) {
                 cb(result);
             }
@@ -37,7 +37,7 @@ watcher.watch((stats) => {
         start = end;
     }
 
-    readLogs(DEFAULT_FILE_NAME, { start, end }, (log: ILogLineDto) => {
+    readLogs(DEFAULT_FILE_NAME, { start, end }, (log: ILogLine) => {
         console.log(JSON.stringify(log));
     });
 

@@ -1,9 +1,9 @@
 import { filterEmptyString } from "../Utils";
-import { IRequestLineDto } from "./IRequestLineDto";
+import { IRequestLine } from "./IRequestLine";
 
 const pattern = () => /(?<verb>[^ ]*) (?<uri>[^ ]*) (?<protocol>[^ ]*)/gm;
 
-export function parseRequestLine(line: string): IRequestLineDto {
+export function create(line: string): IRequestLine {
     const result = pattern().exec(line);
     if (result) {
         return {

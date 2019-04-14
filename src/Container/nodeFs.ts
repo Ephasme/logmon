@@ -3,4 +3,5 @@ import { IFileSystem } from "../FileSystem";
 
 export const nodeFs: IFileSystem = {
     statSync: fs.statSync,
+    existsSync: fs.existsSync,
 };

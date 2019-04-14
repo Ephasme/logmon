@@ -12,20 +12,21 @@ export class LogWatcher implements ILogWatcher {
         this.watcher = watcher;
     }
 
-    public subscribe(onLog: Handler): void {
-        this.subs.push(onLog);
+    public subscribe(handler: Handler): void {
+        if (handler == null) throw new Error("Argument null: handler");
+        this.subs.push(handler);
     }
 
     public watch(): void {
         this.watcher.watch((block) => {
             const log = LogLineFactory.createFrom(block);
             if (log) {
-                this.onLog(log);
+                this.handle(log);
             }
         });
     }
 
-    private onLog(logLine: ILogLine): void {
+    private handle(logLine: ILogLine): void {
         for (const sub of this.subs) {
             sub(logLine);
         }

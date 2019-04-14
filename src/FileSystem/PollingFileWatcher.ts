@@ -19,6 +19,10 @@ export class PollingFileWatcher implements IFileWatcher {
         if (filename == null) throw new Error(`Argument null: filename is required.`);
         if (pollingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
 
+        if (!fs.existsSync(filename)) {
+            throw new Error(`Can't watch file ${filename}: it does not exist.`);
+        }
+
         this.fs = fs;
         this.filename = filename;
         this.pollingDelay = pollingDelay;

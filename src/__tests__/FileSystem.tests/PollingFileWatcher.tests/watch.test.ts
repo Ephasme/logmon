@@ -1,4 +1,3 @@
-import "jest";
 import * as sinon from "sinon";
 import { factory } from "../../../__fixtures__/fsFactory";
 import { IFileSystem } from "../../../FileSystem/IFileSystem";
@@ -17,6 +16,7 @@ it("should not call onChange when timing is wrong", () => {
 
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
+        existsSync: (_) => true,
     };
 
     const watcher = new PollingFileWatcher(fakeFs, "testfile");
@@ -32,6 +32,7 @@ it("should call statsSync on filename", () => {
     const fakedStatSync = sinon.fake(factory.makeStatic().statSync);
     const fakeFs: IFileSystem = {
         statSync: fakedStatSync,
+        existsSync: (_) => true,
     };
 
     const watcher = new PollingFileWatcher(fakeFs, "testfile");
@@ -55,6 +56,8 @@ it("should return the correct mtimeMs from stats", () => {
 
 it("should tick every seconds by default", () => {
     const stub = sinon.stub(factory.makeStatic());
+
+    stub.existsSync.returns(true);
 
     stub.statSync.onCall(0).returns({
         size: 51,

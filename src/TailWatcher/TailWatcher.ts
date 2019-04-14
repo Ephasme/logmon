@@ -1,4 +1,4 @@
-import { BlockReader } from "../FileSystem/blockReader";
+import { BlockReader } from "../FileSystem/BlockReader";
 import { IFileWatcher } from "../FileSystem/IFileWatcher";
 import { ITailWatcher } from "./ITailWatcher";
 

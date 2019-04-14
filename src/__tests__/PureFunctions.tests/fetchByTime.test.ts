@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { fetchByTime } from "../../LogRepository/";
+import { fetchByTime } from "../../PureFunctions";
 
 it("should return elements that are older than a given time", () => {
 

@@ -1,6 +1,6 @@
 import { kernel } from "./Container";
 
-const DEFAULT_FILE_NAME = "C:\\dev\\logmon-ts\\src\\__fixtures__\\test.log";
+const DEFAULT_FILE_NAME = "/tmp/access.log";
 const watcher = kernel.createLogWatcher(DEFAULT_FILE_NAME);
 
 watcher.subscribe((log) => {

@@ -1,5 +1,5 @@
-import { groupByFirstRouteSegment } from "../../LogRepository";
 import { ILogLine } from "../../Models/ILogLine";
+import { groupByFirstRouteSegment } from "../../PureFunctions";
 
 const $with = (base: ILogLine, obj: any) => Object.assign({}, base, obj);
 
@@ -18,7 +18,6 @@ const logFactory = {
             time: new Date(2018, 5, 5, 13, 43, 12, 123),
             userid: "userid",
         };
-
 
         return [
             base,

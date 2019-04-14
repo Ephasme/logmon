@@ -13,6 +13,7 @@ export const factory: IFileSystemFixtureFactory = {
                     mtimeMs: 120,
                 };
             },
+            existsSync: (_: string) => true,
         };
     },
 };

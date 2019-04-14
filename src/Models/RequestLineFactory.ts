@@ -1,4 +1,4 @@
-import { filterEmptyString } from "../Utils";
+import * as utils from "../Utils";
 import { IRequestLine } from "./IRequestLine";
 
 const pattern = () => /(?<verb>[^ ]*) (?<uri>[^ ]*) (?<protocol>[^ ]*)/gm;
@@ -11,7 +11,7 @@ export function createFrom(line: string): IRequestLine {
     if (result === null) return null;
     return {
         httpAction: result.groups.verb,
-        routeSegments: filterEmptyString(result.groups.uri.split("/")),
+        routeSegments: utils.filterEmptyString(result.groups.uri.split("/")),
         protocol: result.groups.protocol,
     };
 }

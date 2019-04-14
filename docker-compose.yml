@@ -1,0 +1,6 @@
+version: "2"
+
+services:
+  logmon-tests:
+    build: .
+    command: "npx jest --watchAll" 

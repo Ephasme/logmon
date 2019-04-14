@@ -1,5 +1,4 @@
-import { IWatcher } from ".";
-import { IFileSystem, IStats } from "../FileSystem";
+import { IFileSystem, IFileWatcher, IStats } from ".";
 
 /**
  * I created this PollingWatcher because nodejs's watch
@@ -8,10 +7,10 @@ import { IFileSystem, IStats } from "../FileSystem";
  *
  * Source: https://stackoverflow.com/a/12979775/1829285
  */
-export class PollingWatcher implements IWatcher {
-    private lastmtimeMs: number = 0;
+export class PollingFileWatcher implements IFileWatcher {
 
     private filename: string;
+    private lastmtimeMs: number = 0;
     private pollingDelay: number;
     private fs: IFileSystem;
 
@@ -25,13 +24,13 @@ export class PollingWatcher implements IWatcher {
         this.pollingDelay = pollingDelay;
     }
 
-    public watch(onChange: (stats: IStats) => void) {
+    public watch(onChange: (stats: IStats, filename: string) => void) {
         if (onChange == null) throw new Error("Argument null: onChange callback is required.");
 
         const stats = this.fs.statSync(this.filename);
 
         if (stats.mtimeMs > this.lastmtimeMs) {
-            onChange(stats);
+            onChange(stats, this.filename);
             this.lastmtimeMs = stats.mtimeMs;
         }
 

@@ -3,14 +3,15 @@ import { IRequestLine } from "./IRequestLine";
 
 const pattern = () => /(?<verb>[^ ]*) (?<uri>[^ ]*) (?<protocol>[^ ]*)/gm;
 
-export function create(line: string): IRequestLine {
+export function createFrom(line: string): IRequestLine {
+    if (line === null) return null;
+    const trimedLine = line.trim();
+    if (trimedLine === "") return null;
     const result = pattern().exec(line);
-    if (result) {
-        return {
-            httpAction: result.groups.verb,
-            routeSegments: filterEmptyString(result.groups.uri.split("/")),
-            protocol: result.groups.protocol,
-        };
-    }
-    return null;
+    if (result === null) return null;
+    return {
+        httpAction: result.groups.verb,
+        routeSegments: filterEmptyString(result.groups.uri.split("/")),
+        protocol: result.groups.protocol,
+    };
 }

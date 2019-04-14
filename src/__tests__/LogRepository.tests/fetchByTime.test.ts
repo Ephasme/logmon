@@ -1,13 +1,7 @@
 import * as moment from "moment";
-import { factory } from "../../LogRepository/";
-
-const makeLog = () => {
-    return ;
-};
+import { fetchByTime } from "../../LogRepository/";
 
 it("should return elements that are older than a given time", () => {
-
-    const repo = factory();
 
     const base = {
         domain: "domain",
@@ -23,29 +17,26 @@ it("should return elements that are older than a given time", () => {
         userid: "userid",
     };
 
-    const firstTime = moment(base.time).add(14, "ms").toDate();
-    repo.add(Object.assign({}, base, {
-        time: firstTime,
-    }));
-    const nTime34 = moment(base.time).add(34, "ms").toDate();
-    repo.add(Object.assign({}, base, {
-        time: nTime34,
-    }));
-    const nTime78 = moment(base.time).add(78, "ms").toDate();
-    repo.add(Object.assign({}, base, {
-        time: nTime78,
-    }));
-    const nTimem187 = moment(base.time).add(1987, "ms").toDate();
-    repo.add(Object.assign({}, base, {
-        time: nTimem187,
-    }));
+    const past14 = moment(base.time).add(14, "ms").toDate();
+    const past34 = moment(base.time).add(34, "ms").toDate();
+    const past78 = moment(base.time).add(78, "ms").toDate();
+    const past187 = moment(base.time).add(1987, "ms").toDate();
 
-    const result = repo.fetchByTime(moment(base.time).add(16).toDate());
+    const withTime = (time: Date) => Object.assign({}, base, { time });
+
+    const logs = [
+        withTime(past14),
+        withTime(past34),
+        withTime(past78),
+        withTime(past187),
+    ];
+
+    const result = fetchByTime(logs, moment(base.time).add(16).toDate());
 
     const arr = Array.from(result);
 
     expect(arr).toHaveLength(3);
-    expect(arr[0]).toHaveProperty("time", nTime34);
-    expect(arr[1]).toHaveProperty("time", nTime78);
-    expect(arr[2]).toHaveProperty("time", nTimem187);
+    expect(arr[0]).toHaveProperty("time", past34);
+    expect(arr[1]).toHaveProperty("time", past78);
+    expect(arr[2]).toHaveProperty("time", past187);
 });

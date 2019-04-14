@@ -5,3 +5,5 @@ coverage
 test.log
 
 *.log
+
+!test.log

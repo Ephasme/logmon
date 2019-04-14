@@ -1,45 +1,18 @@
-import { createReadStream } from "fs";
-import * as readline from "readline";
+import * as blessed from "blessed";
 import { nodeFs as fs } from "./FileSystem";
-import { ILogLine } from "./Models/ILogLine";
-import { create } from "./Models/LogLineFactory";
-import { IWatcher, PollingWatcher } from "./Watcher";
+import { IFileWatcher, PollingFileWatcher, readBlock } from "./FileSystem";
+import { ILogWatcher, LogWatcher } from "./LogWatcher";
+import { ITailWatcher, TailWatcher } from "./TailWatcher";
 
-const DEFAULT_FILE_NAME = "C:\\dev\\logmon-ts\\src\\test.log";
+const DEFAULT_FILE_NAME = "C:\\dev\\logmon-ts\\src\\__fixtures__\\test.log";
 
-let start = 0;
+const fileWatcher: IFileWatcher = new PollingFileWatcher(fs, DEFAULT_FILE_NAME, 1000);
+const tailWatcher: ITailWatcher = new TailWatcher(fileWatcher, readBlock);
 
-const watcher: IWatcher = new PollingWatcher(fs, DEFAULT_FILE_NAME);
+const watcher: ILogWatcher = new LogWatcher(tailWatcher);
 
-interface IBlock {
-    start: number;
-    end: number;
-}
-
-function readLogs(filename: string, block: IBlock, cb: (log: ILogLine) => void) {
-    const rs = createReadStream(filename, block);
-    const rl = readline.createInterface(rs);
-    rl.addListener("line", (line) => {
-
-        if (line.trim() !== "") {
-            const result = create(line);
-            if (result) {
-                cb(result);
-            }
-        }
-    });
-}
-
-watcher.watch((stats) => {
-    const end = stats.size;
-
-    if (end < start) {
-        start = end;
-    }
-
-    readLogs(DEFAULT_FILE_NAME, { start, end }, (log: ILogLine) => {
-        console.log(JSON.stringify(log));
-    });
-
-    start = end;
+watcher.subscribe((log) => {
+    console.log(JSON.stringify(log));
 });
+
+watcher.watch();

@@ -1,31 +1,33 @@
 import { ILogLine } from "../Models/ILogLine";
 
-export interface ILogRepository {
-    add(logLine: ILogLine): void;
-    fetchByTime(after: Date): IterableIterator<ILogLine>;
-}
-
-class LogRepository implements ILogRepository {
-    private timeseries: ILogLine[] = [];
-
-    public add(logLine: ILogLine): void {
-        this.timeseries.push(logLine);
-    }
-
-    public *fetchByTime(after: Date): IterableIterator<ILogLine> {
-        for (const logLine of this.timeseries) {
-            if (logLine.time > after) {
-                yield logLine;
-            }
+export function *fetchByTime(logs: ILogLine[], after: Date): IterableIterator<ILogLine> {
+    for (const logLine of logs) {
+        if (logLine.time > after) {
+            yield logLine;
         }
     }
 }
 
-let repo: ILogRepository = null;
+export function groupByFirstRouteSegment(logs: ILogLine[]): Map<string, Set<ILogLine>> {
+    return (logs || [])
+        .filter((x) => x.request.routeSegments.length > 0)
+        .map((x) => ({
+            id: x.request.routeSegments[0],
+            ...x,
+        }))
+        .reduce((prev, cur) => {
+            if (!prev.has(cur.id)) {
+                prev.set(cur.id, new Set<ILogLine>());
+            }
+            prev.get(cur.id).add(cur);
+            return prev;
+        }, new Map<string, Set<ILogLine>>());
+}
 
-export function factory() {
-    if (repo == null) {
-        repo = new LogRepository();
-    }
-    return repo;
+export function displayStats(logs: Map<string, Set<ILogLine>>) {
+    logs.forEach((val, key) => {
+        const values = Array.from(val.values());
+        const sumDurations = values.reduce((acc, el) => acc + el.duration, 0);
+        console.log(`${key}: ${sumDurations / values.length}`);
+    });
 }

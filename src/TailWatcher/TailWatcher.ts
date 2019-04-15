@@ -19,7 +19,7 @@ export class TailWatcher implements ITailWatcher {
             if (end < this.cursor) {
                 this.cursor = end;
             }
-            this.readBlock(filename, { start: this.cursor, end }, onData);
+            this.readBlock(filename, { start: this.cursor, end: end - 1 }, onData);
             this.cursor = end;
         });
     }

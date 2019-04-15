@@ -1,5 +1,5 @@
 import { ILogLine } from "../../Models/ILogLine";
-import { groupByFirstRouteSegment } from "../../PureFunctions";
+import { groupBySections } from "../../Stats/Stats";
 
 const $with = (base: ILogLine, obj: any) => Object.assign({}, base, obj);
 
@@ -46,17 +46,17 @@ const logFactory = {
 };
 
 it("should return empty set if logs are null", () => {
-    const groups = groupByFirstRouteSegment(null);
+    const groups = groupBySections(null);
     expect(groups.size).toBe(0);
 });
 
 it("should return empty set if logs are empty", () => {
-    const groups = groupByFirstRouteSegment([]);
+    const groups = groupBySections([]);
     expect(groups.size).toBe(0);
 });
 
 it("should group by first route segment", () => {
-    const groups = groupByFirstRouteSegment(logFactory.create());
+    const groups = groupBySections(logFactory.create());
 
     expect(Array.from(groups.keys()))
         .toEqual(["group1", "group2", "group3", "group4"]);

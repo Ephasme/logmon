@@ -1,18 +1,14 @@
 import { kernel } from "./Container";
-import { ILogLine } from "./Models/ILogLine";
+import { Stats } from "./Stats/Stats";
 
 const DEFAULT_FILE_NAME = "/tmp/access.log";
 const watcher = kernel.createLogWatcher(DEFAULT_FILE_NAME);
 
+const stats = new Stats();
 
-const logs: ILogLine[] = [];
+watcher.subscribe(stats.onLog.bind(stats));
 
-const pushLogs = (log: ILogLine): void => {
-    logs.push(log);
-    console.log(`Pushed log for [${log.request}]`)
-};
-
-watcher.subscribe(pushLogs);
+stats.run();
 
 console.log("Application started:")
 console.log(`   * watching ${DEFAULT_FILE_NAME}`)

@@ -1,5 +1,5 @@
 import { ILogLine } from "../Models/ILogLine";
-import * as LogLineFactory from "../Models/LogLineFactory";
+import { FactoryFunction } from "../Models/LogLineFactory";
 import { ITailWatcher } from "../TailWatcher/ITailWatcher";
 import { Handler, ILogWatcher } from "./ILogWatcher";
 
@@ -7,9 +7,11 @@ export class LogWatcher implements ILogWatcher {
 
     private subs: Handler[] = [];
     private watcher: ITailWatcher;
+    private factory: FactoryFunction;
 
-    constructor(watcher: ITailWatcher) {
+    constructor(factory: FactoryFunction, watcher: ITailWatcher) {
         this.watcher = watcher;
+        this.factory = factory;
     }
 
     public subscribe(handler: Handler): void {
@@ -19,7 +21,7 @@ export class LogWatcher implements ILogWatcher {
 
     public watch(): void {
         this.watcher.watch((block) => {
-            const log = LogLineFactory.createFrom(block);
+            const log = this.factory(block);
             if (log) {
                 this.handle(log);
             }

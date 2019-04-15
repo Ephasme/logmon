@@ -6,7 +6,9 @@ import * as RequestLineFactory from "./RequestLineFactory";
 const pattern = () => /(?<domain>[^ ]*) (?<hyphen>[^ ]*) (?<userid>[^ ]*) \[(?<time>[^]*)\] "(?<action>[^"]*)" (?<resultcode>[^ ]*) (?<duration>[^ ]*)/gm;
 /* tslint:enable */
 
-export function createFrom(line: string): ILogLine | null {
+export type FactoryFunction = (line: string) => ILogLine | null;
+
+export const createFrom: FactoryFunction = (line) => {
     if (line === null) return null;
     const trimedLine = line.trim();
     if (trimedLine === "") return null;

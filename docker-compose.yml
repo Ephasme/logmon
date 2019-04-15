@@ -1,6 +1,7 @@
 version: "2"
 
 services:
-  logmon-tests:
+  logmon:
     build: .
-    command: "npx jest --watchAll" 
+    volumes:
+      - './tmp:/tmp'

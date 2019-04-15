@@ -4,29 +4,28 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "tslint --project tsconfig.json --fix",
+    "clean": "./clean.sh",
+    "lint:fix": "tslint --project tsconfig.json --fix",
     "test:cover": "jest --coverage",
     "test:watch": "jest --watch",
     "test": "jest",
-    "start-dev": "ts-node src/index.ts",
-    "build": "tsc",
-    "prestart": "npm run lint && npm run build",
-    "start": "node dist/index.js"
+    "start:dev": "cp ./src/__fixtures__/access.log.template /tmp/access.log && ts-node src/index.ts",
+    "poststart:dev": "rm -rf /tmp/access.log",
+    "start": "NODE_ENV=production node dist/index.js",
+    "build": "tsc"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/node": "^11.13.4",
+    "moment": "^2.24.0",
+    "typescript": "^3.4.3"
+  },
   "devDependencies": {
-    "@types/blessed": "^0.1.11",
     "@types/jest": "^24.0.11",
     "@types/mock-fs": "^3.6.30",
-    "@types/node": "^11.13.4",
-    "blessed": "^0.1.81",
-    "immutable": "^4.0.0-rc.12",
     "jest": "^24.7.1",
     "mock-fs": "^4.8.0",
-    "moment": "^2.24.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.3",
-    "tslint": "^5.15.0",
-    "typescript": "^3.4.3"
+    "tslint": "^5.15.0"
   }
 }

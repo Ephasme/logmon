@@ -1,9 +1,6 @@
-FROM node:10-slim
-
+FROM node:11-alpine as builder
 WORKDIR /app
-
 COPY . /app
-COPY src/__fixtures__/test.log /tmp/access.log
-RUN npm install
-
-CMD ["npm", "start"]
+RUN yarn install --prod
+RUN yarn build
+CMD ["yarn", "start"]

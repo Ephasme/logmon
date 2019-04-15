@@ -23,11 +23,11 @@ export function groupByFirstRouteSegment(logs: ILogLine[]): Map<string, Set<ILog
             return prev;
         }, new Map<string, Set<ILogLine>>());
 }
-
+/* 
 export function displayStats(logs: Map<string, Set<ILogLine>>) {
     logs.forEach((val, key) => {
         const values = Array.from(val.values());
         const sumDurations = values.reduce((acc, el) => acc + el.duration, 0);
         console.log(`${key}: ${sumDurations / values.length}`);
     });
-}
+} */

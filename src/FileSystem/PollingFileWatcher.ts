@@ -34,8 +34,6 @@ export class PollingFileWatcher implements IFileWatcher {
                 onChange(stats, this.filename);
                 this.lastmtimeMs = stats.mtimeMs;
             }
-        } else {
-            console.log("Waiting for log file.");
         }
 
         setTimeout(this.watch.bind(this), this.pollingDelay, onChange);

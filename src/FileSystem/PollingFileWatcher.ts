@@ -19,10 +19,6 @@ export class PollingFileWatcher implements IFileWatcher {
         if (filename == null) throw new Error(`Argument null: filename is required.`);
         if (pollingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
 
-        if (!fs.existsSync(filename)) {
-            throw new Error(`Can't watch file ${filename}: it does not exist.`);
-        }
-
         this.fs = fs;
         this.filename = filename;
         this.pollingDelay = pollingDelay;
@@ -31,11 +27,15 @@ export class PollingFileWatcher implements IFileWatcher {
     public watch(onChange: (stats: IStats, filename: string) => void) {
         if (onChange == null) throw new Error("Argument null: onChange callback is required.");
 
-        const stats = this.fs.statSync(this.filename);
+        if (this.fs.existsSync(this.filename)) {
+            const stats = this.fs.statSync(this.filename);
 
-        if (stats.mtimeMs > this.lastmtimeMs) {
-            onChange(stats, this.filename);
-            this.lastmtimeMs = stats.mtimeMs;
+            if (stats.mtimeMs > this.lastmtimeMs) {
+                onChange(stats, this.filename);
+                this.lastmtimeMs = stats.mtimeMs;
+            }
+        } else {
+            console.log("Waiting for log file.");
         }
 
         setTimeout(this.watch.bind(this), this.pollingDelay, onChange);

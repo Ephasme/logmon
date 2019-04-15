@@ -2,6 +2,7 @@ import { IFileSystem, IStats } from "../FileSystem";
 
 export interface IFileSystemFixtureFactory {
     makeStatic(): IFileSystem;
+    makeNoFile(): IFileSystem;
 }
 
 export const factory: IFileSystemFixtureFactory = {
@@ -14,6 +15,14 @@ export const factory: IFileSystemFixtureFactory = {
                 };
             },
             existsSync: (_: string) => true,
+        };
+    },
+    makeNoFile() {
+        return {
+            statSync(_: string): IStats {
+                throw new Error("File does not exist.");
+            },
+            existsSync: (_: string) => false,
         };
     },
 };

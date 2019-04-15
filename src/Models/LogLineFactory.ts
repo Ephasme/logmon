@@ -23,4 +23,4 @@ export const createFrom: FactoryFunction = (line) => {
         httpResultCode: parseInt(result.groups.resultcode),
         duration: parseInt(result.groups.duration),
     };
-}
+};

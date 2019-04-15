@@ -21,8 +21,8 @@ it("should be able to create a log watcher with a valid file", () => {
     expect(() => kernel.createLogWatcher("/some/path/somefile.txt")).not.toThrow();
 });
 
-it("should not be able to create a log watcher without a valid file", () => {
-    expect(() => kernel.createLogWatcher("any")).toThrow();
+it("should be able to create a log watcher without a valid file", () => {
+    expect(() => kernel.createLogWatcher("any")).not.toThrow();
 });
 
 it("should have property allowing log watcher creation", () => {

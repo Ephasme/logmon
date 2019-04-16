@@ -52,12 +52,12 @@ it("should parse {request}", () => {
     });
 });
 
-it("should parse {httpResultCode}", () => {
+it("should parse {result}", () => {
     const result = Factory.createFrom(str);
-    expect(result.httpResultCode).toBe(503);
+    expect(result.result).toBe(503);
 });
 
-it("should parse {duration}", () => {
+it("should parse {packet}", () => {
     const result = Factory.createFrom(str);
-    expect(result.duration).toBe(12);
+    expect(result.packet).toBe(12);
 });

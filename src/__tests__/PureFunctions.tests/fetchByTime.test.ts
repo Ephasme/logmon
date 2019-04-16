@@ -5,8 +5,8 @@ it("should return elements that are older than a given time", () => {
 
     const base = {
         domain: "domain",
-        duration: 123,
-        httpResultCode: 200,
+        packet: 123,
+        result: 200,
         hyphen: "-",
         request: {
             httpAction: "GET",

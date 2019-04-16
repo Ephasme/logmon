@@ -9,21 +9,23 @@
     "test:cover": "jest --coverage",
     "test:watch": "jest --watch",
     "test": "jest",
-    "start:dev": "cp ./src/__fixtures__/access.log.template /tmp/access.log && ts-node src/index.ts",
-    "poststart:dev": "rm -rf /tmp/access.log",
+    "start:dev": "node --inspect=5858 -r ts-node/register ./src/index.ts --filename src/__fixtures__/access.log.template",
     "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc"
   },
   "dependencies": {
     "@types/node": "^11.13.4",
+    "immutable": "^4.0.0-rc.12",
     "moment": "^2.24.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.3",
+    "yarg": "^1.0.8"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/mock-fs": "^3.6.30",
     "jest": "^24.7.1",
     "mock-fs": "^4.8.0",
+    "nodemon": "^1.18.11",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.3",
     "tslint": "^5.15.0"

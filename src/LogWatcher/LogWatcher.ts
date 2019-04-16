@@ -1,11 +1,11 @@
 import { ILogLine } from "../Models/ILogLine";
 import { FactoryFunction } from "../Models/LogLineFactory";
 import { ITailWatcher } from "../TailWatcher/ITailWatcher";
-import { Handler, ILogWatcher } from "./ILogWatcher";
+import { ILogWatcher, AnyListener, HandlerDelegate } from "./ILogWatcher";
 
 export class LogWatcher implements ILogWatcher {
 
-    private subs: Handler[] = [];
+    private subs: HandlerDelegate[] = [];
     private watcher: ITailWatcher;
     private factory: FactoryFunction;
 
@@ -14,9 +14,13 @@ export class LogWatcher implements ILogWatcher {
         this.factory = factory;
     }
 
-    public subscribe(handler: Handler): void {
-        if (handler == null) throw new Error("Argument null: handler");
-        this.subs.push(handler);
+    public subscribe(input: AnyListener): void {
+        if (input == null) throw new Error("Argument null: input.");
+        if (typeof input === "function") {
+            this.subs.push(input);
+        } else {
+            this.subs.push((log) => input.onLog(log));
+        }
     }
 
     public watch(): void {

@@ -1,14 +1,14 @@
 import { ILogLine } from "../../Models/ILogLine";
-import { groupBySections } from "../../Stats/Stats";
+import { groupBySections } from "../../Stats/groupBySections";
 
 const $with = (base: ILogLine, obj: any) => Object.assign({}, base, obj);
 
 const logFactory = {
     create() {
-        const base = {
+        const base: ILogLine = {
             domain: "domain",
-            duration: 123,
-            httpResultCode: 200,
+            packet: 123,
+            result: 200,
             hyphen: "-",
             request: {
                 httpAction: "GET",

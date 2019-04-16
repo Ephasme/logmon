@@ -20,7 +20,7 @@ export const createFrom: FactoryFunction = (line) => {
         userid: result.groups.userid,
         time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss Z").toDate(),
         request: RequestLineFactory.createFrom(result.groups.action),
-        httpResultCode: parseInt(result.groups.resultcode),
-        duration: parseInt(result.groups.duration),
+        result: parseInt(result.groups.resultcode),
+        packet: parseInt(result.groups.duration),
     };
 };

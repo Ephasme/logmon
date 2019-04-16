@@ -6,6 +6,6 @@ export interface ILogLine {
     userid: string;
     time: Date;
     request: IRequestLine;
-    httpResultCode: number;
-    duration: number;
+    result: number;
+    packet: number;
 }

@@ -1,16 +1,33 @@
 import { kernel } from "./Container";
-import { Stats } from "./Stats/Stats";
+import { getStatsBySections } from "./Stats/getStatsBySections";
+import * as yargs from "yargs";
+import { ILogLine } from "./Models/ILogLine";
 
-const DEFAULT_FILE_NAME = "/tmp/access.log";
-const watcher = kernel.createLogWatcher(DEFAULT_FILE_NAME);
+const args = yargs.default("filename", "/tmp/access.log").argv;
 
-const stats = new Stats();
+const watcher = kernel.createLogWatcher(args.filename);
 
-watcher.subscribe(stats.onLog.bind(stats));
+const each10seconds = kernel.createTimerMonitor(10000);
+const eachSecond = kernel.createTimerMonitor(1000);
 
-stats.run();
+console.log("Application started:");
+console.log(`   * watching ${args.filename}`);
 
-console.log("Application started:")
-console.log(`   * watching ${DEFAULT_FILE_NAME}`)
+watcher.subscribe(each10seconds);
+watcher.subscribe(eachSecond);
+
+each10seconds.run((batch: ILogLine[]) => {
+    const stats = getStatsBySections(batch);
+    if (stats.size > 0) {
+        console.log(JSON.stringify(stats));
+    }
+});
+
+eachSecond.run((batch: ILogLine[]) => {
+    const alert = batch.length > 10;
+    if (alert) {
+        console.log("start alert");
+    }
+});
 
 watcher.watch();

@@ -17,7 +17,7 @@ export class TailWatcher implements ITailWatcher {
         this.watcher.watch((stats, filename) => {
             const end = stats.size;
             if (end > this.cursor) {
-                this.readBlock(filename, { start: this.cursor, end: end }, onData);
+                this.readBlock(filename, { start: this.cursor, end }, onData);
             }
             this.cursor = end;
         });

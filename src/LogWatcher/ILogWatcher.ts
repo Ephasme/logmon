@@ -1,8 +1,12 @@
 import { ILogLine } from "../Models/ILogLine";
 
-export type Handler = (log: ILogLine) => void;
+export interface IHandler {
+    onLog: HandlerDelegate;
+}
+export type HandlerDelegate = (log: ILogLine) => void;
+export type AnyListener = HandlerDelegate | IHandler;
 
 export interface ILogWatcher {
-    subscribe(onLog: Handler): void;
+    subscribe(input: AnyListener): void;
     watch(): void;
 }

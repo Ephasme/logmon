@@ -18,8 +18,6 @@ export const defaultState: IState = {
     ...defaultBatchState,
     hasChanged: false,
     lastUpdated: new Date(),
-    alertState: {
-        name: "idle",
-        since: new Date(),
-    },
+    message: null,
+    overloadDuration: 0,
 };

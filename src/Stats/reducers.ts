@@ -1,7 +1,7 @@
 import * as moment from "moment";
 import { ILogLine } from "../Models/ILogLine";
 import { defaultBatchState } from "./defaultStates";
-import { IBasicState, IBatchState, IState, StateBySections, Transition } from "./types";
+import { IBasicState, IState, StateBySections, IBatchState } from "./types";
 import { groupBySections } from "./utils";
 import { add, mergeBatches } from "./utils";
 
@@ -35,48 +35,43 @@ const reduceCurrentBatch = (input: StateBySections) => {
     }), defaultBatchState);
 };
 
-const runTransition: Transition = (state, now, currentTraffic, threshold) => {
-    const isHigh = currentTraffic > threshold;
-    const minutesSinceLastEvent = moment.duration(moment(now).diff(moment(state.since))).asSeconds();
-    if (state.name === "idle" && isHigh) return { name: "warming up", since: new Date() };
-    if (state.name === "idle" && !isHigh) return state;
-
-    if (state.name === "warming up" && isHigh) {
-        return minutesSinceLastEvent < 2 * 60 ? state : {
-            name: "triggered",
-            since: new Date(),
-        };
+export const reduceAlert = (state: IState, currentBatch: IBatchState) => {
+    let overloadDuration = state.overloadDuration;
+    let message = state.message;
+    if (currentBatch.traffic < 10) {
+        overloadDuration = Math.max(0, overloadDuration - 10);
+    } else {
+        overloadDuration = Math.min(30, overloadDuration + 10);
     }
-    if (state.name === "warming up" && !isHigh) return { name: "idle", since: new Date() };
 
-    if (state.name === "triggered" && !isHigh) return { name: "cooling down", since: new Date() };
-    if (state.name === "triggered" && isHigh) return { name: "triggered", since: new Date() };
-
-    if (state.name === "cooling down" && isHigh) return { name: "warming up", since: new Date() };
-    if (state.name === "cooling down" && !isHigh) {
-        return minutesSinceLastEvent < 2 * 60 ? state : {
-            name: "idle",
-            since: new Date(),
-        };
+    if (overloadDuration === 30) {
+        message = "alert";
     }
-    return state;
+
+    if (overloadDuration === 0) {
+        if (message === "alert") {
+            message = null;
+        }
+    }
+    return {
+        overloadDuration,
+        message,
+    };
 };
 
 export function mainReducer(state: IState, threshold: number, input: ILogLine[]): IState {
-    if (input === null || input.length === 0) { return {
-        ...state,
-        currentBatch: null,
-        alertState: runTransition(state.alertState, new Date(), 0, threshold),
-    };
-    }
 
     const currentBatch = reduceCurrentBatch(reduceSections(input));
+
+    // nominal to trigger =>
+    //      now - last nominal > @
+
 
     return {
         currentBatch,
         allBatches: mergeBatches(state.allBatches, currentBatch),
         hasChanged: true,
         lastUpdated: new Date(),
-        alertState: runTransition(state.alertState, new Date(), currentBatch.traffic, threshold),
+        ...reduceAlert(state, currentBatch),
     };
 }

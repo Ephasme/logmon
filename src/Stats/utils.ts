@@ -1,6 +1,6 @@
-import { IBasicState, StateBySections, IBatchState } from "./types";
+import { Map, Set } from "immutable";
 import { ILogLine } from "../Models/ILogLine";
-import { Set, Map } from "immutable";
+import { IBasicState, IBatchState, StateBySections } from "./types";
 
 export type Adder<T> = (state1: T, state2: T) => T;
 export type BasicStateAdder = Adder<IBasicState>;

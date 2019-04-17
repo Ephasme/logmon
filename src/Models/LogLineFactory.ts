@@ -25,7 +25,7 @@ export const createFrom: FactoryFunction = (line) => {
                 request: requestLine,
                 result: parseInt(result.groups.resultcode),
                 packet: parseInt(result.groups.duration),
-            };    
+            };
         }
     }
     return null;

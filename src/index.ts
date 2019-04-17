@@ -1,8 +1,8 @@
 import * as yargs from "yargs";
 import { kernel } from "./Container";
 import { ILogLine } from "./Models/ILogLine";
-import { mainReducer } from "./Stats/reducers";
 import { defaultState } from "./Stats/defaultStates";
+import { mainReducer } from "./Stats/reducers";
 
 const args = yargs.default("filename", "/tmp/access.log").argv;
 
@@ -17,8 +17,8 @@ watcher.subscribe(each10seconds);
 let currentState = defaultState;
 
 each10seconds.run((batch: ILogLine[]) => {
-    currentState = mainReducer(currentState, 10*10, batch);
-        console.log(JSON.stringify(currentState, null, 4));
+    currentState = mainReducer(currentState, 10 * 10, batch);
+    console.log(JSON.stringify(currentState, null, 4));
 });
 
 watcher.watch();

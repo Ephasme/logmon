@@ -1,5 +1,5 @@
-import { IBasicState, IBatchState, IState } from "./types";
 import { Map } from "immutable";
+import { IBasicState, IBatchState, IState } from "./types";
 
 export const defaultBasicState: IBasicState = {
     hits: 0,
@@ -21,5 +21,5 @@ export const defaultState: IState = {
     alertState: {
         name: "idle",
         since: new Date(),
-    }
+    },
 };

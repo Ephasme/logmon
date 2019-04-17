@@ -1,17 +1,17 @@
 import { Map } from "immutable";
 
-export interface IBasicState { 
+export interface IBasicState {
     hits: number;
     errors: number;
     traffic: number;
 }
 
-export type AlertState = {
-    name: "idle" | "warming up" | "triggered" | "cooling down",
-    since: Date,
+export interface IAlertState {
+    name: "idle" | "warming up" | "triggered" | "cooling down";
+    since: Date;
 }
 
-export type Transition = (state: AlertState, now: Date, currentTraffic: number, threshold: number) => AlertState;
+export type Transition = (state: IAlertState, now: Date, currentTraffic: number, threshold: number) => AlertState;
 
 export type StateBySections = Map<string, IBasicState>;
 
@@ -24,5 +24,5 @@ export interface IState {
     currentBatch: IBatchState | null;
     allBatches: IBatchState;
     lastUpdated: Date;
-    alertState: AlertState;
+    alertState: IAlertState;
 }

@@ -9,8 +9,7 @@ import { ILogWatcher, LogWatcher } from "../LogWatcher";
 import { createFrom as logLineFactory } from "../Models/LogLineFactory";
 import { ITailWatcher, TailWatcher } from "../TailWatcher";
 import { nodeFs as fs } from "./nodeFs";
-import { ITimerMonitor } from "../Stats/ITimerMonitor";
-import { TimerMonitor } from "../Stats/TimerMonitor";
+import { ITimerMonitor, TimerMonitor } from "../TimerMonitor";
 
 export interface IKernel {
     createLogWatcher: (filename: string) => ILogWatcher;
@@ -25,5 +24,5 @@ export const kernel: IKernel = {
     },
     createTimerMonitor(duration) {
         return new TimerMonitor(duration);
-    },
+    }
 };

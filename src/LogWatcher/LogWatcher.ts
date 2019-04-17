@@ -1,7 +1,7 @@
 import { ILogLine } from "../Models/ILogLine";
 import { FactoryFunction } from "../Models/LogLineFactory";
 import { ITailWatcher } from "../TailWatcher/ITailWatcher";
-import { ILogWatcher, AnyListener, HandlerDelegate } from "./ILogWatcher";
+import { AnyListener, HandlerDelegate, ILogWatcher } from "./ILogWatcher";
 
 export class LogWatcher implements ILogWatcher {
 

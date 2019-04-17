@@ -1,5 +1,5 @@
 import { ILogLine } from "../../Models/ILogLine";
-import { groupBySections } from "../../Stats/groupBySections";
+import { groupBySections } from "../../Stats/utils";
 
 const $with = (base: ILogLine, obj: any) => Object.assign({}, base, obj);
 

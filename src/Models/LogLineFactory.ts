@@ -14,13 +14,19 @@ export const createFrom: FactoryFunction = (line) => {
     if (trimedLine === "") return null;
     const result = pattern().exec(line);
     if (result === null) return null;
-    return {
-        domain: result.groups.domain,
-        hyphen: result.groups.hyphen,
-        userid: result.groups.userid,
-        time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss Z").toDate(),
-        request: RequestLineFactory.createFrom(result.groups.action),
-        result: parseInt(result.groups.resultcode),
-        packet: parseInt(result.groups.duration),
-    };
+    if (result.groups) {
+        const requestLine = RequestLineFactory.createFrom(result.groups.action);
+        if (requestLine) {
+            return {
+                domain: result.groups.domain,
+                hyphen: result.groups.hyphen,
+                userid: result.groups.userid,
+                time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss Z").toDate(),
+                request: requestLine,
+                result: parseInt(result.groups.resultcode),
+                packet: parseInt(result.groups.duration),
+            };    
+        }
+    }
+    return null;
 };

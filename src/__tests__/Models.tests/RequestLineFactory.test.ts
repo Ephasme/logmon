@@ -8,11 +8,6 @@ it("should return null when empty string is given", () => {
     expect(result).toBeNull();
 });
 
-it("should return null when null is given", () => {
-    const result = Factory.createFrom(null);
-    expect(result).toBeNull();
-});
-
 it("should return null when failing", () => {
     const result = Factory.createFrom(invalid);
     expect(result).toBeNull();
@@ -25,15 +20,15 @@ it("should not be null when success", () => {
 
 it("should parse {protocol}", () => {
     const result = Factory.createFrom(str);
-    expect(result.protocol).toBe("HTTP/1.0");
+    expect(result && result.protocol).toBe("HTTP/1.0");
 });
 
 it("should parse {routeSegments}", () => {
     const result = Factory.createFrom(str);
-    expect(result.routeSegments).toEqual(["api", "user"]);
+    expect(result && result.routeSegments).toEqual(["api", "user"]);
 });
 
 it("should parse {httpAction}", () => {
     const result = Factory.createFrom(str);
-    expect(result.httpAction).toBe("POST");
+    expect(result && result.httpAction).toBe("POST");
 });

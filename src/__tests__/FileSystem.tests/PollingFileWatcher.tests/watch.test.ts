@@ -4,11 +4,6 @@ import { PollingFileWatcher } from "../../../FileSystem/PollingFileWatcher";
 
 jest.useFakeTimers();
 
-it("should throw when onChange is null", () => {
-    const watcher = new PollingFileWatcher(factory.makeStatic(), "testfile");
-    expect(() => watcher.watch(null)).toThrow(/Argument null/);
-});
-
 it("should not call onChange when timing is wrong", () => {
     const fakedStatSync = jest.fn().mockImplementation(factory.makeStatic().statSync);
     const onChange = jest.fn();

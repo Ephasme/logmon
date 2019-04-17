@@ -17,10 +17,8 @@ watcher.subscribe(each10seconds);
 let currentState = defaultState;
 
 each10seconds.run((batch: ILogLine[]) => {
-    currentState = mainReducer(currentState, batch);
-    if (currentState.hasChanged) {
+    currentState = mainReducer(currentState, 10*10, batch);
         console.log(JSON.stringify(currentState, null, 4));
-    }
 });
 
 watcher.watch();

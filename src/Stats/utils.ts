@@ -22,7 +22,7 @@ export const mergeBatches: BatchStateAdder = (batch1, batch2) => ({
 });
 
 export function groupBySections(logs: ILogLine[]): Map<string, Set<ILogLine>> {
-    return (logs || [])
+    return logs
         .filter((x) => x.request.routeSegments.length > 0)
         .map((x) => ({
             id: x.request.routeSegments[0],

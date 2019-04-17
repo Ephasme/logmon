@@ -45,11 +45,6 @@ const logFactory = {
     },
 };
 
-it("should return empty set if logs are null", () => {
-    const groups = groupBySections(null);
-    expect(groups.size).toBe(0);
-});
-
 it("should return empty set if logs are empty", () => {
     const groups = groupBySections([]);
     expect(groups.size).toBe(0);

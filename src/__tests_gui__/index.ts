@@ -20,7 +20,8 @@ export async function test_alert_is_off() {
     gui.render(newState, {
         filename: "filename",
         maxHitsPerSeconds: 12,
-        overloadDuration: 5,
+        maxOverloadDuration: 5,
+        secondsPerRefresh: 2,
     });
 }
 
@@ -41,7 +42,8 @@ export function test_alert_is_on() {
     gui.render(newState, {
         filename: "filename",
         maxHitsPerSeconds: 12,
-        overloadDuration: 5,
+        maxOverloadDuration: 5,
+        secondsPerRefresh: 2,
     });
 }
 

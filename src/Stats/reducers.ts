@@ -42,9 +42,9 @@ export const reduceAlert = (state: IAlertState, currentBatch: IBatchState, appSe
    } = appSettings;
 
     if (currentBatch.hits < maxHitsPerSeconds) {
-        newState.overloadDuration = Math.max(0, state.overloadDuration - 1);
+        newState.overloadDuration = Math.max(0, state.overloadDuration - appSettings.secondsPerRefresh);
     } else {
-        newState.overloadDuration = Math.min(maxOverloadDuration, state.overloadDuration + 1);
+        newState.overloadDuration = Math.min(maxOverloadDuration, state.overloadDuration + appSettings.secondsPerRefresh);
     }
 
     if (newState.overloadDuration === maxOverloadDuration && state.status !== "off") {

@@ -6,8 +6,8 @@ import { IAlertState, IBatchState, AnyMessage, IAlertMessage, IApplicationSettin
 
 const appSettings: () => IApplicationSettings = () => ({
     maxHitsPerSeconds: 10,
-    maxOverloadDuration: 3,
-    secondsPerRefresh: 1,
+    maxOverloadDuration: 20,
+    secondsPerRefresh: 5,
     filename: "",
 });
 
@@ -19,24 +19,24 @@ it("should increase overloading when hits is too high", () => {
     const now = new Date();
     const result = reduceAlert(state, currentBatch, appSettings(), now);
 
-    expect(result.overloadDuration).toBe(3);
+    expect(result.overloadDuration).toBe(7);
 });
 
 it("should not increase overloading more than threshold", () => {
     const state: IAlertState = defaultAlertState();
     const currentBatch: IBatchState = defaultBatchState();
-    state.overloadDuration = 3;
+    state.overloadDuration = 19;
     currentBatch.hits = 200;
     const now = new Date();
     const result = reduceAlert(state, currentBatch, appSettings(), now);
 
-    expect(result.overloadDuration).not.toBeGreaterThan(3);
+    expect(result.overloadDuration).not.toBeGreaterThan(20);
 });
 
 it("should not create a recovering message when hits is zero and no message", () => {
     const state: IAlertState = defaultAlertState();
     const currentBatch: IBatchState = defaultBatchState();
-    state.overloadDuration = 2;
+    state.overloadDuration = 15;
     state.message = List();
     currentBatch.hits = 200;
     const now = new Date();
@@ -92,18 +92,18 @@ it("should not update the message if its off and overloaded", () => {
 it("should reduce overloading when hits is low", () => {
     const state: IAlertState = defaultAlertState();
     const currentBatch: IBatchState = defaultBatchState();
-    state.overloadDuration = 3;
+    state.overloadDuration = 10;
     currentBatch.hits = 0;
     const now = new Date();
     const result = reduceAlert(state, currentBatch, appSettings(), now);
 
-    expect(result.overloadDuration).toBe(2);
+    expect(result.overloadDuration).toBe(5);
 });
 
 it("should create a message when hits is too high", () => {
     const state: IAlertState = defaultAlertState();
     const currentBatch: IBatchState = defaultBatchState();
-    state.overloadDuration = 2;
+    state.overloadDuration = 19;
     currentBatch.hits = 200;
     const now = new Date();
     const result = reduceAlert(state, currentBatch, appSettings(), now);

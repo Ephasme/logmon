@@ -9,6 +9,7 @@
     "test:cover": "jest --coverage",
     "test:watch": "jest --watch",
     "test": "jest",
+    "start:logwriting": "node ./dist/__tests_utils__/start.js",
     "start:debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename src/__fixtures__/access.log",
     "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc",

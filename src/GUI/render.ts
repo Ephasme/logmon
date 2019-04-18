@@ -1,7 +1,6 @@
 import { IState, IBatchState, IBasicState, IApplicationSettings } from "../Stats/types";
 import { Map } from "immutable";
 import moment = require("moment");
-import { file } from "@babel/types";
 
 export const maybeGetBatch = (batch: IBatchState): IBatchState | null =>
     batch.sections.size > 0 ? batch : null;

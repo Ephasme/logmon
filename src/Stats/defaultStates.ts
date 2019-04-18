@@ -1,5 +1,5 @@
-import { Map } from "immutable";
-import { IBasicState, IBatchState, IState } from "./types";
+import { List, Map } from "immutable";
+import { IAlertState, IBasicState, IBatchState, IState } from "./types";
 
 export const defaultBasicState: IBasicState = {
     hits: 0,
@@ -12,12 +12,17 @@ export const defaultBatchState: IBatchState = {
     ...defaultBasicState,
 };
 
+export const defaultAlertState: IAlertState = {
+    message: List(),
+    overload: 0,
+    status: "on",
+};
+
 export const defaultState: IState = {
     currentBatch: defaultBatchState,
     allBatches: defaultBatchState,
     ...defaultBatchState,
     hasChanged: false,
     lastUpdated: new Date(),
-    message: null,
-    overloadDuration: 0,
+    alert: defaultAlertState,
 };

@@ -1,7 +1,6 @@
-import * as moment from "moment";
 import { ILogLine } from "../Models/ILogLine";
 import { defaultBatchState } from "./defaultStates";
-import { IBasicState, IState, StateBySections, IBatchState } from "./types";
+import { IAlertState, IBasicState, IBatchState, IState, StateBySections } from "./types";
 import { groupBySections } from "./utils";
 import { add, mergeBatches } from "./utils";
 
@@ -35,43 +34,48 @@ const reduceCurrentBatch = (input: StateBySections) => {
     }), defaultBatchState);
 };
 
-export const reduceAlert = (state: IState, currentBatch: IBatchState) => {
-    let overloadDuration = state.overloadDuration;
-    let message = state.message;
-    if (currentBatch.traffic < 10) {
-        overloadDuration = Math.max(0, overloadDuration - 10);
+const alertMessage = (value: number, now: Date) =>
+    `High traffic generated an alert - hits = ${value}, triggered at ${now}`;
+
+const recoverMessage = () =>
+    `Recovered from high traffic at ${new Date()}`;
+
+export const reduceAlert = (state: IAlertState, currentBatch: IBatchState,
+                            now: Date, highHits: number, maxOverload: number): IAlertState => {
+    const newState = Object.assign({}, state);
+
+    if (currentBatch.hits < highHits) {
+        newState.overload = Math.max(0, state.overload - 1);
     } else {
-        overloadDuration = Math.min(30, overloadDuration + 10);
+        newState.overload = Math.min(maxOverload, state.overload + 1);
     }
 
-    if (overloadDuration === 30) {
-        message = "alert";
+    if (newState.overload === maxOverload) {
+        newState.status = "off";
+        newState.message = state.message.unshift({ type: "alert", hits: currentBatch.hits, time: now });
     }
 
-    if (overloadDuration === 0) {
-        if (message === "alert") {
-            message = null;
+    if (newState.overload === 0) {
+        if (state.status === "off") {
+            newState.message = state.message.unshift({ type: "recover", time: now });
         }
+        newState.status = "on";
     }
-    return {
-        overloadDuration,
-        message,
-    };
+    return newState;
 };
 
-export function mainReducer(state: IState, threshold: number, input: ILogLine[]): IState {
+export function mainReducer(state: IState, highHits: number, maxOverload: number, input: ILogLine[]): IState {
 
     const currentBatch = reduceCurrentBatch(reduceSections(input));
 
     // nominal to trigger =>
     //      now - last nominal > @
 
-
     return {
         currentBatch,
         allBatches: mergeBatches(state.allBatches, currentBatch),
         hasChanged: true,
         lastUpdated: new Date(),
-        ...reduceAlert(state, currentBatch),
+        alert: reduceAlert(state.alert, currentBatch, new Date(), highHits, maxOverload),
     };
 }

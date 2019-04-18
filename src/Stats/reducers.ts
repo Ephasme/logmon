@@ -4,19 +4,19 @@ import { IAlertState, IBasicState, IBatchState, IState, StateBySections } from "
 import { groupBySections } from "./utils";
 import { add, mergeBatches } from "./utils";
 
-const reduceErrors = (state: number, input: ILogLine): number =>
-    input.result >= 200 && input.result <= 299 ? state : state + 1;
+export const reduceErrors = (state: number, input: number): number =>
+    input >= 200 && input <= 299 ? state : state + 1;
 
 const reduceHits = (state: number): number =>
     state + 1;
 
-const reduceTraffic = (state: number, input: ILogLine): number =>
-    state + input.packet;
+const reduceTraffic = (state: number, input: number): number =>
+    state + input;
 
 const reduceSection = (state: IBasicState, input: ILogLine) => ({
-    errors: reduceErrors(state.errors, input),
+    errors: reduceErrors(state.errors, input.result),
     hits: reduceHits(state.hits),
-    traffic: reduceTraffic(state.traffic, input),
+    traffic: reduceTraffic(state.traffic, input.packet),
 });
 
 const reduceSections = (input: ILogLine[]) => groupBySections(input).map((set) => {

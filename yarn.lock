@@ -321,6 +321,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/blessed@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@types/blessed/-/blessed-0.1.11.tgz#8e4911fbac89c3b6910da724325bf27860828ad7"
+  integrity sha512-XplTXUREKwCmUliffPd82ugLzkVZSIrpL80iouo89XT0SupvRsUsTzAENtQ8bJQbxWbJ9KPH/JA0ENEPBmssjg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.0.tgz#1eb8c033e98cf4e1a4cedcaf8bcafe8cb7591e85"
@@ -646,6 +653,11 @@ binary-extensions@^1.0.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
   integrity sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==
+
+blessed@^0.1.81:
+  version "0.1.81"
+  resolved "https://registry.yarnpkg.com/blessed/-/blessed-0.1.81.tgz#f962d687ec2c369570ae71af843256e6d0ca1129"
+  integrity sha1-+WLWh+wsNpVwrnGvhDJW5tDKESk=
 
 bluebird@^3.4.6:
   version "3.5.4"

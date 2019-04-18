@@ -33,7 +33,8 @@ export interface IAlertState {
 
 export interface IState {
     hasChanged: boolean;
-    currentBatch: IBatchState | null;
+    lastValidBatch: IBatchState;
+    currentBatch: IBatchState;
     allBatches: IBatchState;
     lastUpdated: Date;
     alert: IAlertState;

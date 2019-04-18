@@ -73,6 +73,9 @@ export function mainReducer(state: IState, highHits: number, maxOverload: number
 
     return {
         currentBatch,
+        lastValidBatch: state.currentBatch.sections.size > 0
+            ? state.currentBatch
+            : state.lastValidBatch,
         allBatches: mergeBatches(state.allBatches, currentBatch),
         hasChanged: true,
         lastUpdated: new Date(),

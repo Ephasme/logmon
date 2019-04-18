@@ -14,7 +14,9 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@types/blessed": "^0.1.11",
     "@types/node": "^11.13.4",
+    "blessed": "^0.1.81",
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.24.0",
     "typescript": "^3.4.3",

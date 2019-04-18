@@ -19,6 +19,7 @@ export const defaultAlertState: IAlertState = {
 };
 
 export const defaultState: IState = {
+    lastValidBatch: defaultBatchState,
     currentBatch: defaultBatchState,
     allBatches: defaultBatchState,
     ...defaultBatchState,

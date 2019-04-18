@@ -1,6 +1,7 @@
-import { IState, IBatchState, IBasicState } from "../Stats/types";
+import { IState, IBatchState, IBasicState, IApplicationSettings } from "../Stats/types";
 import { Map } from "immutable";
-import * as blessed from "blessed";
+import moment = require("moment");
+import { file } from "@babel/types";
 
 export const maybeGetBatch = (batch: IBatchState): IBatchState | null =>
     batch.sections.size > 0 ? batch : null;
@@ -10,74 +11,11 @@ export function getBatch(state: IState) {
            maybeGetBatch(state.lastValidBatch);
 }
 
-export function batchToTableData(state?: [string, IBasicState][]): string[][] {
-    return (state || []).reduce((acc, [idx, el]) => {
-        return [ ...acc, [ idx, el.hits.toString(), el.traffic.toString(), el.errors.toString() ]];
-    }, [["section", "hits", "traffic", "errors"]]);
-}
-
 export interface IGui {
     render(): void;
 }
 
 export function createGui() {
-    const screen = blessed.screen({
-        smartCSR: true,
-        title: "LogMon",
-    });
-
-    const alert = blessed.box({
-        parent: screen,
-        top: 0,
-        style: {
-            bg: "red",
-            fg: "white",
-        },
-        content: "ALERT:\nSome alert",
-    })
-
-    const header = blessed.box({
-        parent: screen,
-        top: 2,
-        content: "Welcome to LogMon - an access log monitoring console application.\n" +
-                 "\n" +
-                 "You can use options to customize the timing, \n" +
-                 "and the alerting behaviour (see --help command for more infos).\n" +
-                 "\n" +
-                 "> Made with love by Ephasme... <3\n" +
-                 "> Press ESC, a, or C-c to quit.",
-
-    });
-
-    const globalStats = blessed.box({
-        top: <number>header.top + 7,
-        parent: screen,
-    });
-
-    const listtableTitle = blessed.box({
-        parent: screen,
-        top: <number>globalStats.top + 8,
-        content: "Last batch statistics:"
-    });
-    
-    const listtableDate = blessed.box({
-        parent: screen,
-        top: <number>listtableTitle.top + 1,
-        content: "Last update:",
-    });
-
-    const listtable = blessed.listtable({
-        parent: screen,
-        border: "line",
-        top: <number>listtableDate.top + 1,
-        scrollable: true,
-        height: "100%-22",
-        width: "50%",
-        data: [],
-    });
-
-    screen.key(['escape', 'q', 'C-c'], () => process.exit(0));
-
     type BasicStateWithKey = IBasicState & { key: string };
     
     function most<T>(all: Map<string, BasicStateWithKey>, selector: (batch: BasicStateWithKey) => T, name: string) {
@@ -89,55 +27,90 @@ export function createGui() {
     }
 
     const alertMessage = (value: number, now: Date) =>
-        `High traffic generated an alert - hits = ${value}, triggered at ${now}`;
+        `High traffic generated an alert - hits = ${value}, triggered at ${now.toLocaleString()}`;
 
     const recoverMessage = (now: Date) =>
         `Recovered from high traffic at ${now}`;
 
+    let lastRender = moment();
+
     return {
-        render: (state: IState) => {
+        render: (state: IState, appSettings: IApplicationSettings) => {
+            const now = moment();
+            const timespan = moment.duration(now.diff(lastRender)).asSeconds();
             const batch = getBatch(state);
+            console.clear();
 
             if (state.alert.status === "off") {
                 const message = state.alert.message.get(0);
                 if (message && message.type === "alert") {
-                    alert.setContent(`Alert:\n\t${alertMessage(message.hits, message.time)}`);
-                    alert.show();
+                    console.log("");
+                    console.log(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
+                    console.log("");
                 } else if (message && message.type === "recover") {
-                    alert.setContent(`Alert:\n\t${recoverMessage(message.time)}`);
-                    alert.show();
+                    console.log("");
+                    console.log(`[o] Info:\t${recoverMessage(message.time)}`);
+                    console.log("");
                 }
-            } else {
-                alert.hide();
-            }
+            }            
 
-            if (batch) {
-                listtable.setData(batchToTableData(batch.sections.toArray()));
-            } else {
-                listtable.setData(batchToTableData());
-            }
-            listtableDate.setContent(state.lastUpdated.toLocaleString());
+            lastRender = now;
+
+            console.log("Welcome to LogMon - an access log monitoring console application.\n" +
+            "\n" +
+            "You can use options to customize the timing, \n" +
+            "and the alerting behaviour (see --help command for more infos).");
+
+            console.log("");
+            console.log("Settings:");
+            console.log(`    - Overload duration:\t${state.alert.overloadDuration}/${appSettings.maxOverloadDuration}`);
+            console.log(`    - Max hits per second:\t${appSettings.maxHitsPerSeconds}`);
+            console.log(`    - Monitored file:\t\t${appSettings.filename}`);
+
 
             const allBatchesWithKeys = state.allBatches.sections
                 .map((x, key) => ({ ...x, key }));
 
             const mostVisits = most(allBatchesWithKeys, (x) => x.hits, "hit(s)");
             const mostErrorProne = most(allBatchesWithKeys, (x) => x.errors, "error(s)");
-            globalStats.setContent(`
-Global stats:
-    
-    Most visited section: ${mostVisits}
-    Most buggy section: ${mostErrorProne}
-    Total hits: ${state.allBatches.hits} hit(s)
-    Total traffic: ${state.allBatches.traffic} b`)
+            console.log("");
+            console.log("Global stats:");
+            console.log(`    - Most visited section:\t${mostVisits}`);
+            console.log(`    - Most buggy section:\t${mostErrorProne}`);
+            console.log(`    - Total hits:\t\t${state.allBatches.hits} hit(s)`);
+            console.log(`    - Avg hits/s:\t\t${state.allBatches.hits / timespan}`);
+            console.log(`    - Total traffic:\t\t${state.allBatches.traffic} b`);
 
-            screen.render();
+            function displaySections(state: [string, IBasicState][]) {
+                for (const [key, data] of state) {
+                    console.log(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`)
+                }
+            }
+
+            console.log("");
+            console.log("Current batch:");
+            console.log(`    - Current batch traffic:\t${state.currentBatch.traffic}`);
+            console.log(`    - Current batch hits/s:\t${state.currentBatch.hits / timespan}`);
+
+            console.log("");
+            console.log("Sections details:")
+            console.log("Last updated at " + state.lastUpdated.toLocaleString());
+            console.log("");
+            if (batch) {
+                displaySections(batch.sections.toArray());
+            } else {
+                displaySections([]);
+            }
+
+            console.log("");
+            console.log("> Made with love by Ephasme... <3");
+            console.log("> Press ESC, a, or C-c to quit.");
         }
     }
 }
 
 const gui = createGui();
 
-export function render(state: IState) {
-    gui.render(state);
+export function render(state: IState, appSettings: IApplicationSettings) {
+    gui.render(state, appSettings);
 }

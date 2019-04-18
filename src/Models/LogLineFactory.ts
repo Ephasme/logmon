@@ -3,7 +3,7 @@ import { ILogLine } from "./ILogLine";
 import * as RequestLineFactory from "./RequestLineFactory";
 
 /* tslint:disable */
-const pattern = () => /(?<domain>[^ ]*) (?<hyphen>[^ ]*) (?<userid>[^ ]*) \[(?<time>[^]*)\] "(?<action>[^"]*)" (?<resultcode>[^ ]*) (?<duration>[^ ]*)/gm;
+const pattern = () => /(?<domain>[^ ]*) (?<hyphen>[^ ]*) (?<userid>[^ ]*) \[(?<time>[^]*)\] "(?<action>[^"]*)" (?<resultcode>[^ ]*) (?<packet>[^ ]*)/gm;
 /* tslint:enable */
 
 export type FactoryFunction = (line: string) => ILogLine | null;
@@ -24,7 +24,7 @@ export const createFrom: FactoryFunction = (line) => {
                 time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss Z").toDate(),
                 request: requestLine,
                 result: parseInt(result.groups.resultcode),
-                packet: parseInt(result.groups.duration),
+                packet: parseInt(result.groups.packet),
             };
         }
     }

@@ -1,4 +1,12 @@
 import { List, Map } from "immutable";
+import { ILogLine } from "../Models/ILogLine";
+
+export interface IApplicationSettings {
+    maxHitsPerSeconds: number;
+    maxOverloadDuration: number;
+    secondsPerRefresh: number;
+    filename: string;
+}
 
 export interface IBasicState {
     hits: number;
@@ -26,12 +34,13 @@ export interface IRecoverMessage {
 export type AnyMessage = IAlertMessage | IRecoverMessage;
 
 export interface IAlertState {
-    overload: number; // in seconds.
+    overloadDuration: number; // in seconds.
     status: "off" | "on";
     message: List<AnyMessage>;
 }
 
-export interface IState {
+export type IState = {
+    logs: ILogLine[],
     hasChanged: boolean;
     lastValidBatch: IBatchState;
     currentBatch: IBatchState;

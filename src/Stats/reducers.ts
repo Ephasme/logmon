@@ -34,12 +34,6 @@ const reduceCurrentBatch = (input: StateBySections) => {
     }), defaultBatchState);
 };
 
-const alertMessage = (value: number, now: Date) =>
-    `High traffic generated an alert - hits = ${value}, triggered at ${now}`;
-
-const recoverMessage = () =>
-    `Recovered from high traffic at ${new Date()}`;
-
 export const reduceAlert = (state: IAlertState, currentBatch: IBatchState,
                             now: Date, highHits: number, maxOverload: number): IAlertState => {
     const newState = Object.assign({}, state);

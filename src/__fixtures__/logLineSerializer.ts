@@ -1,4 +1,4 @@
-import { ILogLine } from "../Models/ILogLine";
+import { ILogLine } from "../LogWatcher";
 import moment = require("moment");
 
 export function formatLogLine(log: ILogLine) {

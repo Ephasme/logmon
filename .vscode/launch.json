@@ -11,7 +11,7 @@
             "runtimeExecutable": "yarn",
             "runtimeArgs": [
                 "run",
-                "start:debug"
+                "start:app-debug"
             ],
             "port": 5858
         },

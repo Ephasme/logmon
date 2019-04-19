@@ -1,5 +1,5 @@
 import * as utils from "../Utils";
-import { IRequestLine } from "./IRequestLine";
+import { IRequestLine } from "./types/IRequestLine";
 
 const pattern = () => /(?<verb>[^ ]*) (?<uri>[^ ]*) (?<protocol>[^ ]*)/gm;
 

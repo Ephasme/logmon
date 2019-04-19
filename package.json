@@ -1,19 +1,14 @@
 {
-  "name": "logmon-ts",
+  "name": "logmon-ts-2",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "git@github.com:Ephasme/logmon.git",
+  "author": "Loup Peluso <loup.peluso@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "./clean.sh",
-    "lint:fix": "tslint --project tsconfig.json --fix",
-    "test:cover": "jest --coverage",
-    "test:watch": "jest --watch",
-    "test": "jest",
-    "start:logwriting": "node ./dist/__tests_utils__/start.js",
-    "start:debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename src/__fixtures__/access.log",
-    "start": "NODE_ENV=production node dist/index.js",
-    "build": "tsc",
-    "test:gui": "ts-node ./src/__tests_gui__/index.ts"
+    "start:logs-debug": "nodemon --watch src --inspect=5859 -r ts-node/register ./src/__tests_utils__/index.ts --filename data/access.log",
+    "start:app-debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename data/access.log",
+    "start:all-debug": "concurrently \"yarn run start:write-logs\" \"yarn run start:app-debug\""
   },
   "dependencies": {
     "@types/node": "^11.13.4",
@@ -26,10 +21,11 @@
     "@types/faker": "^4.1.5",
     "@types/jest": "^24.0.11",
     "@types/mock-fs": "^3.6.30",
-    "nodemon": "^1.18.11",
+    "concurrently": "^4.1.0",
     "faker": "^4.1.0",
     "jest": "^24.7.1",
     "mock-fs": "^4.8.0",
+    "nodemon": "^1.18.11",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.0.3",
     "tslint": "^5.15.0"

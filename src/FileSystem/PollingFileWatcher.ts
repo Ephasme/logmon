@@ -3,9 +3,10 @@ import { IFileSystem, IFileWatcher, IStats } from ".";
 /**
  * I created this PollingWatcher because nodejs's watch
  * and watchFile functions are a little bit buggy and
- * qinconsistent accross platforms.
+ * inconsistent accross platforms.
  *
- * Source: https://stackoverflow.com/a/12979775/1829285
+ * Sources:  https://stackoverflow.com/a/12979775/1829285
+ *           https://nodejs.org/docs/latest/api/fs.html#fs_caveats
  */
 export class PollingFileWatcher implements IFileWatcher {
 

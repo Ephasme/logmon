@@ -1,9 +1,7 @@
-import { BlockReader } from "../FileSystem/BlockReader";
-import { IFileWatcher } from "../FileSystem/IFileWatcher";
-import { ITailWatcher } from "./ITailWatcher";
+import { BlockReader, IFileWatcher } from "../FileSystem";
+import { ITailWatcher } from ".";
 
 export class TailWatcher implements ITailWatcher {
-
     private cursor = 0;
     private readBlock: BlockReader;
     private watcher: IFileWatcher;

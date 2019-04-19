@@ -1,5 +1,5 @@
 import { factory } from "../../../__fixtures__/fsFactory";
-import { IFileSystem } from "../../../FileSystem/IFileSystem";
+import { IFileSystem } from "../../../FileSystem";
 import { PollingFileWatcher } from "../../../FileSystem/PollingFileWatcher";
 
 jest.useFakeTimers();

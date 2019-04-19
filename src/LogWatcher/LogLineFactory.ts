@@ -1,5 +1,5 @@
 import * as moment from "moment";
-import { ILogLine } from "./ILogLine";
+import { ILogLine } from "./types/ILogLine";
 import * as RequestLineFactory from "./RequestLineFactory";
 
 /* tslint:disable */

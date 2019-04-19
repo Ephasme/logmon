@@ -1,2 +1,2 @@
-export * from "./ITailWatcher";
+export * from "./types/ITailWatcher";
 export * from "./TailWatcher";

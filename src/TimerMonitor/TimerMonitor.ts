@@ -1,27 +1,25 @@
-import { ILogLine } from "../Models/ILogLine";
+import { ILogLine, ILogWatcher } from "../LogWatcher";
 import { ITimerMonitor } from "./ITimerMonitor";
 
 export class TimerMonitor implements ITimerMonitor {
-    private duration: number;
     private batch: ILogLine[] = [];
+    private logWatcher: ILogWatcher;
 
-    constructor(duration: number) {
-        this.duration = duration;
+    constructor(logWatcher: ILogWatcher) {
+        this.logWatcher = logWatcher;
     }
 
-    public onLog(log: ILogLine) {
-        this.batch.push(log);
+    public watch() {
+        this.logWatcher.watch((log: ILogLine) => {
+            this.batch.push(log);
+        });
     }
 
-    public run(onBatch: (batch: ILogLine[]) => void) {
-        const currentBatch = this.swapBatches();
-        onBatch(currentBatch);
-        setTimeout(() => this.run(onBatch), this.duration);
-    }
-
-    private swapBatches(): ILogLine[] {
-        const currentBatch = this.batch;
-        this.batch = [];
-        return currentBatch;
+    public *flush(): IterableIterator<ILogLine> {
+        const size = this.batch.length;
+        let item: ILogLine | undefined;
+        for (let i = 0; i < size && (item = this.batch.shift()); i++) {
+            yield item;
+        }
     }
 }

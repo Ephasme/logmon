@@ -1,6 +1,5 @@
 import { TailWatcher } from "../../TailWatcher";
 import { IFileWatcher, BlockReader, IStats } from "../../FileSystem";
-import { IBlock } from "../../FileSystem/IBlock";
 
 it("should call watch of FileWatcher", () => {
     const mockBlockReader: BlockReader = jest.fn();

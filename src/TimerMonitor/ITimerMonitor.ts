@@ -1,6 +1,6 @@
-import { ILogLine } from "../Models/ILogLine";
+import { ILogLine } from "../LogWatcher";
 
 export interface ITimerMonitor {
-    onLog(log: ILogLine): void;
-    run(onBatch: (batch: ILogLine[]) => void): void;
+    flush(): IterableIterator<ILogLine>;
+    watch(): void;
 }

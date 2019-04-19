@@ -1,42 +1,74 @@
-import * as yargs from "yargs";
-import { kernel } from "./Container";
-import { IApplicationSettings } from "./Stats/types";
-import { Renderer } from "./Renderer";
+import { PollingFileWatcher, IFileSystem, readBlock } from "./FileSystem";
+import * as fs from "fs";
+import { LogWatcher, ILogLine } from "./LogWatcher";
+import * as LogLineFactory from "./LogWatcher/LogLineFactory"
+import { TailWatcher } from "./TailWatcher";
+import { TimerMonitor } from "./TimerMonitor";
+import { Set, List } from "immutable"
+import { hitsBySeconds as hitsPerSeconds } from "./hitsBySeconds";
+import { timeBoundaries } from "./timeBoudaries";
+import moment = require("moment");
 
-const args = yargs
-    .option("filename", {
-        alias: "i",
-        default: "/tmp/access.log",
-        description: "log file to monitor",
-        type: "string",
-    })
-    .option("secondsPerRefresh", {
-        alias: "t",
-        default: "10",
-        description: "number of hits per second over which, after two minutes, you want to raise an alert",
-        type: "number",
-    })
-    .option("maxHitsPerSeconds", {
-        alias: "f",
-        default: "10",
-        description: "number of seconds between each updates",
-        type: "number",
-    })
-    .help()
-    .argv;
-
-const secondsPerRefresh = parseInt(args.secondsPerRefresh);
-const appSettings: IApplicationSettings = {
-    filename: args.filename,
-    maxHitsPerSeconds: parseInt(args.maxHitsPerSeconds),
-    secondsPerRefresh: secondsPerRefresh,
-    maxOverloadDuration: 2*60,
+export const nodeFs: IFileSystem = {
+    statSync: fs.statSync,
+    existsSync: fs.existsSync,
 };
-const watcher = kernel.createLogWatcher(args.filename);
-const monitoring = kernel.createTimerMonitor(1000 * secondsPerRefresh);
 
-watcher.subscribe(monitoring);
-const renderer = new Renderer(kernel.createMainReducer(), kernel.createGui(), appSettings);
-monitoring.run(renderer.onBatch.bind(renderer));
+const fileWatcher = new PollingFileWatcher(nodeFs, "data/access.log");
+const tailWatcher = new TailWatcher(fileWatcher, readBlock);
+const logWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher);
+const monitor = new TimerMonitor(logWatcher);
 
-watcher.watch();
+monitor.watch();
+
+// Time elapsed since last analysis in milliseconds.
+let elapsedSinceAnalysis = 0;
+
+// Batch of logline to analyze.
+let toAnalyze: ILogLine[] = [];
+
+const delay = 1000;
+const analysisDelay = 10000;
+
+type IState = {
+    time: number;
+    hits: number;
+};
+
+const state: IState = {
+    time: 0,
+    hits: 0,
+}
+
+function main() {
+    console.clear();
+    const batch = Array.from(monitor.flush());
+
+    if (batch.length === 0) {
+        console.log("zero batch");
+    }
+
+    elapsedSinceAnalysis += delay;
+    
+    const result = timeBoundaries(List(batch));
+    const ms = moment(result.older.time).diff(result.younger.time, "s");
+
+    state.time = ms;
+    state.hits = batch.length;
+
+    for (const log of batch) {
+        toAnalyze.push(log);
+    }
+
+    if (elapsedSinceAnalysis > analysisDelay) {
+        
+        toAnalyze = [];
+        elapsedSinceAnalysis = 0;
+    }
+
+    console.log(state);
+
+    setTimeout(() => main(), delay);
+}
+
+main();

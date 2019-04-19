@@ -1,6 +1,6 @@
 import { LogWatcher} from "../../LogWatcher/LogWatcher";
-import { FactoryFunction } from "../../Models/LogLineFactory";
-import { ITailWatcher } from "../../TailWatcher/ITailWatcher";
+import { FactoryFunction } from "../../LogWatcher/LogLineFactory";
+import { ITailWatcher } from "../../TailWatcher";
 
 const mockFactoryFunction: FactoryFunction = (_) => {
     return {
@@ -24,7 +24,7 @@ it("should call watch from TailWatcher", () => {
         watch: fakeWatch,
     };
     const w = new LogWatcher(mockFactoryFunction, mockTailWatcher);
-    w.watch();
+    w.watch(fakeWatch);
     expect(fakeWatch).toBeCalledTimes(1);
 });
 
@@ -37,8 +37,7 @@ it("should call log handler when log is given", () => {
         watch: fakeWatch,
     };
     const w = new LogWatcher(mockFactoryFunction, mockTailWatcher);
-    w.subscribe(fakeLogHandler);
-    w.watch();
+    w.watch(fakeLogHandler);
     expect(fakeLogHandler).toBeCalledTimes(1);
 });
 
@@ -51,7 +50,6 @@ it("should not call log handler when not log is given", () => {
         watch: fakeWatch,
     };
     const w = new LogWatcher((_) => null, mockTailWatcher);
-    w.subscribe(fakeLogHandler);
-    w.watch();
+    w.watch(fakeLogHandler);
     expect(fakeLogHandler).not.toBeCalled();
 });

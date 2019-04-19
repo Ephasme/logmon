@@ -8,10 +8,9 @@ export function truncate(filename: string) {
 }
 
 export function writeLogLines(filename: string): void {
-
     fs.appendFileSync(filename, formatLogLine(generateLogLine()));
 
     setTimeout(() => {
         writeLogLines(filename);
-    }, faker.random.number({ min: 30, max: 45 }));
+    }, faker.random.arrayElement([100]));
 }

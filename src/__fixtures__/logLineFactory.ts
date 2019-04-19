@@ -1,5 +1,5 @@
 import * as faker from "faker";
-import { ILogLine } from "../Models/ILogLine";
+import { ILogLine } from "../LogWatcher";
 
 const randomAction = () => faker.random.arrayElement([
     "GET", "POST", "DELETE", "PUT", "PATCH", "HEAD"
@@ -26,7 +26,7 @@ export function generateLogLine(): ILogLine {
             routeSegments: [ randomSection(), randomSubSection() ],
         },
         result: faker.random.number({ min: 0, max: 599 }),
-        time: faker.date.recent(),
+        time: new Date(),
         userid: faker.internet.userName(),
     }
 }

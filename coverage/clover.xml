@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1555673807287" clover="3.2.0">
+  <project timestamp="1555673807287" name="All files">
+    <metrics statements="205" coveredstatements="181" conditionals="33" coveredconditionals="29" methods="60" coveredmethods="46" elements="298" coveredelements="256" complexity="0" loc="205" ncloc="205" packages="10" files="19" classes="19"/>
+    <package name="src">
+      <metrics statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="Renderer.ts" path="/Users/loup/dev/logmon-ts/src/Renderer.ts">
+        <metrics statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.Container">
+      <metrics statements="18" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/Container/index.ts">
+        <metrics statements="16" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+      </file>
+      <file name="nodeFs.ts" path="/Users/loup/dev/logmon-ts/src/Container/nodeFs.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.FileSystem">
+      <metrics statements="19" coveredstatements="19" conditionals="3" coveredconditionals="3" methods="4" coveredmethods="4"/>
+      <file name="PollingFileWatcher.ts" path="/Users/loup/dev/logmon-ts/src/FileSystem/PollingFileWatcher.ts">
+        <metrics statements="10" coveredstatements="10" conditionals="3" coveredconditionals="3" methods="2" coveredmethods="2"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="13" count="8" type="stmt"/>
+        <line num="18" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
+        <line num="27" count="16" type="stmt"/>
+        <line num="30" count="7" type="stmt"/>
+        <line num="31" count="7" type="stmt"/>
+        <line num="35" count="19" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/FileSystem/index.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+      </file>
+      <file name="readBlock.ts" path="/Users/loup/dev/logmon-ts/src/FileSystem/readBlock.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.GUI">
+      <metrics statements="56" coveredstatements="56" conditionals="8" coveredconditionals="8" methods="11" coveredmethods="11"/>
+      <file name="render.ts" path="/Users/loup/dev/logmon-ts/src/GUI/render.ts">
+        <metrics statements="56" coveredstatements="56" conditionals="8" coveredconditionals="8" methods="11" coveredmethods="11"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="21" count="8" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="25" count="6" type="stmt"/>
+        <line num="28" count="5" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="5" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="34" count="5" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="54" count="4" type="stmt"/>
+        <line num="59" count="4" type="stmt"/>
+        <line num="60" count="4" type="stmt"/>
+        <line num="61" count="4" type="stmt"/>
+        <line num="62" count="4" type="stmt"/>
+        <line num="63" count="4" type="stmt"/>
+        <line num="66" count="4" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="69" count="4" type="stmt"/>
+        <line num="70" count="4" type="stmt"/>
+        <line num="71" count="4" type="stmt"/>
+        <line num="72" count="4" type="stmt"/>
+        <line num="73" count="4" type="stmt"/>
+        <line num="74" count="4" type="stmt"/>
+        <line num="75" count="4" type="stmt"/>
+        <line num="76" count="4" type="stmt"/>
+        <line num="77" count="4" type="stmt"/>
+        <line num="81" count="2" type="stmt"/>
+        <line num="85" count="4" type="stmt"/>
+        <line num="86" count="4" type="stmt"/>
+        <line num="87" count="4" type="stmt"/>
+        <line num="88" count="4" type="stmt"/>
+        <line num="90" count="4" type="stmt"/>
+        <line num="91" count="4" type="stmt"/>
+        <line num="92" count="4" type="stmt"/>
+        <line num="93" count="4" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="97" count="3" type="stmt"/>
+        <line num="100" count="4" type="stmt"/>
+        <line num="101" count="4" type="stmt"/>
+        <line num="102" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.LogWatcher">
+      <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
+      <file name="LogWatcher.ts" path="/Users/loup/dev/logmon-ts/src/LogWatcher/LogWatcher.ts">
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="8" count="6" type="stmt"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/LogWatcher/index.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.Models">
+      <metrics statements="22" coveredstatements="20" conditionals="12" coveredconditionals="10" methods="4" coveredmethods="4"/>
+      <file name="LogLineFactory.ts" path="/Users/loup/dev/logmon-ts/src/Models/LogLineFactory.ts">
+        <metrics statements="12" coveredstatements="11" conditionals="6" coveredconditionals="5" methods="2" coveredmethods="2"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="10" type="cond" truecount="1" falsecount="1"/>
+        <line num="13" count="10" type="stmt"/>
+        <line num="14" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="16" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="8" type="stmt"/>
+        <line num="20" count="8" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+      </file>
+      <file name="RequestLineFactory.ts" path="/Users/loup/dev/logmon-ts/src/Models/RequestLineFactory.ts">
+        <metrics statements="10" coveredstatements="9" conditionals="6" coveredconditionals="5" methods="2" coveredmethods="2"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="4" count="13" type="stmt"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="7" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="8" count="14" type="stmt"/>
+        <line num="9" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="13" type="stmt"/>
+        <line num="11" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="12" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.Stats">
+      <metrics statements="43" coveredstatements="36" conditionals="8" coveredconditionals="6" methods="18" coveredmethods="8"/>
+      <file name="defaultStates.ts" path="/Users/loup/dev/logmon-ts/src/Stats/defaultStates.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="10" count="20" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+      </file>
+      <file name="reducers.ts" path="/Users/loup/dev/logmon-ts/src/Stats/reducers.ts">
+        <metrics statements="27" coveredstatements="21" conditionals="8" coveredconditionals="6" methods="9" coveredmethods="2"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="8" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="8" type="stmt"/>
+        <line num="42" count="8" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="47" count="5" type="stmt"/>
+        <line num="51" count="3" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="61" count="8" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+      </file>
+      <file name="utils.ts" path="/Users/loup/dev/logmon-ts/src/Stats/utils.ts">
+        <metrics statements="11" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="4"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="27" count="5" type="stmt"/>
+        <line num="32" count="5" type="stmt"/>
+        <line num="33" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.TailWatcher">
+      <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="TailWatcher.ts" path="/Users/loup/dev/logmon-ts/src/TailWatcher/TailWatcher.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="5" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/TailWatcher/index.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.TimerMonitor">
+      <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+      <file name="TimerMonitor.ts" path="/Users/loup/dev/logmon-ts/src/TimerMonitor/TimerMonitor.ts">
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/TimerMonitor/index.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.Utils">
+      <metrics statements="3" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+      <file name="index.ts" path="/Users/loup/dev/logmon-ts/src/Utils/index.ts">
+        <metrics statements="3" coveredstatements="2" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="5" count="38" type="cond" truecount="2" falsecount="0"/>
+      </file>
+    </package>
+  </project>
+</coverage>

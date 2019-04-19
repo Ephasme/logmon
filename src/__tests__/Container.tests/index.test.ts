@@ -21,10 +21,14 @@ it("should be able to create a log watcher with a valid file", () => {
     expect(() => kernel.createLogWatcher("/some/path/somefile.txt")).not.toThrow();
 });
 
-it("should be able to create a log watcher without a valid file", () => {
-    expect(() => kernel.createLogWatcher("any")).not.toThrow();
-});
+it("should be able to create a main reducer with a valid file", () => {
+    expect(() => kernel.createMainReducer()).not.toThrow();
+})
 
-it("should have property allowing log watcher creation", () => {
-    expect(kernel).toHaveProperty("createLogWatcher");
+it("should be able to create a timer monitor with a valid file", () => {
+    expect(() => kernel.createTimerMonitor(15)).not.toThrow();
+})
+
+it("should be able to create a gui without a valid file", () => {
+    expect(() => kernel.createGui()).not.toThrow();
 });

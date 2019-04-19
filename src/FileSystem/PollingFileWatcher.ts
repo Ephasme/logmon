@@ -15,8 +15,6 @@ export class PollingFileWatcher implements IFileWatcher {
     private fs: IFileSystem;
 
     constructor(fs: IFileSystem, filename: string, pollingDelay: number = 1000) {
-        if (fs == null) throw new Error(`Argument null: fs is required.`);
-        if (filename == null) throw new Error(`Argument null: filename is required.`);
         if (pollingDelay < 0) throw new Error(`Invalid argument: polling delay is supposed to be positive.`);
 
         this.fs = fs;
@@ -25,8 +23,6 @@ export class PollingFileWatcher implements IFileWatcher {
     }
 
     public watch(onChange: (stats: IStats, filename: string) => void) {
-        if (onChange == null) throw new Error("Argument null: onChange callback is required.");
-
         if (this.fs.existsSync(this.filename)) {
             const stats = this.fs.statSync(this.filename);
 

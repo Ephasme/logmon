@@ -19,12 +19,10 @@ export const defaultAlertState: () => IAlertState = () => ({
 });
 
 export const defaultState: () => IState = () => ({
-    logs: [],
     lastValidBatch: defaultBatchState(),
     currentBatch: defaultBatchState(),
     allBatches: defaultBatchState(),
     ...defaultBatchState(),
     hasChanged: false,
-    lastUpdated: new Date(),
     alert: defaultAlertState(),
 });

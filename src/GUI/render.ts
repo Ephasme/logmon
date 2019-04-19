@@ -11,10 +11,10 @@ export function getBatch(state: IState) {
 }
 
 export interface IGui {
-    render(): void;
+    render(state: IState, appSettings: IApplicationSettings, now: Date, lastRender: Date): void;
 }
 
-export function createGui() {
+export function createGui(clear: () => void, display: (input: string) => void) {
     type BasicStateWithKey = IBasicState & { key: string };
     
     function most<T>(all: Map<string, BasicStateWithKey>, selector: (batch: BasicStateWithKey) => T, name: string) {
@@ -31,40 +31,36 @@ export function createGui() {
     const recoverMessage = (now: Date) =>
         `Recovered from high traffic at ${now}`;
 
-    let lastRender = moment();
-
     return {
-        render: (state: IState, appSettings: IApplicationSettings) => {
-            const now = moment();
-            const timespan = moment.duration(now.diff(lastRender)).asSeconds();
+        render: (state: IState, appSettings: IApplicationSettings, now: Date, lastRender: Date) => {
+            const momentNow = moment(now);
+            const timespan = moment.duration(momentNow.diff(lastRender)).asSeconds();
             const batch = getBatch(state);
-            console.clear();
+            clear();
 
             if (state.alert.status === "off") {
                 const message = state.alert.message.get(0);
                 if (message && message.type === "alert") {
-                    console.log("");
-                    console.log(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
-                    console.log("");
+                    display("");
+                    display(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
+                    display("");
                 } else if (message && message.type === "recover") {
-                    console.log("");
-                    console.log(`[o] Info:\t${recoverMessage(message.time)}`);
-                    console.log("");
+                    display("");
+                    display(`[o] Info:\t${recoverMessage(message.time)}`);
+                    display("");
                 }
             }            
 
-            lastRender = now;
-
-            console.log("Welcome to LogMon - an access log monitoring console application.\n" +
+            display("Welcome to LogMon - an access log monitoring console application.\n" +
             "\n" +
             "You can use options to customize the timing, \n" +
             "and the alerting behaviour (see --help command for more infos).");
 
-            console.log("");
-            console.log("Settings:");
-            console.log(`    - Overload duration:\t${state.alert.overloadDuration}/${appSettings.maxOverloadDuration}`);
-            console.log(`    - Max hits per second:\t${appSettings.maxHitsPerSeconds}`);
-            console.log(`    - Monitored file:\t\t${appSettings.filename}`);
+            display("");
+            display("Settings:");
+            display(`    - Overload duration:\t\t${state.alert.overloadDuration}/${appSettings.maxOverloadDuration}`);
+            display(`    - Max hits per second:\t\t${appSettings.maxHitsPerSeconds}`);
+            display(`    - Monitored file:\t\t\t${appSettings.filename}`);
 
 
             const allBatchesWithKeys = state.allBatches.sections
@@ -72,44 +68,38 @@ export function createGui() {
 
             const mostVisits = most(allBatchesWithKeys, (x) => x.hits, "hit(s)");
             const mostErrorProne = most(allBatchesWithKeys, (x) => x.errors, "error(s)");
-            console.log("");
-            console.log("Global stats:");
-            console.log(`    - Most visited section:\t${mostVisits}`);
-            console.log(`    - Most buggy section:\t${mostErrorProne}`);
-            console.log(`    - Total hits:\t\t${state.allBatches.hits} hit(s)`);
-            console.log(`    - Avg hits/s:\t\t${state.allBatches.hits / timespan}`);
-            console.log(`    - Total traffic:\t\t${state.allBatches.traffic} b`);
+            display("");
+            display("Global stats:");
+            display(`    - Most visited section:\t\t${mostVisits}`);
+            display(`    - Most buggy section:\t\t${mostErrorProne}`);
+            display(`    - Total hits:\t\t\t\t${state.allBatches.hits} hit(s)`);
+            display(`    - Avg hits/s:\t\t\t\t${state.allBatches.hits / timespan}`);
+            display(`    - Total traffic:\t\t\t${state.allBatches.traffic} b`);
 
             function displaySections(state: [string, IBasicState][]) {
                 for (const [key, data] of state) {
-                    console.log(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`)
+                    display(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`)
                 }
             }
 
-            console.log("");
-            console.log("Current batch:");
-            console.log(`    - Current batch traffic:\t${state.currentBatch.traffic}`);
-            console.log(`    - Current batch hits/s:\t${state.currentBatch.hits / timespan}`);
+            display("");
+            display("Current batch:");
+            display(`    - Current batch traffic:\t${state.currentBatch.traffic}`);
+            display(`    - Current batch hits/s:\t\t${state.currentBatch.hits / timespan}`);
 
-            console.log("");
-            console.log("Sections details:")
-            console.log("Last updated at " + state.lastUpdated.toLocaleString());
-            console.log("");
+            display("");
+            display("Sections details:")
+            display("Last updated at " + now.toLocaleString());
+            display("");
             if (batch) {
                 displaySections(batch.sections.toArray());
             } else {
                 displaySections([]);
             }
 
-            console.log("");
-            console.log("> Made with love by Ephasme... <3");
-            console.log("> Press ESC, a, or C-c to quit.");
+            display("");
+            display("> Made with love by Ephasme... <3");
+            display("> Press ESC, a, or C-c to quit.");
         }
     }
-}
-
-const gui = createGui();
-
-export function render(state: IState, appSettings: IApplicationSettings) {
-    gui.render(state, appSettings);
 }

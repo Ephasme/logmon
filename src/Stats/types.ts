@@ -1,5 +1,4 @@
 import { List, Map } from "immutable";
-import { ILogLine } from "../Models/ILogLine";
 
 export interface IApplicationSettings {
     maxHitsPerSeconds: number;
@@ -40,11 +39,9 @@ export interface IAlertState {
 }
 
 export type IState = {
-    logs: ILogLine[],
     hasChanged: boolean;
     lastValidBatch: IBatchState;
     currentBatch: IBatchState;
     allBatches: IBatchState;
-    lastUpdated: Date;
     alert: IAlertState;
 }

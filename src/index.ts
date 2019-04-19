@@ -1,10 +1,7 @@
 import * as yargs from "yargs";
 import { kernel } from "./Container";
-import { ILogLine } from "./Models/ILogLine";
-import { defaultState } from "./Stats/defaultStates";
-import { mainReducer } from "./Stats/reducers";
-import { render } from "./GUI/render";
 import { IApplicationSettings } from "./Stats/types";
+import { Renderer } from "./Renderer";
 
 const args = yargs
     .option("filename", {
@@ -13,7 +10,7 @@ const args = yargs
         description: "log file to monitor",
         type: "string",
     })
-    .option("secondsBetweenUpdates", {
+    .option("secondsPerRefresh", {
         alias: "t",
         default: "10",
         description: "number of hits per second over which, after two minutes, you want to raise an alert",
@@ -28,22 +25,18 @@ const args = yargs
     .help()
     .argv;
 
-const secondsBetweenUpdates = parseInt(args.secondsBetweenUpdates);
+const secondsPerRefresh = parseInt(args.secondsPerRefresh);
 const appSettings: IApplicationSettings = {
     filename: args.filename,
     maxHitsPerSeconds: parseInt(args.maxHitsPerSeconds),
-    secondsPerRefresh: secondsBetweenUpdates,
+    secondsPerRefresh: secondsPerRefresh,
     maxOverloadDuration: 2*60,
 };
 const watcher = kernel.createLogWatcher(args.filename);
-const monitoring = kernel.createTimerMonitor(1000 * secondsBetweenUpdates);
+const monitoring = kernel.createTimerMonitor(1000 * secondsPerRefresh);
 
 watcher.subscribe(monitoring);
-
-let currentState = defaultState();
-monitoring.run((logs: ILogLine[]) => {
-    currentState = mainReducer(currentState, logs, appSettings, new Date());
-    render(currentState, appSettings);
-});
+const renderer = new Renderer(kernel.createMainReducer(), kernel.createGui(), appSettings);
+monitoring.run(renderer.onBatch.bind(renderer));
 
 watcher.watch();

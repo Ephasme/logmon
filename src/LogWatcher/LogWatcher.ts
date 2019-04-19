@@ -15,7 +15,6 @@ export class LogWatcher implements ILogWatcher {
     }
 
     public subscribe(input: AnyListener): void {
-        if (input == null) throw new Error("Argument null: input.");
         if (typeof input === "function") {
             this.subs.push(input);
         } else {

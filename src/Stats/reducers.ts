@@ -61,12 +61,13 @@ export const reduceAlert = (state: IAlertState, currentBatch: IBatchState, appSe
     return newState;
 };
 
-export function mainReducer(state: IState, logs: ILogLine[], appSettings: IApplicationSettings, now: Date): IState {
+export type MainReducer = (state: IState, logs: ILogLine[], appSettings: IApplicationSettings, now: Date) => IState;
+
+export const mainReducer: MainReducer = (state, logs, appSettings, now) => {
 
     const currentBatch = reduceCurrentBatch(reduceSections(logs));
 
     return {
-        logs,
         currentBatch,
         lastValidBatch: state.currentBatch.sections.size > 0
             ? state.currentBatch

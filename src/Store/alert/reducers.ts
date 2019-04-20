@@ -1,7 +1,7 @@
 import { List } from "immutable";
 import moment = require("moment");
-import { ILogLine } from "../LogWatcher";
-import { AnyAction, IComputeOverloadingAction, COMPUTE_OVERLOADING, NEW_LOG } from "./actions";
+import { ILogLine } from "../../LogWatcher";
+import { AnyAlertAction, IComputeOverloadingAction, COMPUTE_OVERLOADING, NEW_LOG, INewLogAction } from "./actions";
 import { AlertState, OVERLOADING, RECOVERING } from "./states";
 
 export const computeTimeGap = (logs: List<ILogLine>): number | null => {
@@ -13,7 +13,6 @@ export const computeTimeGap = (logs: List<ILogLine>): number | null => {
     }
     return null;
 }
-
 
 export const runComputeOverloadingAction = (state: AlertState, action: IComputeOverloadingAction): AlertState => {
     const { now, hitsPerSecondsThreshold } = action.payload;
@@ -41,17 +40,21 @@ export const runComputeOverloadingAction = (state: AlertState, action: IComputeO
     return { ...state, logs: List() };
 };
 
-export const alertReducer = (state: AlertState, action: AnyAction): AlertState => {
+
+export const runNewLogAction = (state: AlertState, action: INewLogAction): AlertState => {
+    return {
+        ...state,
+        logs: state.logs.unshift(action.payload.log),
+    }
+}
+
+export const alertReducer = (state: AlertState, action: AnyAlertAction): AlertState => {
     switch (action.type) {
         case COMPUTE_OVERLOADING: {
             return runComputeOverloadingAction(state, action);
         }
         case NEW_LOG: {
-            const { log } = action.payload;
-            return {
-                ...state,
-                logs: state.logs.unshift(log)
-            }
+            return runNewLogAction(state, action);
         }
     }
     return state;

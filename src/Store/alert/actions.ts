@@ -1,6 +1,6 @@
-import { ILogLine } from "../LogWatcher";
+import { ILogLine } from "../../LogWatcher";
 
-export const NEW_LOG = "NEW_LOG";
+export const NEW_LOG = "alert/NEW_LOG";
 export interface INewLogAction {
     type: typeof NEW_LOG;
     payload: {
@@ -8,17 +8,16 @@ export interface INewLogAction {
     };
 }
 
-export const COMPUTE_OVERLOADING = "COMPUTE_OVERLOADING";
+export const COMPUTE_OVERLOADING = "alert/COMPUTE_OVERLOADING";
 export interface IComputeOverloadingAction {
     type: typeof COMPUTE_OVERLOADING;
     payload: {
         now: Date;
-        // The maximum value of hits per seconds over which the application is overloaded.
         hitsPerSecondsThreshold: number;
     };
 }
 
-export type AnyAction =
+export type AnyAlertAction =
     | INewLogAction
     | IComputeOverloadingAction;
 

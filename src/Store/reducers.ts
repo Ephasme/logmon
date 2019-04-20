@@ -1,8 +1,8 @@
-import { ILogLine } from "../LogWatcher";
-import { AnyAction, IComputeOverloadingAction } from "./actions";
 import { List } from "immutable";
 import moment = require("moment");
-import { RootState, DataState } from "./states";
+import { ILogLine } from "../LogWatcher";
+import { AnyAction, IComputeOverloadingAction } from "./actions";
+import { DataState, RootState } from "./states";
 
 export const runComputeOverloadingAction = (state: RootState, action: IComputeOverloadingAction): DataState => {
     const { timespan, threshold } = action.payload;
@@ -35,7 +35,7 @@ export const runComputeOverloadingAction = (state: RootState, action: IComputeOv
                     message: null,
                     overloadingStatus: "IDLE",
                     ...commonState,
-                }
+                };
             }
         }
     }
@@ -47,14 +47,13 @@ export const runTrimLogs = (state: List<ILogLine>, now: Date, ttl: number) => {
         .takeWhile((x) => {
             return moment.duration(moment(now).diff(x.time)).seconds() <= ttl;
         });
-}
+};
 
 export const runNewLog = (state: List<ILogLine>, log: ILogLine) => {
     return state.unshift(log);
-}
+};
 
 export const dataReducer = (state: RootState, action: AnyAction): DataState => {
-    const { logs } = state;
     switch (action.type) {
         case "COMPUTE_OVERLOADING": {
             return runComputeOverloadingAction(state, action);

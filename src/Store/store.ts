@@ -1,6 +1,6 @@
+import { AnyAction } from "./actions";
 import { dataReducer, logsReducer } from "./reducers";
 import { defaultStateFactory } from "./states";
-import { AnyAction } from "./actions";
 
 class StoreManager {
     private currentState = defaultStateFactory();

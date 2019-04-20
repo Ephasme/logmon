@@ -1,5 +1,5 @@
-import { ILogLine } from "../LogWatcher";
 import { List } from "immutable";
+import { ILogLine } from "../LogWatcher";
 
 export interface IAlertMessage {
     type: "alert";

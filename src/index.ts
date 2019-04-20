@@ -2,10 +2,10 @@ import * as fs from "fs";
 import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
 import { LogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
-import { TailWatcher } from "./TailWatcher";
+import { computeOverloadingAction as computeOverloading, newLogAction as addLog, trimLogsAction as trimLogs } from "./Store/actions";
 import { RootState } from "./Store/states";
-import { newLogAction, computeOverloadingAction, trimLogsAction } from "./Store/actions";
 import { storage } from "./Store/store";
+import { TailWatcher } from "./TailWatcher";
 
 export const nodeFs: IFileSystem = {
     statSync: fs.statSync,
@@ -26,12 +26,12 @@ const render = (state: RootState) => {
 };
 
 logWatcher.watch((log) => {
-    storage.dispatch(newLogAction(log));
+    storage.dispatch(addLog(log));
 });
 
 function computeOverloadingProcess() {
-    storage.dispatch(computeOverloadingAction(2 * 60, 10));
-    storage.dispatch(trimLogsAction(new Date(), 2 * 60));
+    storage.dispatch(computeOverloading(2 * 60, 10));
+    storage.dispatch(trimLogs(new Date(), 2 * 60));
 }
 
 function renderProcess() {

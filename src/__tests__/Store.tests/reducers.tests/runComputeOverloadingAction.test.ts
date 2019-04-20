@@ -1,84 +1,78 @@
 import { List } from "immutable";
-import { generateLogLine } from "../../../__fixtures__/logLineFactory";
 import { computeOverloadingAction } from "../../../Store/actions";
 import { runComputeOverloadingAction } from "../../../Store/reducers";
-import { defaultStateFactory } from "../../../Store/states";
+import { defaultStateFactory, AnyStatus, OVERLOADING, RECOVERING, OverloadedStatus as OverloadingStatus, IDLE, RootState, AlertState } from "../../../Store/states";
+import { makeLogs } from "../../../__fixtures__/makeLogBatch";
 
-const makeLogs = () => List([
-    generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 58) }),
-    generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 56) }),
-    generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 55) }),
-    generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 51) }),
-    generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 50) }),
-]);
-
-it("should do nothing when no data is given", () => {
+it("should recover when overloading and hits less than threshold", () => {
     let state = defaultStateFactory();
     state = {
-        logs: List([]),
-        data: {
-             overloadingStatus: "IDLE",
-             message: { type: "alert", time: new Date(), hits: 34 },
-             currentHitsPerSeconds: 3,
-             timespan: 7,
+        alert: {
+            logs: makeLogs(),
+            status: { type: OVERLOADING, since: new Date(), hits: 154 }, 
         },
     };
 
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(5, 1));
-
-    expect(result).toEqual(state.data);
+    const now = new Date(2015, 1, 1, 1, 12, 1);
+    const result = runComputeOverloadingAction(state.alert, computeOverloadingAction(1, now));
+    const expected: AlertState = {
+        logs: List(),
+        status: { type: RECOVERING, since: new Date(2015, 1, 1, 1, 12, 1) },
+    };
+    expect(result).toEqual(expected);
 });
 
-it("should inform recover when back from overloading", () => {
+it("should trim logs when keep overloading", () => {
     let state = defaultStateFactory();
     state = {
-        logs: makeLogs(),
-        data: {
-             overloadingStatus: "TRIGGERED",
-             message: { type: "alert", time: new Date(), hits: 34 },
-             currentHitsPerSeconds: 24,
-             timespan: 10,
+        alert: {
+            logs: makeLogs(),
+            status: { type: OVERLOADING, since: new Date(), hits: 154 }, 
         },
     };
 
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(5, 1));
+    const now = new Date(2015, 1, 1, 1, 12, 1);
+    const result = runComputeOverloadingAction(state.alert, computeOverloadingAction(0.1, now));
 
     expect(result).toEqual({
-        overloadingStatus: "IDLE",
-        message: { type: "recover", time: state.logs.last(null)!.time, hits: 34 },
-        currentHitsPerSeconds: 0.625,
-        timespan: 5,
+        ...state.alert,
+        logs: List(),
     });
 });
 
-it("should not raise an alert when alert is already raised", () => {
-
+it("should overload when threshold is reached", () => {
     let state = defaultStateFactory();
     state = {
-        ...state,
-        logs: makeLogs(),
+        alert: {
+            logs: makeLogs(),
+            status: { type: IDLE, since: new Date() }, 
+        },
     };
 
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(5, 0.1));
-
-    expect(result.message && result.message.type === "alert").toBeTruthy();
-    expect(result.currentHitsPerSeconds).toBe(0.625);
-    expect(result.overloadingStatus === "TRIGGERED").toBeTruthy();
-    expect(result.timespan).toBe(5);
+    const now = new Date(2015, 1, 1, 1, 12, 1);
+    const result = runComputeOverloadingAction(state.alert, computeOverloadingAction(0.1, now));
+    const expected: AlertState = {
+        logs: List(),
+        status: { type: OVERLOADING, since: new Date(2015, 1, 1, 1, 12, 1), hits: 0.625 },
+    };
+    expect(result).toEqual(expected);
 });
 
-it("should raise an alert when overloaded", () => {
-
+it("should recover when no data and overloading", () => {
     let state = defaultStateFactory();
+    
     state = {
-        ...state,
-        logs: makeLogs(),
+        alert: {
+            logs: List([]),
+            status: { type: OVERLOADING, since: new Date(), hits: 34 },
+        },
     };
 
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(5, 0.1));
+    const now = new Date();
+    const result = runComputeOverloadingAction(state.alert, computeOverloadingAction(10, now));
 
-    expect(result.message && result.message.type === "alert").toBeTruthy();
-    expect(result.currentHitsPerSeconds).toBe(0.625);
-    expect(result.overloadingStatus === "TRIGGERED").toBeTruthy();
-    expect(result.timespan).toBe(5);
+    expect(result).toEqual({
+        logs: List([]),
+        status: { type: RECOVERING, since: now },
+    });
 });

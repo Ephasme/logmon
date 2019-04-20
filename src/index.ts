@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
 import { LogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
-import { computeOverloadingAction as computeOverloading, newLogAction as addLog, trimLogsAction as trimLogs } from "./Store/actions";
+import { computeOverloadingAction as computeOverloading, newLogAction as addLog } from "./Store/actions";
 import { RootState } from "./Store/states";
 import { storage } from "./Store/store";
 import { TailWatcher } from "./TailWatcher";
@@ -30,8 +30,8 @@ logWatcher.watch((log) => {
 });
 
 function computeOverloadingProcess() {
-    storage.dispatch(computeOverloading(2 * 60, 10));
-    storage.dispatch(trimLogs(new Date(), 2 * 60));
+    const now = new Date();
+    storage.dispatch(computeOverloading(5, now));
 }
 
 function renderProcess() {

@@ -1,76 +1,57 @@
 import { List } from "immutable";
 import moment = require("moment");
 import { ILogLine } from "../LogWatcher";
-import { AnyAction, IComputeOverloadingAction } from "./actions";
-import { DataState, RootState } from "./states";
+import { AnyAction, IComputeOverloadingAction, COMPUTE_OVERLOADING, NEW_LOG } from "./actions";
+import { AlertState, OVERLOADING, RECOVERING } from "./states";
 
-export const runComputeOverloadingAction = (state: RootState, action: IComputeOverloadingAction): DataState => {
-    const { timespan, threshold } = action.payload;
-    const { logs, data: { overloadingStatus } } = state;
+export const computeTimeGap = (logs: List<ILogLine>): number | null => {
     const first = logs.first(null);
     const last = logs.last(null);
     if (first && last) {
-        const duration = moment(first.time).diff(last.time) / 1000;
-        if (duration >= timespan) {
-            const hits = logs.size;
-            const hitsPerSeconds = hits / duration;
-            const commonState = {
-                currentHitsPerSeconds: hitsPerSeconds,
-                timespan,
+        const gap = moment(first.time).diff(last.time) / 1000;
+        return gap;
+    }
+    return null;
+}
+
+
+export const runComputeOverloadingAction = (state: AlertState, action: IComputeOverloadingAction): AlertState => {
+    const { now, hitsPerSecondsThreshold } = action.payload;
+    const { logs, status } = state;
+
+    const gap = computeTimeGap(logs);
+    
+    const hitsPerSeconds = logs.size / (gap || Infinity);
+
+    if (hitsPerSeconds >= hitsPerSecondsThreshold) {
+        if (status.type !== OVERLOADING) {
+            return {
+                logs: List<ILogLine>(),
+                status: { type: OVERLOADING, since: now, hits: hitsPerSeconds },
             };
-            if (hitsPerSeconds > threshold) {
-                return {
-                    message: { type: "alert", hits: hitsPerSeconds, time: first.time },
-                    overloadingStatus: "TRIGGERED",
-                    ...commonState,
-                };
-            } else if (overloadingStatus === "TRIGGERED") {
-                return {
-                    message: { type: "recover", time: last.time },
-                    overloadingStatus: "IDLE",
-                    ...commonState,
-                };
-            } else {
-                return {
-                    message: null,
-                    overloadingStatus: "IDLE",
-                    ...commonState,
-                };
-            }
+        }
+    } else {
+        if (status.type === OVERLOADING) {
+            return {
+                logs: List<ILogLine>(),
+                status: { type: RECOVERING, since: now },
+            };
         }
     }
-    return state.data;
+    return { ...state, logs: List() };
 };
 
-export const runTrimLogs = (state: List<ILogLine>, now: Date, ttl: number) => {
-    return state
-        .takeWhile((x) => {
-            return moment.duration(moment(now).diff(x.time)).seconds() <= ttl;
-        });
-};
-
-export const runNewLog = (state: List<ILogLine>, log: ILogLine) => {
-    return state.unshift(log);
-};
-
-export const dataReducer = (state: RootState, action: AnyAction): DataState => {
+export const alertReducer = (state: AlertState, action: AnyAction): AlertState => {
     switch (action.type) {
-        case "COMPUTE_OVERLOADING": {
+        case COMPUTE_OVERLOADING: {
             return runComputeOverloadingAction(state, action);
         }
-    }
-    return state.data;
-};
-
-export const logsReducer = (state: List<ILogLine>, action: AnyAction): List<ILogLine> => {
-    switch (action.type) {
-        case "NEW_LOG": {
+        case NEW_LOG: {
             const { log } = action.payload;
-            return runNewLog(state, log);
-        }
-        case "TRIM_LOGS": {
-            const { now, ttl } = action.payload;
-            return runTrimLogs(state, now, ttl);
+            return {
+                ...state,
+                logs: state.logs.unshift(log)
+            }
         }
     }
     return state;

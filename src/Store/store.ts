@@ -1,6 +1,8 @@
 import { AnyAction } from "./actions";
-import { dataReducer, logsReducer } from "./reducers";
+import { alertReducer } from "./reducers";
 import { defaultStateFactory } from "./states";
+
+export type CurrentDateProvider = () => Date;
 
 class StoreManager {
     private currentState = defaultStateFactory();
@@ -9,8 +11,7 @@ class StoreManager {
 
     public dispatch(action: AnyAction) {
         this.currentState = {
-            data: dataReducer(this.currentState, action),
-            logs: logsReducer(this.currentState.logs, action),
+            alert: alertReducer(this.currentState.alert, action),
         };
     }
 }

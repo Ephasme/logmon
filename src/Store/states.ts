@@ -1,39 +1,42 @@
 import { List } from "immutable";
 import { ILogLine } from "../LogWatcher";
 
-export interface IAlertMessage {
-    type: "alert";
-    hits: number;
-    time: Date;
-}
+export const OVERLOADING = "OVERLOADING";
+export type OverloadedStatus = {
+    type: typeof OVERLOADING,
+    since: Date,
+    hits: number,
+};
 
-export interface IRecoverMessage {
-    type: "recover";
-    time: Date;
-}
+export const RECOVERING = "RECOVERING"
+export type RecoveredStatus = {
+    type: typeof RECOVERING,
+    since: Date,
+};
 
-export type AnyMessage = IAlertMessage | IRecoverMessage;
+export const IDLE = "IDLE"
+export type IdleStatus = {
+    type: typeof IDLE,
+    since: Date,
+};
 
-export type OverloadingStatus = "IDLE" | "TRIGGERED";
+export type AnyStatus =
+    | IdleStatus
+    | RecoveredStatus
+    | OverloadedStatus; 
 
-export type DataState = Readonly<{
-    overloadingStatus: OverloadingStatus,
-    message: AnyMessage | null,
-    currentHitsPerSeconds: number,
-    timespan: number;
+export type AlertState = Readonly<{
+    status: AnyStatus,
+    logs: List<ILogLine>,
 }>;
 
 export type RootState = Readonly<{
-    logs: List<ILogLine>;
-    data: DataState;
+    alert: AlertState;
 }>;
 
 export const defaultStateFactory: () => RootState = () => ({
-    logs: List<ILogLine>(),
-    data: {
-        overloadingStatus: "IDLE",
-        message: null,
-        currentHitsPerSeconds: 0,
-        timespan: 0,
+    alert: {
+        status: { type: IDLE, since: new Date() },
+        logs: List(),
     },
 });

@@ -1,8 +1,9 @@
 import { List } from "immutable";
 import moment = require("moment");
 import { ILogLine } from "../../LogWatcher";
-import { AnyAlertAction, IComputeOverloadingAction, COMPUTE_OVERLOADING, NEW_LOG, INewLogAction } from "./actions";
+import { AnyAlertAction, IComputeOverloadingAction, COMPUTE_OVERLOADING } from "./actions";
 import { AlertState, OVERLOADING, RECOVERING } from "./states";
+import { NEW_LOG, INewLogAction } from "../common/actions";
 
 export const computeTimeGap = (logs: List<ILogLine>): number | null => {
     const first = logs.first(null);

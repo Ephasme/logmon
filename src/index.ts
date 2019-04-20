@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
 import { LogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
-import { computeOverloadingAction as computeOverloading, newLogAction as addLog } from "./Store/alert/actions";
+import { computeOverloading, newLog } from "./Store/alert/actions";
 import { RootState } from "./Store/states";
 import { storage } from "./Store/store";
 import { TailWatcher } from "./TailWatcher";
@@ -25,7 +25,7 @@ const render = (state: RootState) => {
     console.log(state);
 };
 
-logWatcher.watch((log) => storage.dispatch(addLog(log)));
+logWatcher.watch((log) => storage.dispatch(newLog(log)));
 
 function computeOverloadingProcess() {
     const now = new Date();

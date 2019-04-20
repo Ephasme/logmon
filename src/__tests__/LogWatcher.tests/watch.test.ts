@@ -1,5 +1,5 @@
-import { LogWatcher} from "../../LogWatcher/LogWatcher";
 import { FactoryFunction } from "../../LogWatcher/LogLineFactory";
+import { LogWatcher} from "../../LogWatcher/LogWatcher";
 import { ITailWatcher } from "../../TailWatcher";
 
 const mockFactoryFunction: FactoryFunction = (_) => {

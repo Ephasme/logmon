@@ -55,7 +55,7 @@ it("should not throw when file does not exist", () => {
 });
 
 it("should tick every seconds by default", () => {
-    const stub : IFileSystem = {
+    const stub: IFileSystem = {
         existsSync: jest.fn()
             .mockReturnValue(true),
         statSync: jest.fn()

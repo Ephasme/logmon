@@ -1,10 +1,10 @@
-import { PollingFileWatcher, IFileSystem, readBlock } from "./FileSystem";
 import * as fs from "fs";
-import { LogWatcher, ILogLine } from "./LogWatcher";
-import * as LogLineFactory from "./LogWatcher/LogLineFactory"
-import { TailWatcher } from "./TailWatcher";
+import { List } from "immutable";
 import * as moment from "moment";
-import { List } from "immutable"
+import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
+import { ILogLine, LogWatcher } from "./LogWatcher";
+import * as LogLineFactory from "./LogWatcher/LogLineFactory";
+import { TailWatcher } from "./TailWatcher";
 
 export const nodeFs: IFileSystem = {
     statSync: fs.statSync,
@@ -29,7 +29,7 @@ export interface IRecoverMessage {
     time: Date;
 }
 
-export type AnyMessage = IAlertMessage | IRecoverMessage
+export type AnyMessage = IAlertMessage | IRecoverMessage;
 
 export type DataState = Readonly<{
     overloadingStatus: "IDLE" | "TRIGGERED",
@@ -42,42 +42,42 @@ export type RootState = Readonly<{
     data: DataState;
 }>;
 
-export const state: () => RootState = () => ({
+export const defaultStateFactory: () => RootState = () => ({
     logs: List<ILogLine>(),
     data: {
         overloadingStatus: "IDLE",
         message: null,
         currentHitsPerSeconds: 0,
-    }
+    },
 });
 
-export type NewLogAction = {
-    type: "NEW_LOG",
+export interface INewLogAction {
+    type: "NEW_LOG";
     payload: {
         log: ILogLine,
-    },
+    };
 }
 
-export type TrimLogAction = {
-    type: "TRIM_LOGS",
+export interface ITrimLogAction {
+    type: "TRIM_LOGS";
     payload: {
         now: Date,
         ttl: number,
-    }
+    };
 }
 
-export type ComputeOverloadingAction = {
-    type: "COMPUTE_OVERLOADING",
+export interface IComputeOverloadingAction {
+    type: "COMPUTE_OVERLOADING";
     payload: {
         threshold: number;
         timespan: number;
-    }
+    };
 }
 
 export type AnyAction =
-    | NewLogAction
-    | TrimLogAction
-    | ComputeOverloadingAction;
+    | INewLogAction
+    | ITrimLogAction
+    | IComputeOverloadingAction;
 
 export const dataReducer = (state: RootState, action: AnyAction): DataState => {
     const { logs } = state;
@@ -97,51 +97,50 @@ export const dataReducer = (state: RootState, action: AnyAction): DataState => {
                             overloadingStatus: "TRIGGERED",
                             currentHitsPerSeconds: hitsPerSeconds,
                             timespan,
-                        }
+                        };
                     } else {
                         return {
                             message: { type: "recover", time: last.time },
                             overloadingStatus: "IDLE",
                             currentHitsPerSeconds: hitsPerSeconds,
-                            timespan, }
+                            timespan };
                     }
                 }
             }
         }
     }
     return state.data;
-}
+};
 
 export const logsReducer = (state: List<ILogLine>, action: AnyAction): List<ILogLine> => {
     switch (action.type) {
         case "NEW_LOG": {
             const { log } = action.payload;
-            return state 
+            return state
                 .unshift(log);
         }
         case "TRIM_LOGS": {
             const { now, ttl } = action.payload;
-            return state 
-                .takeWhile(x => {
+            return state
+                .takeWhile((x) => {
                     return moment.duration(moment(now).diff(x.time)).seconds() <= ttl;
                 });
         }
     }
     return state;
-}
+};
 
-export const newLogAction = (log: ILogLine): NewLogAction =>
+export const newLogAction = (log: ILogLine): INewLogAction =>
     ({ type: "NEW_LOG", payload: { log }});
 
-export const trimLogsAction = (now: Date, ttl: number): TrimLogAction =>
+export const trimLogsAction = (now: Date, ttl: number): ITrimLogAction =>
     ({ type: "TRIM_LOGS", payload: { now, ttl }});
 
-export const computeOverloadingAction = (timespan: number, threshold: number): ComputeOverloadingAction =>
+export const computeOverloadingAction = (timespan: number, threshold: number): IComputeOverloadingAction =>
     ({ type: "COMPUTE_OVERLOADING", payload: { timespan, threshold }});
 
-
 class StoreManager {
-    private currentState = state();
+    private currentState = defaultStateFactory();
 
     public get state() { return this.currentState; }
 
@@ -162,7 +161,7 @@ const storage = new StoreManager();
 const render = (state: RootState) => {
     console.clear();
     console.log(state);
-}
+};
 
 logWatcher.watch((log) => {
     storage.dispatch(newLogAction(log));

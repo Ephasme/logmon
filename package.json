@@ -6,6 +6,7 @@
   "author": "Loup Peluso <loup.peluso@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "tslint -p . --fix",
     "start:logs-debug": "nodemon --watch src --inspect=5859 -r ts-node/register ./src/__tests_utils__/index.ts --filename data/access.log",
     "start:app-debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename data/access.log",
     "start:all-debug": "concurrently \"yarn run start:write-logs\" \"yarn run start:app-debug\""

@@ -1,7 +1,7 @@
-import * as fs from "fs";
 import * as faker from "faker";
-import { formatLogLine } from "../__fixtures__/logLineSerializer";
+import * as fs from "fs";
 import { generateLogLine } from "../__fixtures__/logLineFactory";
+import { formatLogLine } from "../__fixtures__/logLineSerializer";
 
 export function truncate(filename: string) {
     fs.truncateSync(filename);

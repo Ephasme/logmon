@@ -1,6 +1,6 @@
 import * as moment from "moment";
-import { ILogLine } from "./types/ILogLine";
 import * as RequestLineFactory from "./RequestLineFactory";
+import { ILogLine } from "./types/ILogLine";
 
 /* tslint:disable */
 const pattern = () => /(?<domain>[^ ]*) (?<hyphen>[^ ]*) (?<userid>[^ ]*) \[(?<time>[^]*)\] "(?<action>[^"]*)" (?<resultcode>[^ ]*) (?<packet>[^ ]*)/gm;

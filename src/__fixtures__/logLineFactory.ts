@@ -2,8 +2,8 @@ import * as faker from "faker";
 import { ILogLine } from "../LogWatcher";
 
 const randomAction = () => faker.random.arrayElement([
-    "GET", "POST", "DELETE", "PUT", "PATCH", "HEAD"
-])
+    "GET", "POST", "DELETE", "PUT", "PATCH", "HEAD",
+]);
 
 const randomSection = () => faker.random.arrayElement([
     "section1", "section2",
@@ -28,5 +28,5 @@ export function generateLogLine(): ILogLine {
         result: faker.random.number({ min: 0, max: 599 }),
         time: new Date(),
         userid: faker.internet.userName(),
-    }
+    };
 }

@@ -1,6 +1,6 @@
 import { ILogLine, ILogWatcher } from ".";
-import { FactoryFunction } from "./LogLineFactory";
 import { ITailWatcher } from "../TailWatcher";
+import { FactoryFunction } from "./LogLineFactory";
 
 export class LogWatcher implements ILogWatcher {
 

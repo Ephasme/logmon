@@ -15,8 +15,8 @@ const randomSubSection = () => faker.random.arrayElement([
     "sub3", "sub4",
     "sub5"]);
 
-export function generateLogLine(): ILogLine {
-    return {
+export function generateLogLine(input?: Partial<ILogLine>): ILogLine {
+    return Object.assign({}, {
         domain: faker.internet.ip(),
         hyphen: "-",
         packet: faker.random.number({ min: 0, max: 241 }),
@@ -28,5 +28,5 @@ export function generateLogLine(): ILogLine {
         result: faker.random.number({ min: 0, max: 599 }),
         time: new Date(),
         userid: faker.internet.userName(),
-    };
+    }, input);
 }

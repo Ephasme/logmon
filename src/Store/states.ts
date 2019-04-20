@@ -14,8 +14,10 @@ export interface IRecoverMessage {
 
 export type AnyMessage = IAlertMessage | IRecoverMessage;
 
+export type OverloadingStatus = "IDLE" | "TRIGGERED";
+
 export type DataState = Readonly<{
-    overloadingStatus: "IDLE" | "TRIGGERED",
+    overloadingStatus: OverloadingStatus,
     message: AnyMessage | null,
     currentHitsPerSeconds: number,
     timespan: number;

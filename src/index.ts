@@ -1,8 +1,11 @@
 import * as fs from "fs";
 import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
-import { ILogLine, LogWatcher } from "./LogWatcher";
+import { LogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
 import { TailWatcher } from "./TailWatcher";
+import { RootState } from "./Store/states";
+import { newLogAction, computeOverloadingAction, trimLogsAction } from "./Store/actions";
+import { storage } from "./Store/store";
 
 export const nodeFs: IFileSystem = {
     statSync: fs.statSync,
@@ -15,19 +18,7 @@ const logWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher);
 
 const overloadMonitoringDelay = 1000;
 const batchAnalysisDelay = 10000;
-
-export const newLogAction = (log: ILogLine): INewLogAction =>
-    ({ type: "NEW_LOG", payload: { log }});
-
-export const trimLogsAction = (now: Date, ttl: number): ITrimLogAction =>
-    ({ type: "TRIM_LOGS", payload: { now, ttl }});
-
-export const computeOverloadingAction = (timespan: number, threshold: number): IComputeOverloadingAction =>
-    ({ type: "COMPUTE_OVERLOADING", payload: { timespan, threshold }});
-
-// export const mainReducer = (state: IState, action: AnyAction) => {
-//     return logsReducer(state, action);
-// }
+const renderDelay = 2000;
 
 const render = (state: RootState) => {
     console.clear();
@@ -48,4 +39,4 @@ function renderProcess() {
 }
 
 setInterval(computeOverloadingProcess, overloadMonitoringDelay);
-setInterval(renderProcess, 2000);
+setInterval(renderProcess, renderDelay);

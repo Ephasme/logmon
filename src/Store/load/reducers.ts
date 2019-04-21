@@ -8,7 +8,7 @@ import { LoadState } from "./states";
 
 export const runComputeOverloadingAction = (state: LoadState, action: IComputeOverloadingAction): LoadState => {
     const { logs } = state;
-    let { overloadDuration, status, message } = state;
+    let { overloadDuration, status, messages } = state;
     const { now, hitsPerSecondThreshold, maxOverloadDuration, elapsedSinceLastUpdate } = action.payload;
 
     const timeGap = computeTimeGap(logs, elapsedSinceLastUpdate);
@@ -22,18 +22,18 @@ export const runComputeOverloadingAction = (state: LoadState, action: IComputeOv
 
     if (overloadDuration.sec === maxOverloadDuration.sec  && status !== "TRIGGERED") {
         status = "TRIGGERED";
-        message = { type: "alert", hits: currentHitsPerSecond, time: now };
+        messages = messages.unshift({ type: "alert", hits: currentHitsPerSecond, time: now });
     }
 
     if (overloadDuration.sec === 0) {
         if (state.status === "TRIGGERED") {
-            message = { type: "info", time: now };
+            messages = messages.unshift({ type: "info", time: now });
         }
         status = "IDLE";
     }
     return {
         logs: List(),
-        message,
+        messages,
         overloadDuration,
         status,
     };

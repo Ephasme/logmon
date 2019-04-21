@@ -16,5 +16,5 @@ export function writeLogLines(filename: string): void {
 
     setTimeout(() => {
         writeLogLines(filename);
-    }, faker.random.arrayElement([100]));
+    }, faker.random.arrayElement([6, 10, 11, 12, 13, 14, 15, 5]));
 }

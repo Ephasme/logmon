@@ -141,7 +141,7 @@ it("should create a recovering message when triggered and recovered", () => {
         },
     });
 
-    expect(result.message).toEqual({
+    expect(result.messages.get(0)).toEqual({
         type: "info",
         time: now,
     });
@@ -169,7 +169,7 @@ it("should create am overloaded message when not triggered and overloaded", () =
         },
     });
 
-    expect(result.message).toEqual({
+    expect(result.messages.get(0)).toEqual({
         type: "alert",
         hits: fixture.hitsPerSecond,
         time: now,
@@ -184,7 +184,7 @@ it("should should not change message when idle and recovered", () => {
         ...state,
         logs: fixture.logs,
         status: "IDLE",
-        message: { type: "info", time: new Date() },
+        messages: List([{ type: "info", time: new Date() }]),
         overloadDuration: Sec(fixture.elapsed),
     };
 
@@ -199,7 +199,7 @@ it("should should not change message when idle and recovered", () => {
         },
     });
 
-    expect(result.message).toEqual(state.message);
+    expect(result.messages).toEqual(state.messages);
 });
 
 it("should should not change message when triggered and overloaded", () => {
@@ -210,7 +210,7 @@ it("should should not change message when triggered and overloaded", () => {
         ...state,
         logs: fixture.logs,
         status: "IDLE",
-        message: { type: "info", time: new Date() },
+        messages: List([{ type: "info", time: new Date() }]),
         overloadDuration: Sec(fixture.elapsed),
     };
 
@@ -225,5 +225,5 @@ it("should should not change message when triggered and overloaded", () => {
         },
     });
 
-    expect(result.message).toEqual(state.message);
+    expect(result.messages).toEqual(state.messages);
 });

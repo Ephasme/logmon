@@ -19,7 +19,7 @@ export type AnyMessage = IAlertMessage | IInfoMessage;
 export type LoadState = Readonly<{
     overloadDuration: ISeconds,
     status: "TRIGGERED" | "IDLE",
-    message?: AnyMessage,
+    messages: List<AnyMessage>,
     logs: List<ILogLine>,
 }>;
 
@@ -27,4 +27,5 @@ export const defaultLoadStateFactory: () => LoadState = () => ({
     overloadDuration: Sec(0),
     status: "IDLE",
     logs: List(),
+    messages: List(),
 });

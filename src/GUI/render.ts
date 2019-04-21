@@ -29,23 +29,23 @@ export function createGui(clear: () => void, display: (input: string) => void): 
         `High traffic generated an alert - hits = ${value}, triggered at ${now.toLocaleString()}`;
 
     const recoverMessage = (now: Date) =>
-        `Recovered from high traffic at ${now}`;
+        `Recovered from high traffic at ${now.toLocaleString()}`;
 
     return {
         render: (state: RootState, now: Date, maxHitsPerSecond: number,
                  maxOverloadDuration: ISeconds, filename: string) => {
             clear();
-            if (state.load.status === "TRIGGERED") {
-                const message = state.load.message;
-                if (message && message.type === "alert") {
-                    display("");
+
+            for (const message of state.load.messages) {
+                 if (message && message.type === "alert") {
                     display(`/!\\ Alert: ${alertMessage(message.hits, message.time)}`);
-                    display("");
                 } else if (message && message.type === "info") {
-                    display("");
                     display(`[o] Info: ${recoverMessage(message.time)}`);
-                    display("");
                 }
+            }
+
+            if (state.load.messages.size > 0) {
+                display("");
             }
 
             display("Welcome to LogMon - an access log monitoring console application.\n" +

@@ -1,8 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should display an alert message when message is alert 1`] = `
-"
-/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+
+Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at 2/1/2015, 1:12:51 AM
+
+
+Settings:
+    - Overload duration:     0/12
+    - Max hits per second:   10
+    - Monitored file:        file
+
+Global stats:
+    - Most visited section:  -
+    - Most buggy section:    -
+    - Total hits:            0 hit(s)
+    - Avg hits/s:            0.00
+    - Total traffic:         0 b
+
+Current batch:
+    - Current batch traffic: 0
+    - Current batch hits/s:  0.00
+
+Sections details:
+
+
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
+`;
+
+exports[`should display many messages 1`] = `
+"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+[o] Info: Recovered from high traffic at 2/2/2015, 5:01:03 AM
+/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 6:01:03 AM
 
 Welcome to LogMon - an access log monitoring console application.
 
@@ -36,8 +71,7 @@ Sections details:
 `;
 
 exports[`should display recovering message when message is recovering 1`] = `
-"
-[o] Info: Recovered from high traffic at Mon Feb 02 2015 04:01:03 GMT+0100 (Central European Standard Time)
+"[o] Info: Recovered from high traffic at 2/2/2015, 4:01:03 AM
 
 Welcome to LogMon - an access log monitoring console application.
 

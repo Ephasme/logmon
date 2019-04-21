@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should display an alert message when message is alert 1`] = `
+"
+/!\\\\ Alert:	High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+
+Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at 2/1/2015, 1:12:51 AM
+
+
+Settings:
+    - Overload duration:     0/12
+    - Max hits per second:   10
+    - Monitored file:        file
+
+Global stats:
+    - Most visited section:  -
+    - Most buggy section:    -
+    - Total hits:            0 hit(s)
+    - Avg hits/s:            0.00
+    - Total traffic:         0 b
+
+Current batch:
+    - Current batch traffic: 0
+    - Current batch hits/s:  0.00
+
+Sections details:
+
+
+> Made with love by Ephasme... <3
+> Press ESC, a, or C-c to quit."
+`;
+
+exports[`should display recovering message when message is recovering 1`] = `
+"
+[o] Info:	Recovered from high traffic at Mon Feb 02 2015 04:01:03 GMT+0100 (Central European Standard Time)
+
+Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at 2/1/2015, 1:12:51 AM
+
+
+Settings:
+    - Overload duration:     0/12
+    - Max hits per second:   10
+    - Monitored file:        file
+
+Global stats:
+    - Most visited section:  -
+    - Most buggy section:    -
+    - Total hits:            0 hit(s)
+    - Avg hits/s:            0.00
+    - Total traffic:         0 b
+
+Current batch:
+    - Current batch traffic: 0
+    - Current batch hits/s:  0.00
+
+Sections details:
+
+
+> Made with love by Ephasme... <3
+> Press ESC, a, or C-c to quit."
+`;
+
+exports[`should display sections when filled 1`] = `
+"Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at 2/1/2015, 1:12:51 AM
+
+
+Settings:
+    - Overload duration:     0/12
+    - Max hits per second:   10
+    - Monitored file:        file
+
+Global stats:
+    - Most visited section:  test2 (14 hit(s))
+    - Most buggy section:    test2 (57 error(s))
+    - Total hits:            55 hit(s)
+    - Avg hits/s:            0.43
+    - Total traffic:         66 b
+
+Current batch:
+    - Current batch traffic: 44
+    - Current batch hits/s:  0.67
+
+Sections details:
+
+test1: 91 bytes in 8 hit(s) (12 error(s))
+test2: 123 bytes in 14 hit(s) (57 error(s))
+
+> Made with love by Ephasme... <3
+> Press ESC, a, or C-c to quit."
+`;

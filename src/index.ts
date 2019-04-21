@@ -1,55 +1,50 @@
 import * as fs from "fs";
-import { IFileSystem, PollingFileWatcher, readBlock } from "./FileSystem";
-import { LogWatcher } from "./LogWatcher";
+import { IFileSystem, PollingFileWatcher, readBlock, IFileWatcher } from "./FileSystem";
+import { LogWatcher, ILogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
 import { computeOverloading } from "./Store/load/actions";
-import { RootState } from "./Store/states";
-import { storage } from "./Store/store";
-import { TailWatcher } from "./TailWatcher";
+import { StoreManager, IStoreManager } from "./Store/store";
+import { TailWatcher, ITailWatcher } from "./TailWatcher";
 import { newLog } from "./Store/common/actions";
 import { computeAnalysis } from "./Store/analysis/actions";
 import { createGui } from "./GUI/render";
 import { Ms, toSec, Sec } from "./Utils/units";
+import { getNow } from "./Time";
 
+// Application settings.
+const filename = "data/access.log";
+const overloadMonitoringDelay = Ms(2000);
+const batchAnalysisDelay = Ms(10000);
+const renderDelay = Ms(500);
+
+const hitsPerSecondThreshold = 2;
+const maxOverloadDuration = Sec(20);
+
+// Poor man DI
 export const nodeFs: IFileSystem = {
     statSync: fs.statSync,
     existsSync: fs.existsSync,
 };
-
-const filename = "data/access.log";
-const fileWatcher = new PollingFileWatcher(nodeFs, filename);
-const tailWatcher = new TailWatcher(fileWatcher, readBlock);
-const logWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, new Date());
-
-const overloadMonitoringDelay = Ms(2000); // In ms
-const batchAnalysisDelay = Ms(10000); // In ms
-const renderDelay = Ms(500); // In ms
-
-const hitsPerSecondThreshold = 2;
-const maxOverloadDuration = Sec(20); // In seconds
-
+const fileWatcher: IFileWatcher = new PollingFileWatcher(nodeFs, filename);
+const tailWatcher: ITailWatcher = new TailWatcher(fileWatcher, readBlock);
+const logWatcher: ILogWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, getNow);
+const storage: IStoreManager = new StoreManager();
 const gui = createGui(console.clear, console.log);
 
-const render = (state: RootState) => {
-    gui.render(state, new Date(), hitsPerSecondThreshold, maxOverloadDuration, filename);
-};
-
+// Start watcher.
 logWatcher.watch((log) => storage.dispatch(newLog(log)));
 
-function computeOverloadingProcess() {
-    storage.dispatch(computeOverloading(new Date(),
+// Start running processes.
+setInterval(() => {
+    storage.dispatch(computeOverloading(getNow(),
         hitsPerSecondThreshold, toSec(overloadMonitoringDelay),
         maxOverloadDuration));
-}
+}, overloadMonitoringDelay.ms);
 
-function computeAnalysisProcess() {
-    storage.dispatch(computeAnalysis(new Date()));
-}
+setInterval(() => {
+    storage.dispatch(computeAnalysis(getNow()));
+}, batchAnalysisDelay.ms);
 
-function renderProcess() {
-    render(storage.state); 
-}
-
-setInterval(computeOverloadingProcess, overloadMonitoringDelay.ms);
-setInterval(computeAnalysisProcess, batchAnalysisDelay.ms);
-setInterval(renderProcess, renderDelay.ms);
+setInterval(() => {
+    gui.render(storage.state, getNow(), hitsPerSecondThreshold, maxOverloadDuration, filename);
+}, renderDelay.ms);

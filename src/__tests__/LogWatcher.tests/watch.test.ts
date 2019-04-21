@@ -9,7 +9,7 @@ it("should call watch from TailWatcher", () => {
         watch: fakeWatch,
     };
     const now = moment();
-    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, now.toDate());
+    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, () => now.toDate());
     w.watch(fakeWatch);
     expect(fakeWatch).toBeCalledTimes(1);
 });
@@ -23,7 +23,7 @@ it("should ignore logs older than starting time", () => {
     const mockTailWatcher: ITailWatcher = {
         watch: fakeWatch,
     };
-    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, now.add(1, "h").toDate());
+    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, () => now.add(1, "h").toDate());
     w.watch(fakeLogHandler);
     expect(fakeLogHandler).toBeCalledTimes(0);
 });
@@ -37,7 +37,7 @@ it("should call log handler when log is given", () => {
     const mockTailWatcher: ITailWatcher = {
         watch: fakeWatch,
     };
-    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, now.subtract(1, "s").toDate());
+    const w = new LogWatcher(_ => generateLogLine(), mockTailWatcher, () => now.subtract(1, "s").toDate());
     w.watch(fakeLogHandler);
     expect(fakeLogHandler).toBeCalledTimes(1);
 });
@@ -51,7 +51,7 @@ it("should not call log handler when not log is given", () => {
     const mockTailWatcher: ITailWatcher = {
         watch: fakeWatch,
     };
-    const w = new LogWatcher((_) => null, mockTailWatcher, now.toDate());
+    const w = new LogWatcher((_) => null, mockTailWatcher, () => now.toDate());
     w.watch(fakeLogHandler);
     expect(fakeLogHandler).not.toBeCalled();
 });

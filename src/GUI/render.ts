@@ -1,12 +1,11 @@
 import { Map } from "immutable";
-import moment = require("moment");
 import { IBasicStats } from "../Store/analysis/utils/createBasicStatsFrom";
 import { RootState } from "../Store/states";
-import { Seconds, Milliseconds, toSec } from "../Utils/units";
-import { stat } from "fs";
+import { Seconds } from "../Utils/units";
 
 export interface IGui {
-    render(now: Date): void;
+    render(state: RootState, now: Date, maxHitsPerSecond: number,
+           maxOverloadDuration: Seconds, filename: string): void;
 }
 
 /**
@@ -14,7 +13,7 @@ export interface IGui {
  * @param clear a function that clears the UI
  * @param display a function that displays a line to the UI
  */
-export function createGui(clear: () => void, display: (input: string) => void) {
+export function createGui(clear: () => void, display: (input: string) => void): IGui {
     type BasicStatsWithKey = IBasicStats & { key: string };
     
     function most<T>(all: Map<string, BasicStatsWithKey>, selector: (batch: BasicStatsWithKey) => T, name: string) {
@@ -22,7 +21,7 @@ export function createGui(clear: () => void, display: (input: string) => void) {
         if (mostVisited) {
             return `${mostVisited.key} (${selector(mostVisited)} ${name})`
         }
-        return "";
+        return "-";
     }
 
     const alertMessage = (value: number, now: Date) =>
@@ -35,8 +34,8 @@ export function createGui(clear: () => void, display: (input: string) => void) {
         render: (state: RootState, now: Date, maxHitsPerSecond: number,
                  maxOverloadDuration: Seconds, filename: string) => {
             clear();
-            if (state.alert.status === "TRIGGERED") {
-                const message = state.alert.message;
+            if (state.load.status === "TRIGGERED") {
+                const message = state.load.message;
                 if (message && message.type === "alert") {
                     display("");
                     display(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
@@ -58,9 +57,9 @@ export function createGui(clear: () => void, display: (input: string) => void) {
             display("");
             display("");
             display("Settings:");
-            display(`    - Overload duration:\t\t${state.alert.overloadDuration.sec}/${maxOverloadDuration.sec}`);
-            display(`    - Max hits per second:\t\t${maxHitsPerSecond}`);
-            display(`    - Monitored file:\t\t\t${filename}`);
+            display(`    - Overload duration:     ${state.load.overloadDuration.sec}/${maxOverloadDuration.sec}`);
+            display(`    - Max hits per second:   ${maxHitsPerSecond}`);
+            display(`    - Monitored file:        ${filename}`);
 
 
             const allBatchesWithKeys = state.analysis.sections
@@ -70,16 +69,16 @@ export function createGui(clear: () => void, display: (input: string) => void) {
             const mostErrorProne = most(allBatchesWithKeys, (x) => x.errors, "error(s)");
             display("");
             display("Global stats:");
-            display(`    - Most visited section:\t\t${mostVisits}`);
-            display(`    - Most buggy section:\t\t${mostErrorProne}`);
-            display(`    - Total hits:\t\t\t${state.analysis.totalAll.hits} hit(s)`);
-            display(`    - Avg hits/s:\t\t\t${state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec}`);
-            display(`    - Total traffic:\t\t\t${state.analysis.totalAll.traffic} b`);
+            display(`    - Most visited section:  ${mostVisits}`);
+            display(`    - Most buggy section:    ${mostErrorProne}`);
+            display(`    - Total hits:            ${state.analysis.totalAll.hits} hit(s)`);
+            display(`    - Avg hits/s:            ${(state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec || 0).toFixed(2)}`);
+            display(`    - Total traffic:         ${state.analysis.totalAll.traffic} b`);
 
             display("");
             display("Current batch:");
-            display(`    - Current batch traffic:\t\t${state.analysis.totalBatch.traffic}`);
-            display(`    - Current batch hits/s:\t\t${state.analysis.totalBatch.hits / state.analysis.totalBatch.timespan.sec}`);
+            display(`    - Current batch traffic: ${state.analysis.totalBatch.traffic}`);
+            display(`    - Current batch hits/s:  ${((state.analysis.totalBatch.hits / state.analysis.totalBatch.timespan.sec) || 0).toFixed(2)}`);
 
             display("");
             display("Sections details:")

@@ -47,7 +47,9 @@ export const runNewLogAction = (state: LoadState, action: INewLogAction): LoadSt
     }
 }
 
-export const alertReducer = (state: LoadState, action: AnyAction): LoadState => {
+export type LoadReducer = (state: LoadState, action: AnyAction) => LoadState;
+
+export const loadReducer: LoadReducer = (state, action) => {
     switch (action.type) {
         case UPDATE_LOAD: {
             return runComputeOverloadingAction(state, action);

@@ -1,6 +1,7 @@
 import { alertReducer } from "./load/reducers";
 import { defaultStateFactory } from "./states";
 import { AnyAction } from "./actions";
+import { analysisReducer } from "./analysis/reducers";
 
 export type CurrentDateProvider = () => Date;
 
@@ -12,6 +13,7 @@ class StoreManager {
     public dispatch(action: AnyAction) {
         this.currentState = {
             alert: alertReducer(this.currentState.alert, action),
+            analysis: analysisReducer(this.currentState.analysis, action),
         };
     }
 }

@@ -1,6 +1,7 @@
 import { List } from "immutable";
 
 import { ILogLine } from "../../LogWatcher";
+import { Seconds, Sec } from "../../Utils/units";
 
 export interface IAlertMessage {
     type: "alert";
@@ -16,14 +17,14 @@ export interface IInfoMessage {
 export type AnyMessage = IAlertMessage | IInfoMessage;
 
 export type LoadState = Readonly<{
-    overloadDuration: number,
+    overloadDuration: Seconds,
     status: "TRIGGERED" | "IDLE",
     message?: AnyMessage,
     logs: List<ILogLine>,
 }>;
 
 export const defaultLoadStateFactory: () => LoadState = () => ({
-    overloadDuration: 0,
+    overloadDuration: Sec(0),
     status: "IDLE",
     logs: List(),
 });

@@ -11,6 +11,9 @@ export class TailWatcher implements ITailWatcher {
         this.watcher = watcher;
     }
 
+    /**
+     * @param onData a callback function which is called each time something is appended to a file.
+     */
     public watch(onData: (data: string) => void) {
         this.watcher.watch((stats, filename) => {
             const end = stats.size;

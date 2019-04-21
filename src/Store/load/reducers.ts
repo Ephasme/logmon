@@ -1,41 +1,31 @@
 import { List } from "immutable";
-import moment = require("moment");
-import { ILogLine } from "../../LogWatcher";
 import { IComputeOverloadingAction, UPDATE_LOAD } from "./actions";
 import { LoadState } from "./states";
 import { NEW_LOG, INewLogAction } from "../common/actions";
 import { AnyAction } from "../actions";
-
-export const computeTimeGap = (logs: List<ILogLine>, nullValue: number): number => {
-    const first = logs.first(null);
-    const last = logs.last(null);
-    if (first && last) {
-        const gap = moment(first.time).diff(last.time) / 1000;
-        return gap;
-    }
-    return nullValue;
-}
+import { computeTimeGap } from "../common/computeTimeGap";
+import { Sec } from "../../Utils/units";
 
 export const runComputeOverloadingAction = (state: LoadState, action: IComputeOverloadingAction): LoadState => {
     const { logs } = state;
     let { overloadDuration, status, message } = state;
     const { now, hitsPerSecondThreshold, maxOverloadDuration, elapsedSinceLastUpdate } = action.payload;
 
-    const timeGap = computeTimeGap(logs, elapsedSinceLastUpdate);
+    const timeGap = computeTimeGap(logs, elapsedSinceLastUpdate.sec);
     const currentHitsPerSecond = logs.size / timeGap;
 
     if (currentHitsPerSecond <= hitsPerSecondThreshold) {
-        overloadDuration = Math.max(0, overloadDuration - timeGap);
+        overloadDuration = Sec(Math.max(0, overloadDuration.sec - timeGap));
     } else {
-        overloadDuration = Math.min(maxOverloadDuration, overloadDuration + timeGap);
+        overloadDuration = Sec(Math.min(maxOverloadDuration.sec, overloadDuration.sec + timeGap));
     }
 
-    if (overloadDuration === maxOverloadDuration && status !== "TRIGGERED") {
+    if (overloadDuration.sec === maxOverloadDuration.sec  && status !== "TRIGGERED") {
         status = "TRIGGERED";
         message = { type: "alert", hits: currentHitsPerSecond, time: now };
     }
 
-    if (overloadDuration === 0) {
+    if (overloadDuration.sec === 0) {
         if (state.status === "TRIGGERED") {
             message = { type: "info", time: now };
         }

@@ -2,6 +2,7 @@ import { LoadState, defaultLoadStateFactory } from "../../../Store/load/states";
 import { runComputeOverloadingAction } from "../../../Store/load/reducers";
 import { makeLogs } from "../../../__fixtures__/makeLogBatch";
 import { List } from "immutable";
+import { Sec } from "../../../Utils/units";
 
 it("should increase overloading when hits is too high", () => {
     let state: LoadState = defaultLoadStateFactory();
@@ -9,19 +10,19 @@ it("should increase overloading when hits is too high", () => {
     state = {
         ...state,
         logs: fixture.logs, 
-        overloadDuration: 0,
+        overloadDuration: Sec(0),
     };
     const now = new Date();
     const result = runComputeOverloadingAction(state, {
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 8,
+            elapsedSinceLastUpdate: Sec(8),
             hitsPerSecondThreshold: fixture.hitsPerSecond / 2,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
-    expect(result.overloadDuration).toEqual(8);
+    expect(result.overloadDuration.sec).toEqual(8);
     expect(Array.from(result.logs)).toHaveLength(0);
 })
 
@@ -31,20 +32,20 @@ it("should not increase overloading more than threshold", () => {
     state = {
         ...state,
         logs: fixture.logs,
-        overloadDuration: 19,
+        overloadDuration: Sec(19),
     };
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 8,
+            elapsedSinceLastUpdate: Sec(8),
             hitsPerSecondThreshold: fixture.hitsPerSecond / 2,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
 
-    expect(result.overloadDuration).not.toBeGreaterThan(20);
+    expect(result.overloadDuration.sec).not.toBeGreaterThan(20);
 });
 
 it("should not decrease overloading less than 0", () => {
@@ -53,20 +54,20 @@ it("should not decrease overloading less than 0", () => {
     state = {
         ...state,
         logs: fixture.logs,
-        overloadDuration: 5,
+        overloadDuration: Sec(5),
     };
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 0,
+            elapsedSinceLastUpdate: Sec(0),
             hitsPerSecondThreshold: fixture.hitsPerSecond / 2,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
 
-    expect(result.overloadDuration).not.toBeLessThan(0);
+    expect(result.overloadDuration.sec).not.toBeLessThan(0);
 });
 
 it("should decrease overloading when no data but time passed", () => {
@@ -75,21 +76,21 @@ it("should decrease overloading when no data but time passed", () => {
         ...state,
         logs: List(),
         status: "TRIGGERED",
-        overloadDuration: 15,
+        overloadDuration: Sec(15),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 5,
-            hitsPerSecondThreshold: 0,
-            maxOverloadDuration: 20,
+            elapsedSinceLastUpdate: Sec(5),
+            hitsPerSecondThreshold: 0.1,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
 
-    expect(result.overloadDuration).toEqual(10);
+    expect(result.overloadDuration.sec).toEqual(10);
 });
 
 it("should preferably use real log time gap instead of process time", () => {
@@ -101,21 +102,21 @@ it("should preferably use real log time gap instead of process time", () => {
         ...state,
         logs: fixture.logs,
         status: "TRIGGERED",
-        overloadDuration: 15,
+        overloadDuration: Sec(15),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 5,
+            elapsedSinceLastUpdate: Sec(5),
             hitsPerSecondThreshold: fixture.hitsPerSecond + 1,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
 
-    expect(result.overloadDuration).toEqual(15 - fixture.elapsed);
+    expect(result.overloadDuration.sec).toEqual(15 - fixture.elapsed);
 });
 
 it("should create a recovering message when triggered and recovered", () => {
@@ -126,16 +127,16 @@ it("should create a recovering message when triggered and recovered", () => {
         ...state,
         logs: fixture.logs,
         status: "TRIGGERED",
-        overloadDuration: fixture.elapsed,
+        overloadDuration: Sec(fixture.elapsed),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 0,
+            elapsedSinceLastUpdate: Sec(0),
             hitsPerSecondThreshold: fixture.hitsPerSecond + 1,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
@@ -154,16 +155,16 @@ it("should create am overloaded message when not triggered and overloaded", () =
         ...state,
         logs: fixture.logs,
         status: "IDLE",
-        overloadDuration: 5,
+        overloadDuration: Sec(5),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 0,
+            elapsedSinceLastUpdate: Sec(0),
             hitsPerSecondThreshold: fixture.hitsPerSecond / 2,
-            maxOverloadDuration: fixture.elapsed,
+            maxOverloadDuration: Sec(fixture.elapsed),
             now,
         }
     });
@@ -184,16 +185,16 @@ it("should should not change message when idle and recovered", () => {
         logs: fixture.logs,
         status: "IDLE",
         message: { type: "info", time: new Date() },
-        overloadDuration: fixture.elapsed,
+        overloadDuration: Sec(fixture.elapsed),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 0,
+            elapsedSinceLastUpdate: Sec(0),
             hitsPerSecondThreshold: fixture.hitsPerSecond + 1,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });
@@ -210,16 +211,16 @@ it("should should not change message when triggered and overloaded", () => {
         logs: fixture.logs,
         status: "IDLE",
         message: { type: "info", time: new Date() },
-        overloadDuration: fixture.elapsed,
+        overloadDuration: Sec(fixture.elapsed),
     };
 
     const now = new Date();
     const result = runComputeOverloadingAction(state, { 
         type: "alert/UPDATE_LOAD",
         payload: {
-            elapsedSinceLastUpdate: 0,
+            elapsedSinceLastUpdate: Sec(0),
             hitsPerSecondThreshold: fixture.hitsPerSecond + 1,
-            maxOverloadDuration: 20,
+            maxOverloadDuration: Sec(20),
             now,
         }
     });

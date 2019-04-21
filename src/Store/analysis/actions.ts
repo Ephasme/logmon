@@ -1,8 +1,10 @@
-export const START_ANALYSIS = "analysis/START_ANALYSIS";
-export interface IStartAnalysis {
-    type: typeof START_ANALYSIS;
-    payload: { };
+export const COMPUTE_ANALYSIS = "analysis/COMPUTE";
+export interface IComputeAnalysis {
+    type: typeof COMPUTE_ANALYSIS;
+    payload: {
+        now: Date,
+    };
 }
 
-export const startAnalysis = (): IStartAnalysis =>
-    ({ type: START_ANALYSIS, payload: { }});
+export const computeAnalysis = (now: Date): IComputeAnalysis =>
+    ({ type: COMPUTE_ANALYSIS, payload: { now }});

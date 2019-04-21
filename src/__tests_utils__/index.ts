@@ -1,5 +1,5 @@
 import * as yargs from "yargs";
-import { writeLogLines, truncate } from "./logWriter";
+import { truncate, writeLogLines } from "./logWriter";
 
 const args = yargs
     .options("filename", {

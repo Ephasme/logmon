@@ -1,7 +1,7 @@
 import { List, Map } from "immutable";
 import { createGui } from "../../GUI/render";
 import { IBasicStats } from "../../Store/analysis/utils/createBasicStatsFrom";
-import { defaultLoadStateFactory, LoadState, AnyMessage } from "../../Store/load/states";
+import { AnyMessage, defaultLoadStateFactory, LoadState } from "../../Store/load/states";
 import { defaultStateFactory, RootState } from "../../Store/states";
 import { Sec } from "../../Utils/units";
 

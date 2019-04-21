@@ -1,13 +1,13 @@
-import { AnyAction } from "../actions";
-import { AnalysisState } from "./states";
-import { COMPUTE_ANALYSIS } from "./actions";
-import { NEW_LOG } from "../common/actions";
 import { List } from "immutable";
-import { groupLogLinesBySections } from "./utils/groupLogLinesBySections";
-import { createBasicStatsFrom, IBasicStats } from "./utils/createBasicStatsFrom";
 import { Sec } from "../../Utils/units";
+import { AnyAction } from "../actions";
+import { NEW_LOG } from "../common/actions";
+import { COMPUTE_ANALYSIS } from "./actions";
+import { IAnalysisState } from "./states";
+import { createBasicStatsFrom, IBasicStats } from "./utils/createBasicStatsFrom";
+import { groupLogLinesBySections } from "./utils/groupLogLinesBySections";
 
-export type AnalysisReducer = (state: AnalysisState, action: AnyAction) => AnalysisState;
+export type AnalysisReducer = (state: IAnalysisState, action: AnyAction) => IAnalysisState;
 
 export type Adder<T> = (state1: T, state2: T) => T;
 
@@ -27,19 +27,19 @@ export const analysisReducer: AnalysisReducer = (state, action) => {
             return {
                 ...state,
                 currentBatch: state.currentBatch.unshift(action.payload.log),
-            }
+            };
         }
         case COMPUTE_ANALYSIS: {
             const totalBatch = createBasicStatsFrom(state.currentBatch);
-            const sections = groupLogLinesBySections(state.currentBatch).map(x => createBasicStatsFrom(x.toList()));
+            const sections = groupLogLinesBySections(state.currentBatch).map((x) => createBasicStatsFrom(x.toList()));
 
             return {
                 totalAll: add(totalBatch, state.totalAll),
                 totalBatch,
                 sections,
                 currentBatch: List(),
-            }
+            };
         }
     }
     return state;
-}
+};

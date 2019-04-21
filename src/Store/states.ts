@@ -1,9 +1,9 @@
-import { LoadState, defaultLoadStateFactory } from "./load/states";
-import { AnalysisState, defaultAnalysisStateFactory } from "./analysis/states";
+import { defaultAnalysisStateFactory, IAnalysisState } from "./analysis/states";
+import { defaultLoadStateFactory, LoadState } from "./load/states";
 
 export type RootState = Readonly<{
     load: LoadState;
-    analysis: AnalysisState;
+    analysis: IAnalysisState;
 }>;
 
 export const defaultStateFactory: () => RootState = () => ({

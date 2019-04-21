@@ -1,13 +1,13 @@
 import { List } from "immutable";
 import { ILogLine } from "../../../LogWatcher";
+import { ISeconds, Sec } from "../../../Utils/units";
 import { computeTimeGap } from "../../common/computeTimeGap";
-import { Seconds, Sec } from "../../../Utils/units";
 
 export interface IBasicStats {
-    readonly hits: number,
-    readonly traffic: number,
-    readonly errors: number,
-    readonly timespan: Seconds,
+    readonly hits: number;
+    readonly traffic: number;
+    readonly errors: number;
+    readonly timespan: ISeconds;
 }
 
 export const defaultBasicStatsFactory: () => IBasicStats = () => ({
@@ -21,7 +21,7 @@ export const createBasicStatsFrom: (logs: List<ILogLine>) => IBasicStats = (logs
     const stats = {
         traffic: 0,
         errors: 0,
-    }
+    };
     for (const log of logs) {
         stats.errors += log.result >= 200 && log.result <= 299 ? 0 : 1;
         stats.traffic += log.packet;

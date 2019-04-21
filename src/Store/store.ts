@@ -1,21 +1,24 @@
+import { AnyAction } from "./actions";
+import { AnalysisReducer } from "./analysis/reducers";
 import { LoadReducer } from "./load/reducers";
 import { defaultStateFactory, RootState } from "./states";
-import { AnyAction } from "./actions";
-import { analysisReducer } from "./analysis/reducers";
 
 export type CurrentDateProvider = () => Date;
 
 export interface IStoreManager {
-    dispatch(action: AnyAction): void; 
     state: RootState;
+    dispatch(action: AnyAction): void;
 }
 
 export class StoreManager implements IStoreManager {
     private currentState = defaultStateFactory();
     private loadReducer: LoadReducer;
+    private analysisReducer: AnalysisReducer;
 
-    constructor(loadReducer: LoadReducer) {
+    constructor(loadReducer: LoadReducer,
+                analysisReducer: AnalysisReducer) {
         this.loadReducer = loadReducer;
+        this.analysisReducer = analysisReducer;
     }
 
     public get state() { return this.currentState; }
@@ -23,7 +26,7 @@ export class StoreManager implements IStoreManager {
     public dispatch(action: AnyAction): void {
         this.currentState = {
             load: this.loadReducer(this.currentState.load, action),
-            analysis: analysisReducer(this.currentState.analysis, action),
+            analysis: this.analysisReducer(this.currentState.analysis, action),
         };
     }
 }

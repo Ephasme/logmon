@@ -1,7 +1,7 @@
 import { List } from "immutable";
 
 import { ILogLine } from "../../LogWatcher";
-import { Seconds, Sec } from "../../Utils/units";
+import { ISeconds, Sec } from "../../Utils/units";
 
 export interface IAlertMessage {
     type: "alert";
@@ -17,7 +17,7 @@ export interface IInfoMessage {
 export type AnyMessage = IAlertMessage | IInfoMessage;
 
 export type LoadState = Readonly<{
-    overloadDuration: Seconds,
+    overloadDuration: ISeconds,
     status: "TRIGGERED" | "IDLE",
     message?: AnyMessage,
     logs: List<ILogLine>,

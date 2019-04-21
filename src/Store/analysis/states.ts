@@ -1,15 +1,15 @@
-import { Map, List } from "immutable";
+import { List, Map } from "immutable";
 import { ILogLine } from "../../LogWatcher";
-import { IBasicStats, defaultBasicStatsFactory } from "./utils/createBasicStatsFrom";
+import { defaultBasicStatsFactory, IBasicStats } from "./utils/createBasicStatsFrom";
 
-export type AnalysisState = {
+export interface IAnalysisState {
     sections: Map<string, IBasicStats>;
     totalAll: IBasicStats;
     totalBatch: IBasicStats;
     currentBatch: List<ILogLine>;
 }
 
-export const defaultAnalysisStateFactory: () => AnalysisState = () => ({
+export const defaultAnalysisStateFactory: () => IAnalysisState = () => ({
     currentBatch: List(),
     totalAll: defaultBasicStatsFactory(),
     totalBatch: defaultBasicStatsFactory(),

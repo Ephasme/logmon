@@ -14,8 +14,8 @@ export const makeLogs = () => {
     ]);
     const elapsed = first - last;
     return {
-        logs: logs,
+        logs,
         elapsed,
         hitsPerSecond: logs.size / elapsed,
-    }
+    };
 };

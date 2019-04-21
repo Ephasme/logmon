@@ -1,9 +1,9 @@
 import { List, Map } from "immutable";
-import { LoadState, defaultLoadStateFactory } from "../../Store/load/states";
 import { createGui } from "../../GUI/render";
-import { RootState, defaultStateFactory } from "../../Store/states";
-import { Sec } from "../../Utils/units";
 import { IBasicStats } from "../../Store/analysis/utils/createBasicStatsFrom";
+import { defaultLoadStateFactory, LoadState } from "../../Store/load/states";
+import { defaultStateFactory, RootState } from "../../Store/states";
+import { Sec } from "../../Utils/units";
 
 export const createState = (partialLoad: Partial<LoadState>): RootState => {
     const someState: RootState = defaultStateFactory();
@@ -14,7 +14,7 @@ export const createState = (partialLoad: Partial<LoadState>): RootState => {
             ...partialLoad,
         },
     };
-}
+};
 export const createSettings = () => ({
     filename: "filename",
     maxHitsPerSeconds: 12,
@@ -24,21 +24,21 @@ export const createSettings = () => ({
 
 it("should display an alert message when message is alert", () => {
     const result: string[] = [];
-    const gui = createGui(jest.fn(), input => { result.push(input); });
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
     gui.render(createState({
         status: "TRIGGERED",
-        message: {type: "alert", hits: 15, time: new Date(2015,1,2,4,1,3)},
-    }), new Date(2015,1,1,1,12,51), 10, Sec(12), "file");
+        message: {type: "alert", hits: 15, time: new Date(2015, 1, 2, 4, 1, 3)},
+    }), new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file");
     expect(result.join("\n")).toMatchSnapshot();
 });
 
 it("should display recovering message when message is recovering", () => {
     const result: string[] = [];
-    const gui = createGui(jest.fn(), input => { result.push(input); });
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
     gui.render(createState({
         status: "TRIGGERED",
-        message: {type: "info", time: new Date(2015,1,2,4,1,3)}
-    }), new Date(2015,1,1,1,12,51), 10, Sec(12), "file"),
+        message: {type: "info", time: new Date(2015, 1, 2, 4, 1, 3)},
+    }), new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file"),
     expect(result.join("\n")).toMatchSnapshot();
 });
 
@@ -60,7 +60,7 @@ it("should display sections when filled", () => {
                     hits: 14,
                     timespan: Sec(74),
                     traffic: 123,
-                }]
+                }],
             ]),
             totalAll: {
                 errors: 50,
@@ -72,11 +72,11 @@ it("should display sections when filled", () => {
                 errors: 76,
                 hits: 22,
                 timespan: Sec(33),
-                traffic: 44, 
-            }
-        }
-    }
-    const gui = createGui(jest.fn(), input => { result.push(input); });
-    gui.render(state, new Date(2015,1,1,1,12,51), 10, Sec(12), "file");
+                traffic: 44,
+            },
+        },
+    };
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(state, new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file");
     expect(result.join("\n")).toMatchSnapshot();
 });

@@ -1,8 +1,8 @@
+import moment = require("moment");
 import { ILogLine, ILogWatcher } from ".";
 import { ITailWatcher } from "../TailWatcher";
-import { FactoryFunction } from "./LogLineFactory";
-import moment = require("moment");
 import { TimeProvider } from "../Time";
+import { FactoryFunction } from "./LogLineFactory";
 
 export class LogWatcher implements ILogWatcher {
 

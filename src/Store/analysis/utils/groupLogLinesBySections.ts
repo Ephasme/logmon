@@ -1,5 +1,5 @@
+import { List, Map, Set } from "immutable";
 import { ILogLine } from "../../../LogWatcher";
-import { Set, Map, List } from "immutable";
 
 export function groupLogLinesBySections(logs: List<ILogLine>): Map<string, Set<ILogLine>> {
     return logs

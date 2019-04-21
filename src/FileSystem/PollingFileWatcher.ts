@@ -1,5 +1,5 @@
-import { IFileSystem, IFileWatcher, IStats } from ".";
 import moment = require("moment");
+import { IFileSystem, IFileWatcher, IStats } from ".";
 
 /**
  * I created this PollingWatcher because nodejs's watch

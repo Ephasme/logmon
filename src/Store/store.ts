@@ -1,6 +1,6 @@
-import { AnyAlertAction } from "./alert/actions";
-import { alertReducer } from "./alert/reducers";
+import { alertReducer } from "./load/reducers";
 import { defaultStateFactory } from "./states";
+import { AnyAction } from "./actions";
 
 export type CurrentDateProvider = () => Date;
 
@@ -9,7 +9,7 @@ class StoreManager {
 
     public get state() { return this.currentState; }
 
-    public dispatch(action: AnyAlertAction) {
+    public dispatch(action: AnyAction) {
         this.currentState = {
             alert: alertReducer(this.currentState.alert, action),
         };

@@ -1,9 +1,9 @@
-import { AlertState, defaultAlertStateFactory } from "./alert/states";
+import { LoadState, defaultLoadStateFactory } from "./load/states";
 
 export type RootState = Readonly<{
-    alert: AlertState;
+    alert: LoadState;
 }>;
 
 export const defaultStateFactory: () => RootState = () => ({
-    alert: defaultAlertStateFactory(),
+    alert: defaultLoadStateFactory(),
 });

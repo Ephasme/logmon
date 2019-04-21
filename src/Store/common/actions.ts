@@ -7,3 +7,6 @@ export interface INewLogAction {
         log: ILogLine,
     };
 }
+
+export const newLog = (log: ILogLine): INewLogAction =>
+    ({ type: NEW_LOG, payload: { log }});

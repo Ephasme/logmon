@@ -39,11 +39,11 @@ export function createGui(clear: () => void, display: (input: string) => void): 
                 const message = state.load.message;
                 if (message && message.type === "alert") {
                     display("");
-                    display(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
+                    display(`/!\\ Alert: ${alertMessage(message.hits, message.time)}`);
                     display("");
                 } else if (message && message.type === "info") {
                     display("");
-                    display(`[o] Info:\t${recoverMessage(message.time)}`);
+                    display(`[o] Info: ${recoverMessage(message.time)}`);
                     display("");
                 }
             }
@@ -89,8 +89,8 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             }
 
             display("");
-            display("> Made with love by Ephasme... <3");
-            display("> Press ESC, a, or C-c to quit.");
+            display("> Handcrafted with care for Datadog by Ephasme... <3");
+            display("> Press C-c to quit.");
         },
     };
 }

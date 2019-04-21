@@ -2,7 +2,7 @@
 
 exports[`should display an alert message when message is alert 1`] = `
 "
-/!\\\\ Alert:	High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
 
 Welcome to LogMon - an access log monitoring console application.
 
@@ -31,13 +31,13 @@ Current batch:
 Sections details:
 
 
-> Made with love by Ephasme... <3
-> Press ESC, a, or C-c to quit."
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
 `;
 
 exports[`should display recovering message when message is recovering 1`] = `
 "
-[o] Info:	Recovered from high traffic at Mon Feb 02 2015 04:01:03 GMT+0100 (Central European Standard Time)
+[o] Info: Recovered from high traffic at Mon Feb 02 2015 04:01:03 GMT+0100 (Central European Standard Time)
 
 Welcome to LogMon - an access log monitoring console application.
 
@@ -66,8 +66,8 @@ Current batch:
 Sections details:
 
 
-> Made with love by Ephasme... <3
-> Press ESC, a, or C-c to quit."
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
 `;
 
 exports[`should display sections when filled 1`] = `
@@ -100,6 +100,6 @@ Sections details:
 test1: 91 bytes in 8 hit(s) (12 error(s))
 test2: 123 bytes in 14 hit(s) (57 error(s))
 
-> Made with love by Ephasme... <3
-> Press ESC, a, or C-c to quit."
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
 `;

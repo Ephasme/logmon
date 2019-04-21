@@ -11,6 +11,7 @@
     "lint:fix": "tslint --project tsconfig.json --fix",
     "test:watch": "jest --watch",
     "test:cover": "jest --coverage",
+    "start:docker:write-logs": "node ./dist/__tests_utils__/index.js",
     "start": "NODE_ENV=production node dist/index.js",
     "start:logs-debug": "nodemon --watch src --inspect=5859 -r ts-node/register ./src/__tests_utils__/index.ts --filename data/access.log",
     "start:app-debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts --filename data/access.log",
@@ -19,7 +20,6 @@
   "dependencies": {
     "@types/node": "^11.13.4",
     "immutable": "^4.0.0-rc.12",
-    "test:cover": "jest --coverage",
     "moment": "^2.24.0",
     "typescript": "^3.4.3",
     "yarg": "^1.0.8"

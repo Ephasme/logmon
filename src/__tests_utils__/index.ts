@@ -1,6 +1,5 @@
-import { truncateSync } from "fs";
 import * as yargs from "yargs";
-import { writeLogLines } from "./logWriter";
+import { writeLogLines, truncate } from "./logWriter";
 
 const args = yargs
     .options("filename", {
@@ -8,5 +7,5 @@ const args = yargs
     })
     .argv;
 
-truncateSync(args.filename);
+truncate(args.filename);
 writeLogLines(args.filename);

@@ -1,0 +1,14 @@
+version: "2"
+
+services:
+  logwriter:
+    build: .
+    volumes:
+      - './tmp:/tmp'
+    command: "yarn start:docker:write-logs"
+  logmon:
+    build: .
+    depends_on:
+      - logwriter
+    volumes:
+      - './tmp:/tmp'

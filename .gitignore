@@ -5,5 +5,3 @@ tmp/
 
 .DS_Store
 *.log
-
-!access.log

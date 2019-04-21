@@ -1,6 +1,6 @@
 import { createReadStream } from "fs";
 import * as readline from "readline";
-import { BlockReader } from "./BlockReader";
+import { BlockReader } from ".";
 
 export const readBlock: BlockReader = (filename, block, handler) => {
     const readStream = createReadStream(filename, block);

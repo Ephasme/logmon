@@ -1,15 +1,20 @@
-import { IState, IAlertState, IBasicState } from "../../Stats/types";
-import { defaultState, defaultAlertState } from "../../Stats/defaultStates";
 import { List, Map } from "immutable";
 import { createGui } from "../../GUI/render";
+import { IBasicStats } from "../../Store/analysis/utils/createBasicStatsFrom";
+import { defaultLoadStateFactory, LoadState } from "../../Store/load/states";
+import { defaultStateFactory, RootState } from "../../Store/states";
+import { Sec } from "../../Utils/units";
 
-export const createAlertState = (alert: IAlertState): IState => {
-    const someState: IState = defaultState();
+export const createState = (partialLoad: Partial<LoadState>): RootState => {
+    const someState: RootState = defaultStateFactory();
     return {
         ...someState,
-        alert,
+        load: {
+            ...defaultLoadStateFactory(),
+            ...partialLoad,
+        },
     };
-}
+};
 export const createSettings = () => ({
     filename: "filename",
     maxHitsPerSeconds: 12,
@@ -17,108 +22,61 @@ export const createSettings = () => ({
     secondsPerRefresh: 2,
 });
 
-it("should display an alert when alert is off", () => {
+it("should display an alert message when message is alert", () => {
     const result: string[] = [];
-    const gui = createGui(jest.fn(), input => { result.push(input); });
-    gui.render(createAlertState({
-        message: List([{ type: "alert", time: new Date(1985, 3, 4, 5, 12, 5, 124), hits: 120 }]),
-        overloadDuration: 120,
-        status: "off",
-    }),
-        createSettings(),
-        new Date(1985, 3, 4, 5, 12, 20, 124),
-        new Date(1985, 3, 4, 5, 12, 10, 124));
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(createState({
+        status: "TRIGGERED",
+        message: {type: "alert", hits: 15, time: new Date(2015, 1, 2, 4, 1, 3)},
+    }), new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file");
     expect(result.join("\n")).toMatchSnapshot();
 });
 
-it("should not display an alert when alert is on", () => {
+it("should display recovering message when message is recovering", () => {
     const result: string[] = [];
-    const gui = createGui(jest.fn(), input => { result.push(input); });
-    gui.render(createAlertState({
-        message: List([{ type: "recover", time: new Date(1985, 3, 4, 5, 12, 5, 124) }]),
-        overloadDuration: 0,
-        status: "on",
-    }),
-        createSettings(),
-        new Date(1985, 3, 4, 5, 12, 20, 124),
-        new Date(1985, 3, 4, 5, 12, 10, 124));
-    expect(result.join("\n")).toMatchSnapshot();
-});
-
-it("should display an recover message when alert is off but overload is zero", () => {
-    const result: string[] = [];
-    const gui = createGui(jest.fn(), input => { result.push(input); });
-    gui.render(createAlertState({
-        message: List([{ type: "recover", time: new Date(1985, 3, 4, 5, 12, 5, 124) }]),
-        overloadDuration: 0,
-        status: "off",
-    }),
-        createSettings(),
-        new Date(1985, 3, 4, 5, 12, 20, 124),
-        new Date(1985, 3, 4, 5, 12, 10, 124));
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(createState({
+        status: "TRIGGERED",
+        message: {type: "info", time: new Date(2015, 1, 2, 4, 1, 3)},
+    }), new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file"),
     expect(result.join("\n")).toMatchSnapshot();
 });
 
 it("should display sections when filled", () => {
     const result: string[] = [];
-    const state: IState = {
-        alert: defaultAlertState(),
-        allBatches: {
-            errors: 1,
-            hits: 2,
-            sections: Map<string, IBasicState>([
-                ["section1", {
-                    errors: 3,
-                    hits: 4,
-                    traffic: 5,
-                }],
-                ["section2", {
-                    errors: 6,
-                    hits: 7,
-                    traffic: 8,
-                }],
-            ]),
-            traffic: 9,
-        },
-        currentBatch: {
-            errors: 10,
-            hits: 11,
-            sections: Map<string, IBasicState>([
-                ["section1", {
+    const state: RootState = {
+        load: defaultLoadStateFactory(),
+        analysis: {
+            currentBatch: List([]),
+            sections: Map<string, IBasicStats>([
+                ["test1", {
                     errors: 12,
-                    hits: 13,
-                    traffic: 14,
+                    hits: 8,
+                    timespan: Sec(73),
+                    traffic: 91,
                 }],
-                ["section2", {
-                    errors: 15,
-                    hits: 16,
-                    traffic: 17,
-                }],
-            ]),
-            traffic: 18,
-        },
-        hasChanged: true,
-        lastValidBatch: {
-            errors: 19,
-            hits: 20,
-            sections: Map<string, IBasicState>([
-                ["section1", {
-                    errors: 21,
-                    hits: 22,
-                    traffic: 23,
-                }],
-                ["section2", {
-                    errors: 24,
-                    hits: 25,
-                    traffic: 26,
+                ["test2", {
+                    errors: 57,
+                    hits: 14,
+                    timespan: Sec(74),
+                    traffic: 123,
                 }],
             ]),
-            traffic: 1137,
+            totalAll: {
+                errors: 50,
+                hits: 55,
+                timespan: Sec(127),
+                traffic: 66,
+            },
+            totalBatch: {
+                errors: 76,
+                hits: 22,
+                timespan: Sec(33),
+                traffic: 44,
+            },
         },
-    }
-    const gui = createGui(jest.fn(), input => { result.push(input); });
-    gui.render(state, createSettings(),
-        new Date(1985, 3, 4, 5, 12, 20, 124),
-        new Date(1985, 3, 4, 5, 12, 10, 124));
+    };
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(state, new Date(2015, 1, 1, 1, 12, 51), 10, Sec(12), "file");
     expect(result.join("\n")).toMatchSnapshot();
 });

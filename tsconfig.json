@@ -5,6 +5,7 @@
         "moduleResolution": "node",
         "strictNullChecks": true,
         "noImplicitAny": true,
+        "experimentalDecorators": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
@@ -16,8 +17,6 @@
         "src/**/*.ts"
     ],
     "exclude": [
-        "src/**/*.test.ts",
-        "src/**/*.test.ts",
         "node_modules"
     ]
 }

@@ -1,9 +1,9 @@
 import * as faker from "faker";
-import { ILogLine } from "../Models/ILogLine";
+import { ILogLine } from "../LogWatcher";
 
 const randomAction = () => faker.random.arrayElement([
-    "GET", "POST", "DELETE", "PUT", "PATCH", "HEAD"
-])
+    "GET", "POST", "DELETE", "PUT", "PATCH", "HEAD",
+]);
 
 const randomSection = () => faker.random.arrayElement([
     "section1", "section2",
@@ -15,8 +15,8 @@ const randomSubSection = () => faker.random.arrayElement([
     "sub3", "sub4",
     "sub5"]);
 
-export function generateLogLine(): ILogLine {
-    return {
+export function generateLogLine(input?: Partial<ILogLine>): ILogLine {
+    return Object.assign({}, {
         domain: faker.internet.ip(),
         hyphen: "-",
         packet: faker.random.number({ min: 0, max: 241 }),
@@ -26,7 +26,7 @@ export function generateLogLine(): ILogLine {
             routeSegments: [ randomSection(), randomSubSection() ],
         },
         result: faker.random.number({ min: 0, max: 599 }),
-        time: faker.date.recent(),
+        time: new Date(),
         userid: faker.internet.userName(),
-    }
+    }, input);
 }

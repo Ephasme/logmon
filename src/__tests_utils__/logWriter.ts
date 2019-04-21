@@ -1,17 +1,16 @@
-import * as fs from "fs";
 import * as faker from "faker";
-import { formatLogLine } from "../__fixtures__/logLineSerializer";
+import * as fs from "fs";
 import { generateLogLine } from "../__fixtures__/logLineFactory";
+import { formatLogLine } from "../__fixtures__/logLineSerializer";
 
 export function truncate(filename: string) {
     fs.truncateSync(filename);
 }
 
 export function writeLogLines(filename: string): void {
-
     fs.appendFileSync(filename, formatLogLine(generateLogLine()));
 
     setTimeout(() => {
         writeLogLines(filename);
-    }, faker.random.number({ min: 30, max: 45 }));
+    }, faker.random.arrayElement([100]));
 }

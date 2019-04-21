@@ -1,28 +1,28 @@
-import { IState, IBatchState, IBasicState, IApplicationSettings } from "../Stats/types";
 import { Map } from "immutable";
-import moment = require("moment");
-
-export const maybeGetBatch = (batch: IBatchState): IBatchState | null =>
-    batch.sections.size > 0 ? batch : null;
-
-export function getBatch(state: IState) {
-    return maybeGetBatch(state.currentBatch) ||
-           maybeGetBatch(state.lastValidBatch);
-}
+import { IBasicStats } from "../Store/analysis/utils/createBasicStatsFrom";
+import { RootState } from "../Store/states";
+import { ISeconds } from "../Utils/units";
+// tslint:disable: max-line-length
 
 export interface IGui {
-    render(state: IState, appSettings: IApplicationSettings, now: Date, lastRender: Date): void;
+    render(state: RootState, now: Date, maxHitsPerSecond: number,
+           maxOverloadDuration: ISeconds, filename: string): void;
 }
 
-export function createGui(clear: () => void, display: (input: string) => void) {
-    type BasicStateWithKey = IBasicState & { key: string };
-    
-    function most<T>(all: Map<string, BasicStateWithKey>, selector: (batch: BasicStateWithKey) => T, name: string) {
+/**
+ * This is a factory responsibe for GUI creation.
+ * @param clear a function that clears the UI
+ * @param display a function that displays a line to the UI
+ */
+export function createGui(clear: () => void, display: (input: string) => void): IGui {
+    type BasicStatsWithKey = IBasicStats & { key: string };
+
+    function most<T>(all: Map<string, BasicStatsWithKey>, selector: (batch: BasicStatsWithKey) => T, name: string) {
         const mostVisited = all.maxBy(selector);
         if (mostVisited) {
-            return `${mostVisited.key} (${selector(mostVisited)} ${name})`
+            return `${mostVisited.key} (${selector(mostVisited)} ${name})`;
         }
-        return "";
+        return "-";
     }
 
     const alertMessage = (value: number, now: Date) =>
@@ -32,74 +32,65 @@ export function createGui(clear: () => void, display: (input: string) => void) {
         `Recovered from high traffic at ${now}`;
 
     return {
-        render: (state: IState, appSettings: IApplicationSettings, now: Date, lastRender: Date) => {
-            const momentNow = moment(now);
-            const timespan = moment.duration(momentNow.diff(lastRender)).asSeconds();
-            const batch = getBatch(state);
+        render: (state: RootState, now: Date, maxHitsPerSecond: number,
+                 maxOverloadDuration: ISeconds, filename: string) => {
             clear();
-
-            if (state.alert.status === "off") {
-                const message = state.alert.message.get(0);
+            if (state.load.status === "TRIGGERED") {
+                const message = state.load.message;
                 if (message && message.type === "alert") {
                     display("");
-                    display(`/!\\ Alert:\t${alertMessage(message.hits, message.time)}`);
+                    display(`/!\\ Alert: ${alertMessage(message.hits, message.time)}`);
                     display("");
-                } else if (message && message.type === "recover") {
+                } else if (message && message.type === "info") {
                     display("");
-                    display(`[o] Info:\t${recoverMessage(message.time)}`);
+                    display(`[o] Info: ${recoverMessage(message.time)}`);
                     display("");
                 }
-            }            
+            }
 
             display("Welcome to LogMon - an access log monitoring console application.\n" +
             "\n" +
             "You can use options to customize the timing, \n" +
             "and the alerting behaviour (see --help command for more infos).");
+            display("");
+            display("Last updated at " + now.toLocaleString());
 
             display("");
+            display("");
             display("Settings:");
-            display(`    - Overload duration:\t\t${state.alert.overloadDuration}/${appSettings.maxOverloadDuration}`);
-            display(`    - Max hits per second:\t\t${appSettings.maxHitsPerSeconds}`);
-            display(`    - Monitored file:\t\t\t${appSettings.filename}`);
+            display(`    - Overload duration:     ${state.load.overloadDuration.sec}/${maxOverloadDuration.sec}`);
+            display(`    - Max hits per second:   ${maxHitsPerSecond}`);
+            display(`    - Monitored file:        ${filename}`);
 
-
-            const allBatchesWithKeys = state.allBatches.sections
+            const allBatchesWithKeys = state.analysis.sections
                 .map((x, key) => ({ ...x, key }));
 
             const mostVisits = most(allBatchesWithKeys, (x) => x.hits, "hit(s)");
             const mostErrorProne = most(allBatchesWithKeys, (x) => x.errors, "error(s)");
             display("");
             display("Global stats:");
-            display(`    - Most visited section:\t\t${mostVisits}`);
-            display(`    - Most buggy section:\t\t${mostErrorProne}`);
-            display(`    - Total hits:\t\t\t\t${state.allBatches.hits} hit(s)`);
-            display(`    - Avg hits/s:\t\t\t\t${state.allBatches.hits / timespan}`);
-            display(`    - Total traffic:\t\t\t${state.allBatches.traffic} b`);
-
-            function displaySections(state: [string, IBasicState][]) {
-                for (const [key, data] of state) {
-                    display(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`)
-                }
-            }
+            display(`    - Most visited section:  ${mostVisits}`);
+            display(`    - Most buggy section:    ${mostErrorProne}`);
+            display(`    - Total hits:            ${state.analysis.totalAll.hits} hit(s)`);
+            display(`    - Avg hits/s:            ${(state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec || 0).toFixed(2)}`);
+            display(`    - Total traffic:         ${state.analysis.totalAll.traffic} b`);
 
             display("");
             display("Current batch:");
-            display(`    - Current batch traffic:\t${state.currentBatch.traffic}`);
-            display(`    - Current batch hits/s:\t\t${state.currentBatch.hits / timespan}`);
+            display(`    - Current batch traffic: ${state.analysis.totalBatch.traffic}`);
+            display(`    - Current batch hits/s:  ${((state.analysis.totalBatch.hits / state.analysis.totalBatch.timespan.sec) || 0).toFixed(2)}`);
 
             display("");
-            display("Sections details:")
-            display("Last updated at " + now.toLocaleString());
+            display("Sections details:");
             display("");
-            if (batch) {
-                displaySections(batch.sections.toArray());
-            } else {
-                displaySections([]);
+
+            for (const [key, data] of state.analysis.sections.toArray()) {
+                display(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`);
             }
 
             display("");
-            display("> Made with love by Ephasme... <3");
-            display("> Press ESC, a, or C-c to quit.");
-        }
-    }
+            display("> Handcrafted with care for Datadog by Ephasme... <3");
+            display("> Press C-c to quit.");
+        },
+    };
 }

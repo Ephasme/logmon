@@ -1,2 +1,2 @@
-export * from "./ILogWatcher";
+export * from "./types";
 export * from "./LogWatcher";

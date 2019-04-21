@@ -1,9 +1,7 @@
-import { BlockReader } from "../FileSystem/BlockReader";
-import { IFileWatcher } from "../FileSystem/IFileWatcher";
-import { ITailWatcher } from "./ITailWatcher";
+import { ITailWatcher } from ".";
+import { BlockReader, IFileWatcher } from "../FileSystem";
 
 export class TailWatcher implements ITailWatcher {
-
     private cursor = 0;
     private readBlock: BlockReader;
     private watcher: IFileWatcher;
@@ -13,6 +11,9 @@ export class TailWatcher implements ITailWatcher {
         this.watcher = watcher;
     }
 
+    /**
+     * @param onData a callback function which is called each time something is appended to a file.
+     */
     public watch(onData: (data: string) => void) {
         this.watcher.watch((stats, filename) => {
             const end = stats.size;

@@ -1,5 +1,5 @@
 import { factory } from "../../../__fixtures__/fsFactory";
-import { IFileSystem } from "../../../FileSystem/IFileSystem";
+import { IFileSystem } from "../../../FileSystem";
 import { PollingFileWatcher } from "../../../FileSystem/PollingFileWatcher";
 
 jest.useFakeTimers();
@@ -55,7 +55,7 @@ it("should not throw when file does not exist", () => {
 });
 
 it("should tick every seconds by default", () => {
-    const stub : IFileSystem = {
+    const stub: IFileSystem = {
         existsSync: jest.fn()
             .mockReturnValue(true),
         statSync: jest.fn()

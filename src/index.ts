@@ -15,9 +15,9 @@ export const nodeFs: IFileSystem = {
 
 const fileWatcher = new PollingFileWatcher(nodeFs, "data/access.log");
 const tailWatcher = new TailWatcher(fileWatcher, readBlock);
-const logWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher);
+const logWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, new Date());
 
-const overloadMonitoringDelay = 1000;
+const overloadMonitoringDelay = 2000;
 const batchAnalysisDelay = 10000;
 const renderDelay = 500;
 

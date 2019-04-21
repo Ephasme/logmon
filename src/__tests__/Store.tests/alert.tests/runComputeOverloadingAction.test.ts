@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import { computeOverloadingAction } from "../../../Store/alert/actions";
+import { computeOverloading } from "../../../Store/alert/actions";
 import { runComputeOverloadingAction } from "../../../Store/alert/reducers";
 import { OVERLOADING, RECOVERING, IDLE, AlertState } from "../../../Store/alert/states";
 import { makeLogs } from "../../../__fixtures__/makeLogBatch";
@@ -11,7 +11,7 @@ it("should recover when overloading and hits less than threshold", () => {
     };
 
     const now = new Date(2015, 1, 1, 1, 12, 1);
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(1, now));
+    const result = runComputeOverloadingAction(state, computeOverloading(1, now));
     const expected: AlertState = {
         logs: List(),
         status: { type: RECOVERING, since: new Date(2015, 1, 1, 1, 12, 1) },
@@ -26,7 +26,7 @@ it("should trim logs when keep overloading", () => {
     };
 
     const now = new Date(2015, 1, 1, 1, 12, 1);
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(0.1, now));
+    const result = runComputeOverloadingAction(state, computeOverloading(0.1, now));
 
     expect(result).toEqual({
         ...state,
@@ -41,7 +41,7 @@ it("should overload when threshold is reached", () => {
     };
 
     const now = new Date(2015, 1, 1, 1, 12, 1);
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(0.1, now));
+    const result = runComputeOverloadingAction(state, computeOverloading(0.1, now));
     const expected: AlertState = {
         logs: List(),
         status: { type: OVERLOADING, since: new Date(2015, 1, 1, 1, 12, 1), hits: 0.625 },
@@ -56,7 +56,7 @@ it("should recover when no data and overloading", () => {
     };
 
     const now = new Date();
-    const result = runComputeOverloadingAction(state, computeOverloadingAction(10, now));
+    const result = runComputeOverloadingAction(state, computeOverloading(10, now));
 
     expect(result).toEqual({
         logs: List([]),

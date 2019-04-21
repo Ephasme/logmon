@@ -5,6 +5,7 @@ import { NEW_LOG } from "../common/actions";
 import { List } from "immutable";
 import { groupLogLinesBySections } from "./utils/groupLogLinesBySections";
 import { createBasicStatsFrom, IBasicStats } from "./utils/createBasicStatsFrom";
+import { Sec } from "../../Utils/units";
 
 export type AnalysisReducer = (state: AnalysisState, action: AnyAction) => AnalysisState;
 
@@ -16,6 +17,7 @@ export const add: BasicStatsAdder = (state1, state2) => ({
     errors: state2.errors + state1.errors,
     hits: state2.hits + state1.hits,
     traffic: state2.traffic + state1.traffic,
+    timespan: Sec(state2.timespan.sec + state1.timespan.sec),
 });
 
 export const analysisReducer: AnalysisReducer = (state, action) => {

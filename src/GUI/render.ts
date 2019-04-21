@@ -2,7 +2,8 @@ import { Map } from "immutable";
 import moment = require("moment");
 import { IBasicStats } from "../Store/analysis/utils/createBasicStatsFrom";
 import { RootState } from "../Store/states";
-import { Seconds } from "../Utils/units";
+import { Seconds, Milliseconds, toSec } from "../Utils/units";
+import { stat } from "fs";
 
 export interface IGui {
     render(now: Date): void;
@@ -31,11 +32,9 @@ export function createGui(clear: () => void, display: (input: string) => void) {
         `Recovered from high traffic at ${now}`;
 
     return {
-        render: (state: RootState, now: Date, elapsed: Seconds,
-                 maxHitsPerSecond: number, maxOverloadDuration: Seconds,
-                 filename: string) => {
+        render: (state: RootState, now: Date, maxHitsPerSecond: number,
+                 maxOverloadDuration: Seconds, filename: string) => {
             clear();
-                    console.log(elapsed);
             if (state.alert.status === "TRIGGERED") {
                 const message = state.alert.message;
                 if (message && message.type === "alert") {
@@ -74,13 +73,13 @@ export function createGui(clear: () => void, display: (input: string) => void) {
             display(`    - Most visited section:\t\t${mostVisits}`);
             display(`    - Most buggy section:\t\t${mostErrorProne}`);
             display(`    - Total hits:\t\t\t${state.analysis.totalAll.hits} hit(s)`);
-            display(`    - Avg hits/s:\t\t\t${state.analysis.totalAll.hits / elapsed.sec}`);
+            display(`    - Avg hits/s:\t\t\t${state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec}`);
             display(`    - Total traffic:\t\t\t${state.analysis.totalAll.traffic} b`);
 
             display("");
             display("Current batch:");
             display(`    - Current batch traffic:\t\t${state.analysis.totalBatch.traffic}`);
-            display(`    - Current batch hits/s:\t\t${state.analysis.totalBatch.hits / elapsed.sec}`);
+            display(`    - Current batch hits/s:\t\t${state.analysis.totalBatch.hits / state.analysis.totalBatch.timespan.sec}`);
 
             display("");
             display("Sections details:")

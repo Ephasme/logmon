@@ -11,13 +11,13 @@ export const runComputeOverloadingAction = (state: LoadState, action: IComputeOv
     let { overloadDuration, status, message } = state;
     const { now, hitsPerSecondThreshold, maxOverloadDuration, elapsedSinceLastUpdate } = action.payload;
 
-    const timeGap = computeTimeGap(logs, elapsedSinceLastUpdate.sec);
-    const currentHitsPerSecond = logs.size / timeGap;
+    const timeGap = computeTimeGap(logs, elapsedSinceLastUpdate);
+    const currentHitsPerSecond = logs.size / timeGap.sec;
 
     if (currentHitsPerSecond <= hitsPerSecondThreshold) {
-        overloadDuration = Sec(Math.max(0, overloadDuration.sec - timeGap));
+        overloadDuration = Sec(Math.max(0, overloadDuration.sec - timeGap.sec));
     } else {
-        overloadDuration = Sec(Math.min(maxOverloadDuration.sec, overloadDuration.sec + timeGap));
+        overloadDuration = Sec(Math.min(maxOverloadDuration.sec, overloadDuration.sec + timeGap.sec));
     }
 
     if (overloadDuration.sec === maxOverloadDuration.sec  && status !== "TRIGGERED") {

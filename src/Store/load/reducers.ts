@@ -1,12 +1,12 @@
 import { List } from "immutable";
 import { Sec } from "../../Utils/units";
 import { AnyAction } from "../actions";
-import { INewLogAction, NEW_LOG } from "../common/actions";
+import { INewLog, NEW_LOG } from "../common/actions";
 import { computeTimeGap } from "../common/computeTimeGap";
-import { IComputeOverloadingAction, UPDATE_LOAD } from "./actions";
+import { IComputeOverloading, UPDATE_LOAD } from "./actions";
 import { LoadState } from "./states";
 
-export const runComputeOverloadingAction = (state: LoadState, action: IComputeOverloadingAction): LoadState => {
+export const runComputeOverloadingAction = (state: LoadState, action: IComputeOverloading): LoadState => {
     const { logs } = state;
     let { overloadDuration, status, messages } = state;
     const { now, hitsPerSecondThreshold, maxOverloadDuration, elapsedSinceLastUpdate } = action.payload;
@@ -39,7 +39,7 @@ export const runComputeOverloadingAction = (state: LoadState, action: IComputeOv
     };
 };
 
-export const runNewLogAction = (state: LoadState, action: INewLogAction): LoadState => {
+export const runNewLogAction = (state: LoadState, action: INewLog): LoadState => {
     return {
         ...state,
         logs: state.logs.unshift(action.payload.log),

@@ -11,14 +11,16 @@ export interface IStoreManager {
 }
 
 export class StoreManager implements IStoreManager {
-    private currentState = defaultStateFactory();
     private loadReducer: LoadReducer;
+    private currentState: RootState;
     private analysisReducer: AnalysisReducer;
 
-    constructor(loadReducer: LoadReducer,
+    constructor(initialState: RootState,
+                loadReducer: LoadReducer,
                 analysisReducer: AnalysisReducer) {
         this.loadReducer = loadReducer;
         this.analysisReducer = analysisReducer;
+        this.currentState = initialState;
     }
 
     public get state() { return this.currentState; }

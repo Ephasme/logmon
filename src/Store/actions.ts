@@ -1,8 +1,8 @@
 import { IComputeAnalysis } from "./analysis/actions";
-import { INewLogAction } from "./common/actions";
-import { IComputeOverloadingAction } from "./load/actions";
+import { INewLog } from "./common/actions";
+import { IComputeOverloading } from "./load/actions";
 
 export type AnyAction =
-    | INewLogAction
+    | INewLog
     | IComputeAnalysis
-    | IComputeOverloadingAction;
+    | IComputeOverloading;

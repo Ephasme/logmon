@@ -13,6 +13,7 @@ import { IStoreManager, StoreManager } from "./Store/store";
 import { ITailWatcher, TailWatcher } from "./TailWatcher";
 import { getNow } from "./Time";
 import { Ms, Sec, toSec } from "./Utils/units";
+import { defaultStateFactory } from "./Store/states";
 
 // Gather cli args.
 const args = yargs
@@ -68,7 +69,7 @@ export const nodeFs: IFileSystem = {
 const fileWatcher: IFileWatcher = new PollingFileWatcher(nodeFs, filename);
 const tailWatcher: ITailWatcher = new TailWatcher(fileWatcher, readBlock);
 const logWatcher: ILogWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, getNow);
-const storage: IStoreManager = new StoreManager(loadReducer, analysisReducer);
+const storage: IStoreManager = new StoreManager(defaultStateFactory(), loadReducer, analysisReducer);
 const gui = createGui(console.clear, console.log);
 
 // Start watcher.

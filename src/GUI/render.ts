@@ -26,10 +26,10 @@ export function createGui(clear: () => void, display: (input: string) => void): 
     }
 
     const alertMessage = (value: number, now: Date) =>
-        `High traffic generated an alert - hits = ${value}, triggered at ${now.toLocaleString()}`;
+        `High traffic generated an alert - hits = ${value}, triggered at ${now.toUTCString()}`;
 
     const recoverMessage = (now: Date) =>
-        `Recovered from high traffic at ${now.toLocaleString()}`;
+        `Recovered from high traffic at ${now.toUTCString()}`;
 
     return {
         render: (state: RootState, now: Date, maxHitsPerSecond: number,
@@ -53,7 +53,7 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             "You can use options to customize the timing, \n" +
             "and the alerting behaviour (see --help command for more infos).");
             display("");
-            display("Last updated at " + now.toLocaleString());
+            display("Last updated at " + now.toUTCString());
 
             display("");
             display("");

@@ -9,11 +9,11 @@ import { analysisReducer } from "./Store/analysis/reducers";
 import { newLog } from "./Store/common/actions";
 import { computeOverloading } from "./Store/load/actions";
 import { loadReducer } from "./Store/load/reducers";
+import { defaultStateFactory } from "./Store/states";
 import { IStoreManager, StoreManager } from "./Store/store";
 import { ITailWatcher, TailWatcher } from "./TailWatcher";
 import { getNow } from "./Time";
 import { Ms, Sec, toSec } from "./Utils/units";
-import { defaultStateFactory } from "./Store/states";
 
 // Gather cli args.
 const args = yargs

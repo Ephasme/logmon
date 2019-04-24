@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should display an alert message when message is alert 1`] = `
-"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
+"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 03:01:03 GMT
 
 Welcome to LogMon - an access log monitoring console application.
 
 You can use options to customize the timing, 
 and the alerting behaviour (see --help command for more infos).
 
-Last updated at 2/1/2015, 1:12:51 AM
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
 
 Settings:
@@ -35,16 +35,16 @@ Sections details:
 `;
 
 exports[`should display many messages 1`] = `
-"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 4:01:03 AM
-[o] Info: Recovered from high traffic at 2/2/2015, 5:01:03 AM
-/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at 2/2/2015, 6:01:03 AM
+"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 03:01:03 GMT
+[o] Info: Recovered from high traffic at Mon, 02 Feb 2015 04:01:03 GMT
+/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 05:01:03 GMT
 
 Welcome to LogMon - an access log monitoring console application.
 
 You can use options to customize the timing, 
 and the alerting behaviour (see --help command for more infos).
 
-Last updated at 2/1/2015, 1:12:51 AM
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
 
 Settings:
@@ -71,14 +71,14 @@ Sections details:
 `;
 
 exports[`should display recovering message when message is recovering 1`] = `
-"[o] Info: Recovered from high traffic at 2/2/2015, 4:01:03 AM
+"[o] Info: Recovered from high traffic at Mon, 02 Feb 2015 03:01:03 GMT
 
 Welcome to LogMon - an access log monitoring console application.
 
 You can use options to customize the timing, 
 and the alerting behaviour (see --help command for more infos).
 
-Last updated at 2/1/2015, 1:12:51 AM
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
 
 Settings:
@@ -110,7 +110,7 @@ exports[`should display sections when filled 1`] = `
 You can use options to customize the timing, 
 and the alerting behaviour (see --help command for more infos).
 
-Last updated at 2/1/2015, 1:12:51 AM
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
 
 Settings:

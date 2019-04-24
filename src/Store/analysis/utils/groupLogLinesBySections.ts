@@ -14,4 +14,4 @@ export const groupLogLinesBySections: GroupLogLinesBySections = (logs) => {
             const newSet = prev.get(cur.id, Set<ILogLine>()).add(cur);
             return prev.set(cur.id, newSet);
         }, Map<string, Set<ILogLine>>());
-}
+};

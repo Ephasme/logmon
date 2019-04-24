@@ -17,7 +17,9 @@ export const defaultBasicStatsFactory: () => IBasicStats = () => ({
     timespan: Sec(0),
 });
 
-export const createBasicStatsFrom: (logs: List<ILogLine>) => IBasicStats = (logs) => {
+export type CreateBasicStatsFrom = (logs: List<ILogLine>) => IBasicStats;
+
+export const createBasicStatsFrom: CreateBasicStatsFrom = (logs) => {
     const stats = {
         traffic: 0,
         errors: 0,

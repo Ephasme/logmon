@@ -4,8 +4,8 @@ import { AnyAction } from "../actions";
 import { NEW_LOG } from "../common/actions";
 import { COMPUTE_ANALYSIS } from "./actions";
 import { IAnalysisState } from "./states";
-import { createBasicStatsFrom, IBasicStats } from "./utils/createBasicStatsFrom";
-import { groupLogLinesBySections } from "./utils/groupLogLinesBySections";
+import { CreateBasicStatsFrom as CreateStats, IBasicStats } from "./utils/createBasicStatsFrom";
+import { GroupLogLinesBySections as GroupBySections } from "./utils/groupLogLinesBySections";
 
 export type AnalysisReducer = (state: IAnalysisState, action: AnyAction) => IAnalysisState;
 
@@ -20,8 +20,11 @@ export const add: BasicStatsAdder = (state1, state2) => ({
     timespan: Sec(state2.timespan.sec + state1.timespan.sec),
 });
 
-export const analysisReducer: AnalysisReducer = (state, action) => {
+export type AnalysisReducerFactory =
+    (createStats: CreateStats, groupBySections: GroupBySections) => AnalysisReducer;
 
+export const analysisReducer: AnalysisReducerFactory =
+    (createStats, groupLogLinesBySections) => (state, action) => {
     switch (action.type) {
         case NEW_LOG: {
             return {
@@ -30,8 +33,8 @@ export const analysisReducer: AnalysisReducer = (state, action) => {
             };
         }
         case COMPUTE_ANALYSIS: {
-            const totalBatch = createBasicStatsFrom(state.currentBatch);
-            const sections = groupLogLinesBySections(state.currentBatch).map((x) => createBasicStatsFrom(x.toList()));
+            const totalBatch = createStats(state.currentBatch);
+            const sections = groupLogLinesBySections(state.currentBatch).map((x) => createStats(x.toList()));
 
             return {
                 totalAll: add(totalBatch, state.totalAll),

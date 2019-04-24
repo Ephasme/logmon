@@ -6,6 +6,8 @@ import { ILogWatcher, LogWatcher } from "./LogWatcher";
 import * as LogLineFactory from "./LogWatcher/LogLineFactory";
 import { computeAnalysis } from "./Store/analysis/actions";
 import { analysisReducer } from "./Store/analysis/reducers";
+import { createBasicStatsFrom } from "./Store/analysis/utils/createBasicStatsFrom";
+import { groupLogLinesBySections } from "./Store/analysis/utils/groupLogLinesBySections";
 import { newLog } from "./Store/common/actions";
 import { computeOverloading } from "./Store/load/actions";
 import { loadReducer } from "./Store/load/reducers";
@@ -69,7 +71,8 @@ export const nodeFs: IFileSystem = {
 const fileWatcher: IFileWatcher = new PollingFileWatcher(nodeFs, filename);
 const tailWatcher: ITailWatcher = new TailWatcher(fileWatcher, readBlock);
 const logWatcher: ILogWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, getNow);
-const storage: IStoreManager = new StoreManager(defaultStateFactory(), loadReducer, analysisReducer);
+const storage: IStoreManager = new StoreManager(
+    defaultStateFactory(), loadReducer, analysisReducer(createBasicStatsFrom, groupLogLinesBySections));
 const gui = createGui(console.clear, console.log);
 
 // Start watcher.

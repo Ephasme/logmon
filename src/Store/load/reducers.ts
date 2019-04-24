@@ -6,7 +6,9 @@ import { computeTimeGap } from "../common/computeTimeGap";
 import { IComputeOverloading, UPDATE_LOAD } from "./actions";
 import { LoadState } from "./states";
 
-export const runComputeOverloadingAction = (state: LoadState, action: IComputeOverloading): LoadState => {
+export type RunComputeOverloadingAction = (state: LoadState, action: IComputeOverloading) => LoadState;
+
+export const runComputeOverloadingAction: RunComputeOverloadingAction = (state, action) => {
     const { logs } = state;
     let { overloadDuration, status, messages } = state;
     const { now, hitsPerSecondThreshold, maxOverloadDuration, elapsedSinceLastUpdate } = action.payload;
@@ -39,7 +41,9 @@ export const runComputeOverloadingAction = (state: LoadState, action: IComputeOv
     };
 };
 
-export const runNewLogAction = (state: LoadState, action: INewLog): LoadState => {
+export type RunNewLogAction = (state: LoadState, action: INewLog) => LoadState;
+
+export const runNewLogAction: RunNewLogAction = (state, action): LoadState => {
     return {
         ...state,
         logs: state.logs.unshift(action.payload.log),

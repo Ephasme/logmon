@@ -1,4 +1,4 @@
-FROM node:11-alpine as builder
+FROM node:11-alpine
 WORKDIR /app
 COPY . /app
 RUN yarn install

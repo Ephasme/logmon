@@ -29,7 +29,7 @@ const logFactory = {
             }),
             $with(base, {
                 request: {
-                    routeSegments: ["group2", "reivbfhjdkg"],
+                    routeSegments: ["group2"],
                 },
             }),
             $with(base, {
@@ -39,7 +39,7 @@ const logFactory = {
             }),
             $with(base, {
                 request: {
-                    routeSegments: ["group4", "erhgdfhgfgfd"],
+                    routeSegments: [],
                 },
             }),
         ]);
@@ -55,5 +55,5 @@ it("should group by first route segment", () => {
     const groups = groupLogLinesBySections(logFactory.create());
 
     expect(Array.from(groups.keys()))
-        .toEqual(["group1", "group2", "group3", "group4"]);
+        .toEqual(["group1", "group2", "group3"]);
 });

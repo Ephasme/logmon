@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 import { generateLogLine } from "../../../../__fixtures__/logLineFactory";
-import { COMPUTE_ANALYSIS } from "../../../../Store/analysis/actions";
+import { ANALYSIS_COMPUTE } from "../../../../Store/analysis/actions";
 import { analysisReducer } from "../../../../Store/analysis/reducers";
 import { newLog } from "../../../../Store/common/actions";
 import { defaultStateFactory } from "../../../../Store/states";
@@ -37,7 +37,7 @@ it("should compute analysis when dispatching COMPUTE_ANALYSIS", () => {
     }));
     const reducer = analysisReducer(createStats, groupBy);
     const result = reducer(state.analysis, {
-        type: COMPUTE_ANALYSIS,
+        type: ANALYSIS_COMPUTE,
         payload: {
             now: new Date(),
         },

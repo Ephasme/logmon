@@ -10,18 +10,18 @@ and the alerting behaviour (see --help command for more infos).
 
 Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
-
 Settings:
-    - Overload duration:     0/12
-    - Max hits per second:   10
     - Monitored file:        file
+    - Avg hits/s threshold:  10
 
 Global stats:
     - Most visited section:  -
     - Most buggy section:    -
     - Total hits:            0 hit(s)
-    - Avg hits/s:            0.00
+    - Total avg hits/s:      0.00
     - Total traffic:         0 b
+Since 5 seconds:
+    - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
@@ -46,18 +46,18 @@ and the alerting behaviour (see --help command for more infos).
 
 Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
-
 Settings:
-    - Overload duration:     0/12
-    - Max hits per second:   10
-    - Monitored file:        file
+    - Monitored file:        filename
+    - Avg hits/s threshold:  10
 
 Global stats:
     - Most visited section:  -
     - Most buggy section:    -
     - Total hits:            0 hit(s)
-    - Avg hits/s:            0.00
+    - Total avg hits/s:      0.00
     - Total traffic:         0 b
+Since 5 seconds:
+    - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
@@ -80,18 +80,18 @@ and the alerting behaviour (see --help command for more infos).
 
 Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
-
 Settings:
-    - Overload duration:     0/12
-    - Max hits per second:   10
     - Monitored file:        file
+    - Avg hits/s threshold:  10
 
 Global stats:
     - Most visited section:  -
     - Most buggy section:    -
     - Total hits:            0 hit(s)
-    - Avg hits/s:            0.00
+    - Total avg hits/s:      0.00
     - Total traffic:         0 b
+Since 5 seconds:
+    - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
@@ -112,18 +112,18 @@ and the alerting behaviour (see --help command for more infos).
 
 Last updated at Sun, 01 Feb 2015 00:12:51 GMT
 
-
 Settings:
-    - Overload duration:     0/12
-    - Max hits per second:   10
     - Monitored file:        file
+    - Avg hits/s threshold:  10
 
 Global stats:
     - Most visited section:  test2 (14 hit(s))
     - Most buggy section:    test2 (57 error(s))
     - Total hits:            55 hit(s)
-    - Avg hits/s:            0.43
+    - Total avg hits/s:      0.43
     - Total traffic:         66 b
+Since 5 seconds:
+    - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 44

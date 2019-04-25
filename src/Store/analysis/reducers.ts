@@ -2,7 +2,7 @@ import { List } from "immutable";
 import { Sec } from "../../Utils/units";
 import { AnyAction } from "../actions";
 import { NEW_LOG } from "../common/actions";
-import { COMPUTE_ANALYSIS } from "./actions";
+import { ANALYSIS_COMPUTE } from "./actions";
 import { IAnalysisState } from "./states";
 import { CreateBasicStatsFrom as CreateStats, IBasicStats } from "./utils/createBasicStatsFrom";
 import { GroupLogLinesBySections as GroupBySections } from "./utils/groupLogLinesBySections";
@@ -32,7 +32,7 @@ export const analysisReducer: AnalysisReducerFactory =
                 currentBatch: state.currentBatch.unshift(action.payload.log),
             };
         }
-        case COMPUTE_ANALYSIS: {
+        case ANALYSIS_COMPUTE: {
             const totalBatch = createStats(state.currentBatch);
             const sections = groupLogLinesBySections(state.currentBatch).map((x) => createStats(x.toList()));
 

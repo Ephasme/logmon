@@ -1,12 +1,12 @@
 import { Map } from "immutable";
 import { IBasicStats } from "../Store/analysis/utils/createBasicStatsFrom";
 import { RootState } from "../Store/states";
-import { ISeconds } from "../Utils/units";
+import { IMilliseconds, toSec, ISeconds } from "../Utils/units";
 // tslint:disable: max-line-length
 
 export interface IGui {
-    render(state: RootState, now: Date, maxHitsPerSecond: number,
-           maxOverloadDuration: ISeconds, filename: string): void;
+    render(state: RootState, now: Date, filename: string,
+           avgHitsPerSecondsThreshold: number, avgHitsPerSecondsDuration: ISeconds): void;
 }
 
 /**
@@ -32,11 +32,9 @@ export function createGui(clear: () => void, display: (input: string) => void): 
         `Recovered from high traffic at ${now.toUTCString()}`;
 
     return {
-        render: (state: RootState, now: Date, maxHitsPerSecond: number,
-                 maxOverloadDuration: ISeconds, filename: string) => {
+        render: (state, now, filename, avgHitsPerSecondsThreshold, avgHitsPerSecondsDuration) => {
             clear();
-
-            for (const message of state.load.messages) {
+            for (const message of state.avgHits.messages) {
                  if (message && message.type === "alert") {
                     display(`/!\\ Alert: ${alertMessage(message.hits, message.time)}`);
                 } else if (message && message.type === "info") {
@@ -44,7 +42,7 @@ export function createGui(clear: () => void, display: (input: string) => void): 
                 }
             }
 
-            if (state.load.messages.size > 0) {
+            if (state.avgHits.messages.size > 0) {
                 display("");
             }
 
@@ -56,11 +54,9 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             display("Last updated at " + now.toUTCString());
 
             display("");
-            display("");
             display("Settings:");
-            display(`    - Overload duration:     ${state.load.overloadDuration.sec}/${maxOverloadDuration.sec}`);
-            display(`    - Max hits per second:   ${maxHitsPerSecond}`);
             display(`    - Monitored file:        ${filename}`);
+            display(`    - Avg hits/s threshold:  ${avgHitsPerSecondsThreshold}`);
 
             const allBatchesWithKeys = state.analysis.sections
                 .map((x, key) => ({ ...x, key }));
@@ -72,8 +68,11 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             display(`    - Most visited section:  ${mostVisits}`);
             display(`    - Most buggy section:    ${mostErrorProne}`);
             display(`    - Total hits:            ${state.analysis.totalAll.hits} hit(s)`);
-            display(`    - Avg hits/s:            ${(state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec || 0).toFixed(2)}`);
+            display(`    - Total avg hits/s:      ${(state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec || 0).toFixed(2)}`);
             display(`    - Total traffic:         ${state.analysis.totalAll.traffic} b`);
+
+            display(`Since ${avgHitsPerSecondsDuration.sec} seconds:`);
+            display(`    - Avg hits/s:            ${state.avgHits.avgHitsPerSeconds.toFixed(2)}`);
 
             display("");
             display("Current batch:");

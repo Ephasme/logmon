@@ -3,19 +3,27 @@ import { List } from "immutable";
 import { generateLogLine } from "./logLineFactory";
 
 export const makeLogs = () => {
-    const last = 50;
-    const first = 58;
+    const expired = [
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 1, 0) }), // EXPIRED
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 5, 0) }), // EXPIRED
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 6, 0) }), // EXPIRED
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 8, 0) }), // EXPIRED
+    ];
+    const valid = [
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 9, 0) }), // OK
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 9, 0) }), // OK
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 10, 0) }), // OK
+        generateLogLine({ time: new Date(2018, 0, 0, 0, 0, 12, 0) }), // OK
+    ];
     const logs = List([
-        generateLogLine({ time: new Date(2015, 1, 2, 1, 12, first) }),
-        generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 56) }),
-        generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 55) }),
-        generateLogLine({ time: new Date(2015, 1, 2, 1, 12, 51) }),
-        generateLogLine({ time: new Date(2015, 1, 2, 1, 12, last) }),
-    ]);
-    const elapsed = first - last;
+        ...expired,
+        ...valid,
+    ].reverse());
+    const elapsed = valid[3].time.getSeconds() - valid[0].time.getSeconds();
     return {
         logs,
+        timeGap: elapsed,
         elapsed,
-        hitsPerSecond: logs.size / elapsed,
+        hitsPerSecond: valid.length / elapsed,
     };
 };

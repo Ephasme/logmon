@@ -1,12 +1,12 @@
 import { defaultAnalysisStateFactory, IAnalysisState } from "./analysis/states";
-import { defaultLoadStateFactory, LoadState } from "./load/states";
+import { AvgHitsState, defaultAvgHitsStateFactory } from "./avghits/states";
 
 export type RootState = Readonly<{
-    load: LoadState;
     analysis: IAnalysisState;
+    avgHits: AvgHitsState;
 }>;
 
 export const defaultStateFactory: () => RootState = () => ({
-    load: defaultLoadStateFactory(),
     analysis: defaultAnalysisStateFactory(),
+    avgHits: defaultAvgHitsStateFactory(),
 });

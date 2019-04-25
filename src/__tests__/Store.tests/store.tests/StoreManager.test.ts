@@ -12,7 +12,7 @@ it("should call all reducers", () => {
     const action = newLog(generateLogLine());
     storeMan.dispatch(action);
 
-    expect(red1).toBeCalledWith(state.load, action);
+    expect(red2).toBeCalledWith(state.analysis, action);
 });
 
 it("should provide the state", () => {

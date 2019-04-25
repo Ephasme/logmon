@@ -4,7 +4,16 @@ import { ANALYSIS_COMPUTE } from "../../../../Store/analysis/actions";
 import { analysisReducer } from "../../../../Store/analysis/reducers";
 import { newLog } from "../../../../Store/common/actions";
 import { defaultStateFactory } from "../../../../Store/states";
-import { Sec } from "../../../../Utils/units";
+import { Sec, Ms } from "../../../../Utils/units";
+import { computeAvgHits } from "../../../../Store/avghits/actions";
+
+it("should do nothing when action is not used", () => {
+    const state = defaultStateFactory();
+    const reducer = analysisReducer(jest.fn(), jest.fn());
+    const result = reducer(state.analysis, computeAvgHits(new Date(), Ms(5000), Sec(2), 54));
+
+    expect(result).toBe(state.analysis);
+});
 
 it("should add a log when dispatching NEW_LOG", () => {
     const state = defaultStateFactory();

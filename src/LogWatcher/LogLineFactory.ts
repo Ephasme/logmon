@@ -9,12 +9,10 @@ const pattern = () => /(?<domain>[^ ]*) (?<hyphen>[^ ]*) (?<userid>[^ ]*) \[(?<t
 export type FactoryFunction = (line: string) => ILogLine | null;
 
 export const createFrom: FactoryFunction = (line) => {
-    if (line === null) return null;
     const trimedLine = line.trim();
     if (trimedLine === "") return null;
     const result = pattern().exec(line);
-    if (result === null) return null;
-    if (result.groups) {
+    if (result && result.groups) {
         const requestLine = RequestLineFactory.createFrom(result.groups.action);
         if (requestLine) {
             return {

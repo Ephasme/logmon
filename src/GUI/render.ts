@@ -1,7 +1,7 @@
 import { Map } from "immutable";
 import { IBasicStats } from "../Store/analysis/utils/createBasicStatsFrom";
 import { RootState } from "../Store/states";
-import { IMilliseconds, toSec, ISeconds } from "../Utils/units";
+import { IMilliseconds, ISeconds, toSec } from "../Utils/units";
 // tslint:disable: max-line-length
 
 export interface IGui {

@@ -1,8 +1,8 @@
-import { computeTimeGap } from "../../../Store/common/computeTimeGap";
 import { List } from "immutable";
-import { makeLogs } from "../../../__fixtures__/makeLogBatch";
-import { Sec } from "../../../Utils/units";
 import { generateLogLine } from "../../../__fixtures__/logLineFactory";
+import { makeLogs } from "../../../__fixtures__/makeLogBatch";
+import { computeTimeGap } from "../../../Store/common/computeTimeGap";
+import { Sec } from "../../../Utils/units";
 
 it("should return correct time gap", () => {
     const logs = List([

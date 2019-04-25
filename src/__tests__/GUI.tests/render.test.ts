@@ -1,7 +1,7 @@
 import { List, Map } from "immutable";
 import { createGui } from "../../GUI/render";
 import { IBasicStats } from "../../Store/analysis/utils/createBasicStatsFrom";
-import { defaultAvgHitsStateFactory, AvgHitsState, AnyMessage } from "../../Store/avghits/states";
+import { AnyMessage, AvgHitsState, defaultAvgHitsStateFactory } from "../../Store/avghits/states";
 import { defaultStateFactory, RootState } from "../../Store/states";
 import { Sec } from "../../Utils/units";
 

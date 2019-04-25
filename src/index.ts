@@ -8,14 +8,14 @@ import { computeAnalysis } from "./Store/analysis/actions";
 import { analysisReducer } from "./Store/analysis/reducers";
 import { createBasicStatsFrom } from "./Store/analysis/utils/createBasicStatsFrom";
 import { groupLogLinesBySections } from "./Store/analysis/utils/groupLogLinesBySections";
+import { computeAvgHits } from "./Store/avghits/actions";
 import { avgHitsReducer } from "./Store/avghits/reducers";
 import { newLog } from "./Store/common/actions";
 import { defaultStateFactory } from "./Store/states";
 import { IStoreManager, StoreManager } from "./Store/store";
 import { ITailWatcher, TailWatcher } from "./TailWatcher";
 import { getNow } from "./Time";
-import { Ms, Sec, toSec, toMs } from "./Utils/units";
-import { computeAvgHits } from "./Store/avghits/actions";
+import { Ms, Sec, toMs, toSec } from "./Utils/units";
 
 // Gather cli args.
 const args = yargs

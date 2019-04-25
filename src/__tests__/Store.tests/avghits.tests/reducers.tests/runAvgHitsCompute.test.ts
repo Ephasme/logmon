@@ -1,10 +1,10 @@
 import { List } from "immutable";
 import { generateLogLine } from "../../../../__fixtures__/logLineFactory";
+import { makeLogs } from "../../../../__fixtures__/makeLogBatch";
 import { AVGHITS_COMPUTE } from "../../../../Store/avghits/actions";
 import { runAvgHitsCompute } from "../../../../Store/avghits/reducers";
-import { Ms, Sec } from "../../../../Utils/units";
-import { makeLogs } from "../../../../__fixtures__/makeLogBatch";
 import { AnyMessage } from "../../../../Store/avghits/states";
+import { Ms, Sec } from "../../../../Utils/units";
 
 it("should trim old logs", () => {
     const toKeep = generateLogLine({ time: new Date(2018, 1, 1, 1, 8, 0) });

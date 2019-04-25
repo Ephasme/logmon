@@ -1,5 +1,36 @@
 import * as yargs from "yargs";
-import { truncate, writeLogLines } from "./logWriter";
+import { truncate, TestWriter } from "./logWriter";
+import * as readline from "readline";
+
+const writer = new TestWriter();
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: "O>",
+});
+rl.on("line", (line) => {
+    switch (line.trim()) {
+        case "++":
+            writer.speed += 50;
+            console.log(writer.speed);
+            break;
+        case "+":
+            writer.speed += 10;
+            console.log(writer.speed);
+            break;
+        case "-":
+            writer.speed -= 10;
+            console.log(writer.speed);
+            break;
+        case "--":
+            writer.speed -= 50;
+            console.log(writer.speed);
+            break;
+    }
+    rl.prompt();
+}).on("close", () => {
+    process.exit(0);
+});
 
 const args = yargs
     .options("filename", {
@@ -8,4 +39,5 @@ const args = yargs
     .argv;
 
 truncate(args.filename);
-writeLogLines(args.filename);
+writer.writeLogLines(args.filename);
+rl.prompt();

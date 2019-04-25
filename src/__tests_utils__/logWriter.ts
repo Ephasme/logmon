@@ -11,10 +11,14 @@ export function truncate(filename: string) {
     }
 }
 
-export function writeLogLines(filename: string): void {
-    fs.appendFileSync(filename, formatLogLine(generateLogLine()));
+export class TestWriter {
+    private mSpeed: number = 50;
 
-    setTimeout(() => {
-        writeLogLines(filename);
-    }, faker.random.arrayElement([82]));
+    public set speed(value: number) { this.mSpeed = value; }
+    public get speed() { return this.mSpeed; }
+
+    public writeLogLines(filename: string): void {
+        fs.appendFileSync(filename, formatLogLine(generateLogLine()));
+        setTimeout(() => this.writeLogLines(filename), this.speed);
+    }
 }

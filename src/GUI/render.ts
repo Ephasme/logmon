@@ -26,7 +26,7 @@ export function createGui(clear: () => void, display: (input: string) => void): 
     }
 
     const alertMessage = (value: number, now: Date) =>
-        `High traffic generated an alert - hits = ${value}, triggered at ${now.toUTCString()}`;
+        `High traffic generated an alert - hits = ${value.toFixed(2)}, triggered at ${now.toUTCString()}`;
 
     const recoverMessage = (now: Date) =>
         `Recovered from high traffic at ${now.toUTCString()}`;
@@ -71,7 +71,7 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             display(`    - Total avg hits/s:      ${(state.analysis.totalAll.hits / state.analysis.totalAll.timespan.sec || 0).toFixed(2)}`);
             display(`    - Total traffic:         ${state.analysis.totalAll.traffic} b`);
 
-            display(`Since ${avgHitsPerSecondsDuration.sec} seconds:`);
+            display(`Last ${avgHitsPerSecondsDuration.sec} seconds:`);
             display(`    - Avg hits/s:            ${state.avgHits.avgHitsPerSeconds.toFixed(2)}`);
 
             display("");
@@ -79,12 +79,13 @@ export function createGui(clear: () => void, display: (input: string) => void): 
             display(`    - Current batch traffic: ${state.analysis.totalBatch.traffic}`);
             display(`    - Current batch hits/s:  ${((state.analysis.totalBatch.hits / state.analysis.totalBatch.timespan.sec) || 0).toFixed(2)}`);
 
-            display("");
-            display("Sections details:");
-            display("");
-
-            for (const [key, data] of state.analysis.sections.toArray()) {
-                display(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`);
+            if (!state.analysis.sections.isEmpty()) {
+                display("");
+                display("Sections details:");
+                display("");
+                for (const [key, data] of state.analysis.sections.toArray()) {
+                    display(`${key}: ${data.traffic} bytes in ${data.hits} hit(s) (${data.errors} error(s))`);
+                }
             }
 
             display("");

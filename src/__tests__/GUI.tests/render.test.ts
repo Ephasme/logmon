@@ -5,7 +5,7 @@ import { AnyMessage, AvgHitsState, defaultAvgHitsStateFactory } from "../../Stor
 import { defaultStateFactory, RootState } from "../../Store/states";
 import { Sec } from "../../Utils/units";
 
-export const createState = (seed: Partial<AvgHitsState>): RootState => {
+export const createState = (seed?: Partial<AvgHitsState>): RootState => {
     const someState: RootState = defaultStateFactory();
     return {
         ...someState,
@@ -36,6 +36,16 @@ it("should display many messages", () => {
     expect(result.join("\n")).toMatchSnapshot();
 });
 
+it("should display fixed value in alert message", () => {
+    const result: string[] = [];
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(createState({
+        status: "triggered",
+        messages: List([{type: "alert", hits: 12.1282051282051284189753, time: new Date(2015, 1, 2, 4, 1, 3)}]),
+    }), new Date(2015, 1, 1, 1, 12, 51), "file", 10, Sec(5));
+    expect(result.join("\n")).toMatchSnapshot();
+})
+
 it("should display an alert message when message is alert", () => {
     const result: string[] = [];
     const gui = createGui(jest.fn(), (input) => { result.push(input); });
@@ -53,6 +63,13 @@ it("should display recovering message when message is recovering", () => {
         status: "triggered",
         messages: List([{type: "info", time: new Date(2015, 1, 2, 4, 1, 3)}]),
     }), new Date(2015, 1, 1, 1, 12, 51), "file", 10, Sec(5)),
+    expect(result.join("\n")).toMatchSnapshot();
+});
+
+it("should not display section details when no data", () => {
+    const result: string[] = [];
+    const gui = createGui(jest.fn(), (input) => { result.push(input); });
+    gui.render(createState(), new Date(2015, 1, 1, 1, 12, 51), "file", 10, Sec(5)),
     expect(result.join("\n")).toMatchSnapshot();
 });
 

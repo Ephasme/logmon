@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should display an alert message when message is alert 1`] = `
-"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 03:01:03 GMT
+"/!\\\\ Alert: High traffic generated an alert - hits = 15.00, triggered at Mon, 02 Feb 2015 03:01:03 GMT
 
 Welcome to LogMon - an access log monitoring console application.
 
@@ -20,24 +20,52 @@ Global stats:
     - Total hits:            0 hit(s)
     - Total avg hits/s:      0.00
     - Total traffic:         0 b
-Since 5 seconds:
+Last 5 seconds:
     - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
     - Current batch hits/s:  0.00
 
-Sections details:
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
+`;
 
+exports[`should display fixed value in alert message 1`] = `
+"/!\\\\ Alert: High traffic generated an alert - hits = 12.13, triggered at Mon, 02 Feb 2015 03:01:03 GMT
+
+Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
+
+Settings:
+    - Monitored file:        file
+    - Avg hits/s threshold:  10
+
+Global stats:
+    - Most visited section:  -
+    - Most buggy section:    -
+    - Total hits:            0 hit(s)
+    - Total avg hits/s:      0.00
+    - Total traffic:         0 b
+Last 5 seconds:
+    - Avg hits/s:            0.00
+
+Current batch:
+    - Current batch traffic: 0
+    - Current batch hits/s:  0.00
 
 > Handcrafted with care for Datadog by Ephasme... <3
 > Press C-c to quit."
 `;
 
 exports[`should display many messages 1`] = `
-"/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 03:01:03 GMT
+"/!\\\\ Alert: High traffic generated an alert - hits = 15.00, triggered at Mon, 02 Feb 2015 03:01:03 GMT
 [o] Info: Recovered from high traffic at Mon, 02 Feb 2015 04:01:03 GMT
-/!\\\\ Alert: High traffic generated an alert - hits = 15, triggered at Mon, 02 Feb 2015 05:01:03 GMT
+/!\\\\ Alert: High traffic generated an alert - hits = 15.00, triggered at Mon, 02 Feb 2015 05:01:03 GMT
 
 Welcome to LogMon - an access log monitoring console application.
 
@@ -56,15 +84,12 @@ Global stats:
     - Total hits:            0 hit(s)
     - Total avg hits/s:      0.00
     - Total traffic:         0 b
-Since 5 seconds:
+Last 5 seconds:
     - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
     - Current batch hits/s:  0.00
-
-Sections details:
-
 
 > Handcrafted with care for Datadog by Ephasme... <3
 > Press C-c to quit."
@@ -90,15 +115,12 @@ Global stats:
     - Total hits:            0 hit(s)
     - Total avg hits/s:      0.00
     - Total traffic:         0 b
-Since 5 seconds:
+Last 5 seconds:
     - Avg hits/s:            0.00
 
 Current batch:
     - Current batch traffic: 0
     - Current batch hits/s:  0.00
-
-Sections details:
-
 
 > Handcrafted with care for Datadog by Ephasme... <3
 > Press C-c to quit."
@@ -122,7 +144,7 @@ Global stats:
     - Total hits:            55 hit(s)
     - Total avg hits/s:      0.43
     - Total traffic:         66 b
-Since 5 seconds:
+Last 5 seconds:
     - Avg hits/s:            0.00
 
 Current batch:
@@ -133,6 +155,35 @@ Sections details:
 
 test1: 91 bytes in 8 hit(s) (12 error(s))
 test2: 123 bytes in 14 hit(s) (57 error(s))
+
+> Handcrafted with care for Datadog by Ephasme... <3
+> Press C-c to quit."
+`;
+
+exports[`should not display section details when no data 1`] = `
+"Welcome to LogMon - an access log monitoring console application.
+
+You can use options to customize the timing, 
+and the alerting behaviour (see --help command for more infos).
+
+Last updated at Sun, 01 Feb 2015 00:12:51 GMT
+
+Settings:
+    - Monitored file:        file
+    - Avg hits/s threshold:  10
+
+Global stats:
+    - Most visited section:  -
+    - Most buggy section:    -
+    - Total hits:            0 hit(s)
+    - Total avg hits/s:      0.00
+    - Total traffic:         0 b
+Last 5 seconds:
+    - Avg hits/s:            0.00
+
+Current batch:
+    - Current batch traffic: 0
+    - Current batch hits/s:  0.00
 
 > Handcrafted with care for Datadog by Ephasme... <3
 > Press C-c to quit."

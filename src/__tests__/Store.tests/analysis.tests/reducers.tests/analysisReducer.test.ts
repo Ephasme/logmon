@@ -2,10 +2,10 @@ import { Map } from "immutable";
 import { generateLogLine } from "../../../../__fixtures__/logLineFactory";
 import { ANALYSIS_COMPUTE } from "../../../../Store/analysis/actions";
 import { analysisReducer } from "../../../../Store/analysis/reducers";
+import { computeAvgHits } from "../../../../Store/avghits/actions";
 import { newLog } from "../../../../Store/common/actions";
 import { defaultStateFactory } from "../../../../Store/states";
-import { Sec, Ms } from "../../../../Utils/units";
-import { computeAvgHits } from "../../../../Store/avghits/actions";
+import { Ms, Sec } from "../../../../Utils/units";
 
 it("should do nothing when action is not used", () => {
     const state = defaultStateFactory();

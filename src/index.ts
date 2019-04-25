@@ -10,6 +10,7 @@ import { createBasicStatsFrom } from "./Store/analysis/utils/createBasicStatsFro
 import { groupLogLinesBySections } from "./Store/analysis/utils/groupLogLinesBySections";
 import { computeAvgHits } from "./Store/avghits/actions";
 import { avgHitsReducer } from "./Store/avghits/reducers";
+import { runAvgHitsCompute } from "./Store/avghits/runners/runAvgHitsCompute";
 import { newLog } from "./Store/common/actions";
 import { defaultStateFactory } from "./Store/states";
 import { IStoreManager, StoreManager } from "./Store/store";
@@ -72,7 +73,9 @@ const fileWatcher: IFileWatcher = new PollingFileWatcher(nodeFs, appSettings.fil
 const tailWatcher: ITailWatcher = new TailWatcher(fileWatcher, readBlock);
 const logWatcher: ILogWatcher = new LogWatcher(LogLineFactory.createFrom, tailWatcher, getNow);
 const storage: IStoreManager = new StoreManager(
-    defaultStateFactory(), avgHitsReducer, analysisReducer(createBasicStatsFrom, groupLogLinesBySections));
+    defaultStateFactory(),
+    avgHitsReducer(runAvgHitsCompute),
+    analysisReducer(createBasicStatsFrom, groupLogLinesBySections));
 const gui = createGui(console.clear, console.log);
 
 // Start watcher.

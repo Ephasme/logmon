@@ -2,7 +2,7 @@ import { List } from "immutable";
 import { generateLogLine } from "../../../../__fixtures__/logLineFactory";
 import { makeLogs } from "../../../../__fixtures__/makeLogBatch";
 import { AVGHITS_COMPUTE } from "../../../../Store/avghits/actions";
-import { runAvgHitsCompute } from "../../../../Store/avghits/reducers";
+import { runAvgHitsCompute } from "../../../../Store/avghits/runners/runAvgHitsCompute";
 import { AnyMessage } from "../../../../Store/avghits/states";
 import { Ms, Sec } from "../../../../Utils/units";
 

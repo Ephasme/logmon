@@ -52,10 +52,11 @@ docker run -ti logmon
 The logwriter test application is interactive: you can control the speed of log writing with the prompt in order to test the alerting logic.
 
 The commands are:
-**++** to increase the delay by 50 ms
-**+** to increase the delay by 10 ms
-**-** to decrease the delay by 10 ms
-**--** to decrease the delay by 50 ms
+
++ **++** to increase the delay by 50 ms
++ **+** to increase the delay by 10 ms
++ **-** to decrease the delay by 10 ms
++ **--** to decrease the delay by 50 ms
 
 You must hit enter to validate your commands.
 It is set to 100 ms delay by default which will approximatively represent 10 hits per seconds.

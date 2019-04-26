@@ -3,11 +3,17 @@ version: "2"
 services:
   logwriter:
     build: .
+    image: logwriter
+    container_name: logwriter
+    stdin_open: true
+    tty: true
     volumes:
       - './tmp:/tmp'
-    command: "yarn start:logs-debug:docker"
+    command: "yarn start:logs-debug"
   logmon:
     build: .
+    image: logmon
+    container_name: logmon
     depends_on:
       - logwriter
     volumes:

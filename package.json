@@ -1,5 +1,5 @@
 {
-  "name": "logmon-ts-2",
+  "name": "logmon",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:Ephasme/logmon.git",
@@ -16,8 +16,7 @@
     "start:logs-debug": "nodemon --watch src --inspect=5859 -r ts-node/register ./src/__tests_utils__/index.ts",
     "start:logs-debug:local": "./scripts/start_logs_debug_local.sh",
     "start:app-debug": "nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts",
-    "start:app-debug:local": "./scripts/start_app_debug_local.sh",
-    "start:all-debug": "concurrently \"yarn run start:logs-debug\" \"yarn run start:app-debug\""
+    "start:app-debug:local": "./scripts/start_app_debug_local.sh"
   },
   "dependencies": {
     "@types/node": "^11.13.4",
@@ -30,7 +29,6 @@
     "@types/faker": "^4.1.5",
     "@types/jest": "^24.0.11",
     "@types/mock-fs": "^3.6.30",
-    "concurrently": "^4.1.0",
     "faker": "^4.1.0",
     "jest": "^24.7.1",
     "mock-fs": "^4.8.0",

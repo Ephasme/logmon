@@ -34,14 +34,18 @@ This will start two containers which are:
 + **logmon** the container running the actual application.
 + **logwriter** the container writing fake logs to the `/tmp/access.log` file.
 
+If you want to control logwriter from within docker you can attach to it with:
+
+```sh
+docker attach logwriter
+```
+
 If you want to start logmon only you can do it with those commands:
 
 ```sh
-docker build --rm --tag logmon:latest .
+docker build --rm --tag logmon .
 docker run -ti logmon
 ```
-
-The same goes for logwriter.
 
 ## LogWriter debug app
 

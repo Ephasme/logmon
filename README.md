@@ -67,12 +67,11 @@ This project took a bit more time than expected (around 12/14 hours I think) bec
 
 Today each parts are separate and can have a resfresh rate on its own. The rendering itself is not correlated with the data processing tasks which allows for different rendering strategies to be implemented without having to change the monitoring logic.
 
-I truly wanted to have something which is qualitative so I took the time to write a lot more tests than expected by the exercice. In the end you'll find more than 60 unit tests comprising 5 GUI tests with snapshots to ensure the rendering is always good whatever refactoring I decide to do. The code coverage is over 99%.
+I truly wanted to have something which is qualitative so I took the time to write a lot more tests than expected by the exercice. In the end you'll find more than 60 unit tests comprising 6 GUI tests with snapshots to ensure the rendering is always good whatever refactoring I decide to do. The code coverage is over 99%.
 
 The code is very testable with a lot of IoC handled by a Poor man DI.
+The state is immutable which allows for easy reasoning and pure functions.
 I believe that all of this make my code highly maintainable and largely SOLID since all you have to do to add new features is to add new sections in the store and implement new reducers and actions (largely inspired by redux).
-
-I didn't add much comments because I believe that the code should speak by itself without requiring additionnal explanation. Plus comments have the tendency to become outdated real quick. 
 
 ## Improvements
 

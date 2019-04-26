@@ -14,6 +14,7 @@ export const runAvgHitsCompute: AvgHitsComputeRunner = (state, action) => {
     const nextLogs = currentLogs.takeWhile((log) => moment(now).diff(log.time) < ttl);
     const timeGap = computeTimeGap(nextLogs, elapsed);
     const avgHitsPerSeconds = nextLogs.size / timeGap.sec;
+
     if (avgHitsPerSeconds > threshold && status === "idle") {
         status = "triggered";
         messages = messages.push({ type: "alert", hits: avgHitsPerSeconds, time: now });

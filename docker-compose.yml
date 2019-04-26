@@ -5,7 +5,7 @@ services:
     build: .
     volumes:
       - './tmp:/tmp'
-    command: "yarn start:docker:write-logs"
+    command: "yarn start:logs-debug:docker"
   logmon:
     build: .
     depends_on:

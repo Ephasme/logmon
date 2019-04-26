@@ -1,6 +1,6 @@
-import * as yargs from "yargs";
-import { truncate, TestWriter } from "./logWriter";
 import * as readline from "readline";
+import * as yargs from "yargs";
+import { TestWriter, truncate } from "./logWriter";
 
 const writer = new TestWriter();
 const rl = readline.createInterface({

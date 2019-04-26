@@ -44,7 +44,7 @@ it("should display fixed value in alert message", () => {
         messages: List([{type: "alert", hits: 12.1282051282051284189753, time: new Date(2015, 1, 2, 4, 1, 3)}]),
     }), new Date(2015, 1, 1, 1, 12, 51), "file", 10, Sec(5));
     expect(result.join("\n")).toMatchSnapshot();
-})
+});
 
 it("should display an alert message when message is alert", () => {
     const result: string[] = [];

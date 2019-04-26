@@ -1,7 +1,7 @@
-nodemon --watch src --inspect=5858 -r ts-node/register ./src/index.ts \
+yarn run start:app-debug \
     --filename data/access.log \
     --renderDelay 800 \
     --batchAnalysisDelay 5000 \
-    --avgHitsPerSecondsThreshold 12 \
+    --avgHitsPerSecondsThreshold 9 \
     --avgHitsPerSecondsDuration 80 \
     --avgHitsPerSecondsDelay 3000

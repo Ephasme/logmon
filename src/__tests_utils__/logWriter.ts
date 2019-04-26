@@ -12,7 +12,7 @@ export function truncate(filename: string) {
 }
 
 export class TestWriter {
-    private mSpeed: number = 50;
+    private mSpeed: number = 100;
 
     public set speed(value: number) { this.mSpeed = value; }
     public get speed() { return this.mSpeed; }

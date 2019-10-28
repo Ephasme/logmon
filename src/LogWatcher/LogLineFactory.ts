@@ -19,7 +19,7 @@ export const createFrom: FactoryFunction = (line) => {
                 domain: result.groups.domain,
                 hyphen: result.groups.hyphen,
                 userid: result.groups.userid,
-                time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss Z").toDate(),
+                time: moment(result.groups.time, "DD/MMM/YYYY:HH:mm:ss ZZ").toDate(),
                 request: requestLine,
                 result: parseInt(result.groups.resultcode, 10),
                 packet: parseInt(result.groups.packet, 10),

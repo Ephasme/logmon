@@ -22,7 +22,7 @@ export function generateLogLine(input?: Partial<ILogLine>): ILogLine {
         packet: faker.random.number({ min: 0, max: 241 }),
         request: {
             httpAction: randomAction(),
-            protocol: faker.internet.protocol(),
+            protocol: faker.internet.protocol().toUpperCase() + "/" + "1.0",
             routeSegments: [ randomSection(), randomSubSection() ],
         },
         result: faker.random.number({ min: 0, max: 599 }),
